@@ -10,7 +10,7 @@ export async function semanticSearch(
 ): Promise<{ sessionId: string; similarity: number; summary: string }[]> {
   let sql = `
     SELECT ss.session_id, ss.summary_text, ss.key_topics, ss.embedding,
-           s.session_date, s.bot_conversation, s.human_conversation
+           s.session_date, s.bot_conversation, s.human_conversation, s.dissatisfaction_info
     FROM session_summaries ss
     JOIN sessions s ON s.id = ss.session_id
     WHERE 1=1
@@ -38,7 +38,7 @@ export async function semanticSearch(
   }
 
   // Fallback: LLM keyword expansion + text matching
-  let searchTerms: string[] = [query]
+  let expandedTerms: string[] = []
   try {
     const raw = await chatComplete(
       '你是搜索关键词扩展专家。将用户搜索意图扩展为关键词JSON数组，覆盖中英文同义词，5-15个。只返回JSON数组，不要其他文字。',
@@ -46,27 +46,35 @@ export async function semanticSearch(
     )
     const jsonStr = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').replace(/<think>[\s\S]*?<\/think>/g, '').trim()
     const parsed = JSON.parse(jsonStr)
-    if (Array.isArray(parsed)) searchTerms = [query, ...parsed]
+    if (Array.isArray(parsed)) expandedTerms = parsed.map((t: string) => t.toLowerCase())
   } catch {
-    searchTerms = query.split(/[\s,，、]+/).filter(Boolean)
+    // ignore expansion failure
   }
 
-  const lowerTerms = searchTerms.map(t => t.toLowerCase())
+  // Split original query into core terms (2+ chars)
+  const coreTerms = query.split(/[\s,，、。；;：:!！?？]+/).filter(t => t.length >= 2).map(t => t.toLowerCase())
+
   return rows
     .map(row => {
       const text = [
         row.summary_text || '',
         row.key_topics || '',
+        row.dissatisfaction_info || '',
         (row.bot_conversation || '').slice(0, 1000),
         (row.human_conversation || '').slice(0, 1000),
       ].join(' ').toLowerCase()
 
-      let matchCount = 0
-      for (const term of lowerTerms) {
-        if (term && text.includes(term)) matchCount++
+      // Core terms: each match gives 0.25 score (high weight)
+      let score = 0
+      for (const term of coreTerms) {
+        if (term && text.includes(term)) score += 0.25
       }
-      const similarity = lowerTerms.length > 0 ? matchCount / lowerTerms.length : 0
-      return { sessionId: row.session_id, similarity: Math.round(similarity * 100) / 100, summary: row.summary_text || '' }
+      // Expanded terms: each match gives 0.08 score (lower weight)
+      for (const term of expandedTerms) {
+        if (term && text.includes(term)) score += 0.08
+      }
+      const similarity = Math.min(Math.round(score * 100) / 100, 1.0)
+      return { sessionId: row.session_id, similarity, summary: row.summary_text || '' }
     })
     .filter(r => r.similarity > 0)
     .sort((a, b) => b.similarity - a.similarity)

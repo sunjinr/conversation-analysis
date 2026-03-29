@@ -40065,7 +40065,7 @@ ${session.dissatisfaction_info}
 async function semanticSearch(query, dateFrom, dateTo, threshold = 0.3, limit2 = 100) {
   let sql = `
     SELECT ss.session_id, ss.summary_text, ss.key_topics, ss.embedding,
-           s.session_date, s.bot_conversation, s.human_conversation
+           s.session_date, s.bot_conversation, s.human_conversation, s.dissatisfaction_info
     FROM session_summaries ss
     JOIN sessions s ON s.id = ss.session_id
     WHERE 1=1
