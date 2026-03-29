@@ -56,7 +56,7 @@ export default function DashboardPage() {
                 }}
                 labelFormatter={l => `日期: ${l}`}
               />
-              <Line type="monotone" dataKey="satisfaction_rate" stroke="#4F46E5" strokeWidth={2} dot={false} name="satisfaction_rate" />
+              <Line type="monotone" dataKey="satisfaction_rate" stroke="#7C5CFC" strokeWidth={2} dot={false} name="satisfaction_rate" />
               <Line type="monotone" dataKey="tasks_resolved" stroke="#10B981" strokeWidth={1.5} dot={{ r: 3 }} name="tasks_resolved" />
               {satisfaction.filter(s => s.tasks_resolved > 0).map(s => (
                 <ReferenceLine key={s.date} x={s.date} stroke="#10B981" strokeDasharray="3 3" />

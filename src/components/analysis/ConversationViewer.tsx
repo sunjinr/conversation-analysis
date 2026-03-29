@@ -20,7 +20,7 @@ function parseConversation(text: string): Message[] {
 }
 
 const roleConfig: Record<string, { bg: string; text: string; align: string; label: string }> = {
-  '会员': { bg: 'bg-brand/10', text: 'text-brand', align: 'justify-end', label: '买家' },
+  '会员': { bg: 'bg-brand-subtle', text: 'text-brand', align: 'justify-end', label: '买家' },
   '机器人': { bg: 'bg-gray-100', text: 'text-gray-700', align: 'justify-start', label: 'AI' },
   '客服': { bg: 'bg-green-50', text: 'text-green-800', align: 'justify-start', label: '人工' },
 }

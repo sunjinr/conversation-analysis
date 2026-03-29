@@ -17,10 +17,10 @@ export default function Sidebar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="w-[240px] bg-[#1e1e2e] text-white flex flex-col shrink-0">
-      <div className="px-5 py-5 border-b border-white/10">
+    <aside className="w-[240px] bg-white text-gray-800 flex flex-col shrink-0 border-r border-[#F0EEE9]">
+      <div className="px-5 py-5 border-b border-[#F0EEE9]">
         <h1 className="text-lg font-bold tracking-tight">CS Analysis</h1>
-        <p className="text-xs text-gray-400 mt-0.5">会话分析与优化平台</p>
+        <p className="text-xs text-[#86868B] mt-0.5">会话分析与优化平台</p>
       </div>
 
       <nav className="flex-1 py-3 px-3 space-y-0.5 overflow-auto">
@@ -31,7 +31,7 @@ export default function Sidebar() {
             end={link.end}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                isActive ? 'bg-brand text-white font-medium' : 'text-gray-300 hover:bg-white/8 hover:text-white'
+                isActive ? 'bg-brand-subtle text-brand font-medium' : 'text-gray-500 hover:bg-[#F5F5F3] hover:text-gray-800'
               }`
             }
           >
@@ -41,16 +41,16 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div className="p-3 border-t border-white/10">
+      <div className="p-3 border-t border-[#F0EEE9]">
         <div className="flex items-center gap-2 px-3 py-2">
-          <div className="w-7 h-7 rounded-full bg-brand/30 flex items-center justify-center text-xs font-medium">
+          <div className="w-7 h-7 rounded-full bg-brand-subtle flex items-center justify-center text-xs font-medium text-brand">
             {user?.name?.[0] || 'U'}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">{user?.name}</p>
-            <p className="text-xs text-gray-400">{user?.role}</p>
+            <p className="text-xs text-[#86868B]">{user?.role}</p>
           </div>
-          <button onClick={() => { logout(); navigate('/login') }} className="text-gray-400 hover:text-white p-1">
+          <button onClick={() => { logout(); navigate('/login') }} className="text-gray-400 hover:text-gray-700 p-1">
             <LogOut size={16} />
           </button>
         </div>

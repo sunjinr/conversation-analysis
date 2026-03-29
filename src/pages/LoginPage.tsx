@@ -25,8 +25,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#1e1e2e] flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-[#F7F7F5] flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-lg shadow-black/5 p-8 w-full max-w-md border border-[#EEECEA]">
         <div className="text-center mb-8">
           <div className="w-14 h-14 bg-brand/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Lock className="text-brand" size={28} />

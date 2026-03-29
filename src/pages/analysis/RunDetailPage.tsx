@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 import { Play, Bell, Flag } from 'lucide-react'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
-const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#06B6D4', '#84CC16']
+const COLORS = ['#7C5CFC', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#86868B', '#06B6D4', '#84CC16']
 
 export default function RunDetailPage() {
   const { id } = useParams()

@@ -5,14 +5,19 @@ export default {
     extend: {
       colors: {
         sidebar: {
-          DEFAULT: '#1e1e2e',
-          hover: '#2a2a3e',
-          active: '#4F46E5',
+          DEFAULT: '#FFFFFF',
+          hover: '#F5F5F3',
+          active: '#F0EBFF',
+          border: '#F0EEE9',
         },
         brand: {
-          DEFAULT: '#4F46E5',
-          light: '#818CF8',
-          dark: '#3730A3',
+          DEFAULT: '#7C5CFC',
+          light: '#9B85FD',
+          dark: '#6344E0',
+          subtle: '#F0EBFF',
+        },
+        surface: {
+          DEFAULT: '#F7F7F5',
         },
       },
     },
