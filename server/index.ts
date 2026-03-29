@@ -17,8 +17,6 @@ import notifyRouter from './routes/notify.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-initDB()
-
 const app = express()
 app.use(cors())
 app.use(express.json({ limit: '50mb' }))
@@ -43,6 +41,12 @@ app.get('*', (_req, res) => {
 })
 
 const PORT = parseInt(process.env.PORT || '3001')
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[Server] Running on http://0.0.0.0:${PORT}`)
+
+initDB().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[Server] Running on http://0.0.0.0:${PORT}`)
+  })
+}).catch(e => {
+  console.error('[DB] Init failed:', e)
+  process.exit(1)
 })
