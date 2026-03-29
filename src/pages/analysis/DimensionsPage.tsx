@@ -60,7 +60,7 @@ export default function DimensionsPage() {
           <p className="text-sm text-gray-500 mt-1">配置分析目标和分类体系</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', definition: '', categories: [], auto_discover: true, sub_skill_ref: '' }) }}
-          className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-dark">
+          className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light">
           <Plus size={16} /> 添加维度
         </button>
       </div>
@@ -73,10 +73,10 @@ export default function DimensionsPage() {
           </div>
           <div className="space-y-4">
             <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              placeholder="维度名称（如：不满意原因分析）" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+              placeholder="维度名称（如：不满意原因分析）" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
             <textarea value={form.definition} onChange={e => setForm(f => ({ ...f, definition: e.target.value }))}
               placeholder="维度定义（详细描述分析目标和分类规则）" rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
 
             <div>
               <h4 className="text-xs font-medium text-gray-500 mb-2">分类类别</h4>
@@ -107,11 +107,11 @@ export default function DimensionsPage() {
             </label>
 
             <input value={form.sub_skill_ref} onChange={e => setForm(f => ({ ...f, sub_skill_ref: e.target.value }))}
-              placeholder="子Skill引用（可选，如：competitor_compare）" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+              placeholder="子Skill引用（可选，如：competitor_compare）" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
 
             <div className="flex gap-2 justify-end">
               <button onClick={() => { setShowForm(false); setEditing(null) }} className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 rounded-lg">取消</button>
-              <button onClick={handleSave} className="px-4 py-2 text-sm bg-brand text-white rounded-lg hover:bg-brand-dark">
+              <button onClick={handleSave} className="px-4 py-2 text-sm bg-brand text-white rounded-lg hover:bg-brand-light">
                 {editing ? '保存修改' : '创建维度'}
               </button>
             </div>
@@ -126,9 +126,9 @@ export default function DimensionsPage() {
             <div key={d.id} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2 mb-2">
-                  <Layers size={16} className="text-brand" />
+                  <Layers size={16} className="text-accent" />
                   <h4 className="font-semibold text-gray-900">{d.name}</h4>
-                  {d.auto_discover ? <span className="badge bg-purple-100 text-purple-600">AI自动发现</span> : null}
+                  {d.auto_discover ? <span className="badge bg-amber-100 text-amber-600">AI自动发现</span> : null}
                   {d.sub_skill_ref && <span className="badge bg-blue-100 text-blue-600">Skill: {d.sub_skill_ref}</span>}
                   {!d.enabled && <span className="badge bg-gray-100 text-gray-400">已禁用</span>}
                 </div>

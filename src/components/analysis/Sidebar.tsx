@@ -17,8 +17,8 @@ export default function Sidebar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="w-[240px] bg-white text-gray-800 flex flex-col shrink-0 border-r border-[#F0EEE9]">
-      <div className="px-5 py-5 border-b border-[#F0EEE9]">
+    <aside className="w-[240px] bg-sidebar text-gray-800 flex flex-col shrink-0 border-r border-sidebar-border">
+      <div className="px-5 py-5 border-b border-sidebar-border">
         <h1 className="text-lg font-bold tracking-tight">CS Analysis</h1>
         <p className="text-xs text-[#86868B] mt-0.5">会话分析与优化平台</p>
       </div>
@@ -31,7 +31,7 @@ export default function Sidebar() {
             end={link.end}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                isActive ? 'bg-brand-subtle text-brand font-medium' : 'text-gray-500 hover:bg-[#F5F5F3] hover:text-gray-800'
+                isActive ? 'bg-sidebar-active text-gray-900 font-medium border-l-[3px] border-accent pl-[9px]' : 'text-gray-500 hover:bg-sidebar-hover hover:text-gray-800'
               }`
             }
           >
@@ -41,9 +41,9 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div className="p-3 border-t border-[#F0EEE9]">
+      <div className="p-3 border-t border-sidebar-border">
         <div className="flex items-center gap-2 px-3 py-2">
-          <div className="w-7 h-7 rounded-full bg-brand-subtle flex items-center justify-center text-xs font-medium text-brand">
+          <div className="w-7 h-7 rounded-full bg-accent-light flex items-center justify-center text-xs font-medium text-accent">
             {user?.name?.[0] || 'U'}
           </div>
           <div className="flex-1 min-w-0">

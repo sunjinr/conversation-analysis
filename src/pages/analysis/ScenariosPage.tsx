@@ -42,7 +42,7 @@ export default function ScenariosPage() {
           <h2 className="text-xl font-bold text-gray-900">圈场景</h2>
           <p className="text-sm text-gray-500 mt-1">用自然语言描述场景，语义检索匹配会话</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-dark">
+        <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light">
           <Plus size={16} /> 新建场景
         </button>
       </div>
@@ -52,10 +52,10 @@ export default function ScenariosPage() {
           <h3 className="text-sm font-semibold text-gray-700 mb-4">创建场景</h3>
           <div className="space-y-4">
             <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              placeholder="场景名称" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+              placeholder="场景名称" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
             <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder="用自然语言描述你想分析的场景，如：AI客服回答错误导致买家不满意的会话" rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
             <div className="flex gap-4">
               <div className="flex-1">
                 <label className="text-xs text-gray-500 mb-1 block">开始日期</label>
@@ -70,7 +70,7 @@ export default function ScenariosPage() {
             </div>
             <div className="flex gap-2 justify-end">
               <button onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 rounded-lg">取消</button>
-              <button onClick={handleCreate} className="px-4 py-2 text-sm bg-brand text-white rounded-lg hover:bg-brand-dark">创建</button>
+              <button onClick={handleCreate} className="px-4 py-2 text-sm bg-brand text-white rounded-lg hover:bg-brand-light">创建</button>
             </div>
           </div>
         </div>
@@ -81,13 +81,13 @@ export default function ScenariosPage() {
           <div key={s.id} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Target size={16} className="text-brand" />
+                <Target size={16} className="text-accent" />
                 <h4 className="font-semibold text-gray-900">{s.name}</h4>
               </div>
               <div className="flex gap-1">
                 <button onClick={() => handlePreview(s.id)} disabled={previewing === s.id}
-                  className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-brand">
-                  {previewing === s.id ? <div className="animate-spin w-4 h-4 border-2 border-brand border-t-transparent rounded-full" /> : <Search size={14} />}
+                  className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-accent">
+                  {previewing === s.id ? <div className="animate-spin w-4 h-4 border-2 border-accent border-t-transparent rounded-full" /> : <Search size={14} />}
                 </button>
                 <button onClick={() => handleDelete(s.id)} className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-red-500">
                   <Trash2 size={14} />
@@ -98,7 +98,7 @@ export default function ScenariosPage() {
             <div className="flex items-center gap-3 text-xs text-gray-400">
               {s.date_from && <span>从 {s.date_from}</span>}
               {s.date_to && <span>到 {s.date_to}</span>}
-              <span className="bg-brand/10 text-brand px-2 py-0.5 rounded-full font-medium">匹配 {s.matched_count} 条</span>
+              <span className="bg-accent-light text-accent px-2 py-0.5 rounded-full font-medium">匹配 {s.matched_count} 条</span>
             </div>
           </div>
         ))}

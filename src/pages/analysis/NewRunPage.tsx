@@ -50,13 +50,13 @@ export default function NewRunPage() {
           <label className="text-sm font-medium text-gray-700 block mb-2">任务名称</label>
           <input value={name} onChange={e => setName(e.target.value)}
             placeholder={`分析 ${new Date().toLocaleDateString('zh-CN')}`}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
         </div>
 
         <div>
           <label className="text-sm font-medium text-gray-700 block mb-2">选择场景（可选，不选则分析全部会话）</label>
           <select value={selectedScenario} onChange={e => setSelectedScenario(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/30">
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20">
             <option value="">全部会话</option>
             {scenarios.map(s => (
               <option key={s.id} value={s.id}>{s.name} ({s.matched_count}条匹配)</option>
@@ -69,10 +69,10 @@ export default function NewRunPage() {
           <div className="space-y-2">
             {dimensions.map(d => (
               <label key={d.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                selectedDims.has(d.id) ? 'border-brand bg-brand/5' : 'border-gray-200 hover:bg-gray-50'
+                selectedDims.has(d.id) ? 'border-accent bg-accent-light' : 'border-gray-200 hover:bg-gray-50'
               }`}>
                 <input type="checkbox" checked={selectedDims.has(d.id)} onChange={() => toggleDim(d.id)}
-                  className="rounded border-gray-300 text-brand" />
+                  className="rounded border-gray-300 text-accent" />
                 <div>
                   <span className="text-sm font-medium text-gray-900">{d.name}</span>
                   <p className="text-xs text-gray-500">{d.definition.slice(0, 80)}...</p>
@@ -83,7 +83,7 @@ export default function NewRunPage() {
         </div>
 
         <button onClick={handleCreate} disabled={creating || selectedDims.size === 0}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand-dark disabled:opacity-50">
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand-light disabled:opacity-50">
           <Play size={16} />
           {creating ? '创建中...' : '发起分析'}
         </button>

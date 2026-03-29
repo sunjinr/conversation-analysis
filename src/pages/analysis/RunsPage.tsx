@@ -14,7 +14,7 @@ export default function RunsPage() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-gray-900">分析任务</h2>
         <button onClick={() => navigate('/analysis/runs/new')}
-          className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-dark">
+          className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light">
           <Plus size={16} /> 新建分析
         </button>
       </div>
@@ -22,7 +22,7 @@ export default function RunsPage() {
       <div className="space-y-3">
         {runs.map(r => (
           <div key={r.id} onClick={() => navigate(`/analysis/runs/${r.id}`)}
-            className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-brand/30 cursor-pointer transition-colors">
+            className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-accent/30 cursor-pointer transition-colors">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">

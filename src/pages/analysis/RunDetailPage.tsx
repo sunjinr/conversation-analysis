@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 import { Play, Bell, Flag } from 'lucide-react'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
-const COLORS = ['#7C5CFC', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#86868B', '#06B6D4', '#84CC16']
+const COLORS = ['#E8735A', '#10B981', '#F59E0B', '#EF4444', '#3A3A3C', '#EC4899', '#86868B', '#06B6D4', '#84CC16']
 
 export default function RunDetailPage() {
   const { id } = useParams()
@@ -187,7 +187,7 @@ export default function RunDetailPage() {
                           <div className="flex gap-1">
                             <input value={feedbackData.corrected_category} onChange={e => setFeedbackData(d => ({ ...d, corrected_category: e.target.value }))}
                               placeholder="正确类别" className="w-24 px-1 py-0.5 border rounded text-xs" />
-                            <button onClick={() => handleFeedback(r.id, r.category)} className="text-xs text-brand">提交</button>
+                            <button onClick={() => handleFeedback(r.id, r.category)} className="text-xs text-accent">提交</button>
                             <button onClick={() => setFeedbackId(null)} className="text-xs text-gray-400">取消</button>
                           </div>
                         ) : (

@@ -71,7 +71,7 @@ export default function TasksPage() {
               <div className="flex gap-2">
                 {t.status === 'open' && (
                   <>
-                    <button onClick={() => handleClaim(t.id)} className="px-3 py-1 text-xs bg-brand text-white rounded-lg hover:bg-brand-dark">领取</button>
+                    <button onClick={() => handleClaim(t.id)} className="px-3 py-1 text-xs bg-brand text-white rounded-lg hover:bg-brand-light">领取</button>
                     <button onClick={() => handleIgnore(t.id)} className="px-3 py-1 text-xs border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50">忽略</button>
                   </>
                 )}

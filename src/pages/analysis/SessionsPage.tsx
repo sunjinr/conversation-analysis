@@ -99,7 +99,7 @@ export default function SessionsPage() {
             <button
               onClick={handleSummarize}
               disabled={summarizing}
-              className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-dark disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light disabled:opacity-50"
             >
               <Sparkles size={16} />
               {summarizing ? sumProgress : '生成会话总结'}
