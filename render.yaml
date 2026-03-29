@@ -1,10 +1,9 @@
 services:
   - type: web
     name: conversation-analysis
-    runtime: node
+    runtime: docker
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: NODE_ENV
         value: production
@@ -14,9 +13,3 @@ services:
         value: https://coding.dashscope.aliyuncs.com/v1
       - key: LLM_CHAT_MODEL
         value: qwen3-coder-plus
-      - key: EMBEDDING_API_KEY
-        sync: false
-      - key: EMBEDDING_BASE_URL
-        value: https://api.siliconflow.cn/v1
-      - key: EMBEDDING_MODEL
-        value: BAAI/bge-large-zh-v1.5

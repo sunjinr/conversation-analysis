@@ -1,8 +1,9 @@
+// @ts-ignore
 import initSqlJs from 'sql.js'
-import type { Database as SqlJsDatabase } from 'sql.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
+import { v4 as uuid } from 'uuid'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const dataDir = process.env.NODE_ENV === 'production' ? '/tmp/data' : path.join(__dirname, '..', 'data')
