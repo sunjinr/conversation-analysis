@@ -31,7 +31,7 @@ export default function Sidebar() {
             end={link.end}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                isActive ? 'bg-sidebar-active text-gray-900 font-medium border-l-[3px] border-accent pl-[9px]' : 'text-gray-500 hover:bg-sidebar-hover hover:text-gray-800'
+                isActive ? 'bg-sidebar-active text-gray-900 font-medium' : 'text-gray-500 hover:bg-sidebar-hover hover:text-gray-800'
               }`
             }
           >
