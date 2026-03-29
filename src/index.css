@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f8f9fc;
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c4c4cc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #a0a0b0; }
+
+/* Badge styles */
+.badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+}
+.badge-urgent { @apply bg-red-100 text-red-700; }
+.badge-high { @apply bg-orange-100 text-orange-700; }
+.badge-medium { @apply bg-yellow-100 text-yellow-700; }
+.badge-low { @apply bg-green-100 text-green-700; }
+.badge-open { @apply bg-blue-100 text-blue-700; }
+.badge-claimed { @apply bg-purple-100 text-purple-700; }
+.badge-resolved { @apply bg-green-100 text-green-700; }
+.badge-ignored { @apply bg-gray-100 text-gray-500; }
+.badge-running { @apply bg-blue-100 text-blue-700; }
+.badge-completed { @apply bg-green-100 text-green-700; }
+.badge-pending { @apply bg-gray-100 text-gray-500; }
+.badge-failed { @apply bg-red-100 text-red-700; }
