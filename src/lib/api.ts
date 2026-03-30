@@ -41,6 +41,9 @@ export const api = {
   summarizeSessions: (batchSize = 10) => post<{ done: boolean; processed: number; remaining: number }>('/sessions/summarize', { batch_size: batchSize }),
   searchSessions: (query: string, dateFrom?: string, dateTo?: string) =>
     post<{ results: any[]; total: number }>('/sessions/search', { query, date_from: dateFrom, date_to: dateTo }),
+  getSessionSample: () => get<{ sample: any; total: number; columns: string[] }>('/sessions/sample/first'),
+  getDataRequests: () => get<any[]>('/sessions/data-requests'),
+  createDataRequest: (description: string) => post<any>('/sessions/data-requests', { description }),
 
   // Scenarios
   getScenarios: () => get<any[]>('/scenarios'),

@@ -3,6 +3,7 @@ import db from '../db.js'
 import { v4 as uuid } from 'uuid'
 import { authMiddleware, AuthRequest } from '../middleware/auth.js'
 import { analyzeSession, generateTasksForRun } from '../services/analyzer.js'
+import { sendDingTalkNotification } from '../services/dingtalk.js'
 
 const router = Router()
 
@@ -75,6 +76,12 @@ router.post('/:id/process', authMiddleware, async (req: AuthRequest, res) => {
     db.prepare('UPDATE analysis_runs SET summary_json = ? WHERE id = ?').run(JSON.stringify(stats), run.id)
 
     generateTasksForRun(run.id)
+
+    // 自动发送钉钉通知（异步，不阻塞响应）
+    const baseUrl = (req.headers.origin as string) || 'http://localhost:5173'
+    sendDingTalkNotification(run.id, baseUrl).catch(e => {
+      console.error('Auto DingTalk notification failed:', e)
+    })
 
     return res.json({ done: true, processed: run.total_sessions, total: run.total_sessions })
   }

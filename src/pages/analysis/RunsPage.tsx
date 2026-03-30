@@ -12,10 +12,10 @@ export default function RunsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-900">分析任务</h2>
+        <h2 className="text-xl font-bold text-gray-900">洞察任务</h2>
         <button onClick={() => navigate('/analysis/runs/new')}
           className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light">
-          <Plus size={16} /> 新建分析
+          <Plus size={16} /> 新建洞察
         </button>
       </div>
 
@@ -38,7 +38,7 @@ export default function RunsPage() {
           </div>
         ))}
         {runs.length === 0 && (
-          <div className="text-center py-12 text-gray-400 text-sm">暂无分析任务</div>
+          <div className="text-center py-12 text-gray-400 text-sm">暂无洞察任务</div>
         )}
       </div>
     </div>

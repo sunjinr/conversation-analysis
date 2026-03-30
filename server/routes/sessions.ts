@@ -28,6 +28,34 @@ router.get('/', (req, res) => {
   res.json({ data: rows, total: total.cnt, summarized: summarized.cnt })
 })
 
+// GET /api/sessions/sample - get one complete session record (must be before /:id)
+router.get('/sample/first', (_req, res) => {
+  const row = db.prepare(`
+    SELECT s.*, ss.summary_text, ss.key_topics
+    FROM sessions s LEFT JOIN session_summaries ss ON ss.session_id = s.id
+    ORDER BY s.sequence_num ASC LIMIT 1
+  `).get() as any
+  const total = db.prepare('SELECT COUNT(*) as cnt FROM sessions').get() as any
+  const columns = ['sequence_num', 'session_id', 'user_id', 'ocs_session_id', 'bot_conversation', 'human_conversation', 'dissatisfaction_info', 'session_date', 'imported_at', 'summary_text', 'key_topics']
+  res.json({ sample: row || null, total: total.cnt, columns })
+})
+
+// GET /api/sessions/data-requests - list data source requests (must be before /:id)
+router.get('/data-requests', (_req, res) => {
+  const rows = db.prepare('SELECT * FROM data_source_requests ORDER BY created_at DESC').all()
+  res.json(rows)
+})
+
+// POST /api/sessions/data-requests - create a data source request
+router.post('/data-requests', authMiddleware, (req: AuthRequest, res) => {
+  const { description } = req.body
+  if (!description || !description.trim()) return res.status(400).json({ error: 'description required' })
+  const id = uuid()
+  db.prepare('INSERT INTO data_source_requests (id, description, created_by) VALUES (?, ?, ?)').run(id, description.trim(), req.user?.name || '')
+  const row = db.prepare('SELECT * FROM data_source_requests WHERE id = ?').get(id)
+  res.json(row)
+})
+
 // GET /api/sessions/:id
 router.get('/:id', (req, res) => {
   const row = db.prepare(`

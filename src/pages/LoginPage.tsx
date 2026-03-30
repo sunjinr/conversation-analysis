@@ -31,7 +31,7 @@ export default function LoginPage() {
           <div className="w-14 h-14 bg-accent-light rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Lock className="text-accent" size={28} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">会话分析平台</h1>
+          <h1 className="text-2xl font-bold text-gray-900">SkiSight 洞察平台</h1>
           <p className="text-gray-500 text-sm mt-1">输入 Token 登录</p>
         </div>
 

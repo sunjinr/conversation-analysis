@@ -76,7 +76,7 @@ export default function RunDetailPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">分析详情</h2>
+          <h2 className="text-xl font-bold text-gray-900">洞察详情</h2>
           <p className="text-sm text-gray-500 mt-1">
             <span className={`badge badge-${run.status}`}>{run.status}</span>
             {' '}| {run.total_sessions}条会话 | {run.created_at?.slice(0, 16)}
@@ -85,13 +85,13 @@ export default function RunDetailPage() {
         <div className="flex gap-2">
           {run.status === 'running' && !processing && (
             <button onClick={startProcess} className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm">
-              <Play size={16} /> 继续分析
+              <Play size={16} /> 继续洞察
             </button>
           )}
           {run.status === 'running' && processing && (
             <button disabled className="flex items-center gap-2 px-4 py-2 bg-brand/50 text-white rounded-lg text-sm">
               <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
-              分析中 {run.processed_sessions}/{run.total_sessions}
+              洞察中 {run.processed_sessions}/{run.total_sessions}
             </button>
           )}
           {run.status === 'completed' && (
@@ -105,7 +105,7 @@ export default function RunDetailPage() {
       {(run.status === 'running') && (
         <div className="mb-6 bg-blue-50 rounded-xl p-4">
           <div className="flex justify-between text-sm text-blue-700 mb-2">
-            <span>分析进度</span>
+            <span>洞察进度</span>
             <span>{run.processed_sessions} / {run.total_sessions}</span>
           </div>
           <div className="h-2 bg-blue-100 rounded-full overflow-hidden">
@@ -120,7 +120,7 @@ export default function RunDetailPage() {
             {(['report', 'results', 'tasks'] as const).map(t => (
               <button key={t} onClick={() => setTab(t)}
                 className={`px-4 py-1.5 rounded-md text-sm transition-colors ${tab === t ? 'bg-white shadow-sm font-medium text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}>
-                {{ report: '分析报告', results: '逐条结果', tasks: '生成任务' }[t]}
+                {{ report: '洞察报告', results: '逐条结果', tasks: '生成任务' }[t]}
               </button>
             ))}
           </div>

@@ -32,7 +32,7 @@ export default function NewRunPage() {
     setCreating(true)
     try {
       const res = await api.createRun({
-        name: name || `分析 ${new Date().toLocaleDateString('zh-CN')}`,
+        name: name || `洞察 ${new Date().toLocaleDateString('zh-CN')}`,
         scenario_id: selectedScenario || null,
         dimension_ids: Array.from(selectedDims),
       })
@@ -43,18 +43,18 @@ export default function NewRunPage() {
 
   return (
     <div className="max-w-2xl">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">创建分析任务</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-6">创建洞察任务</h2>
 
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 space-y-6">
         <div>
           <label className="text-sm font-medium text-gray-700 block mb-2">任务名称</label>
           <input value={name} onChange={e => setName(e.target.value)}
-            placeholder={`分析 ${new Date().toLocaleDateString('zh-CN')}`}
+            placeholder={`洞察 ${new Date().toLocaleDateString('zh-CN')}`}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-2">选择场景（可选，不选则分析全部会话）</label>
+          <label className="text-sm font-medium text-gray-700 block mb-2">选择场景（可选，不选则洞察全部会话）</label>
           <select value={selectedScenario} onChange={e => setSelectedScenario(e.target.value)}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20">
             <option value="">全部会话</option>
@@ -65,7 +65,7 @@ export default function NewRunPage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-2">选择分析维度</label>
+          <label className="text-sm font-medium text-gray-700 block mb-2">选择洞察维度</label>
           <div className="space-y-2">
             {dimensions.map(d => (
               <label key={d.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
@@ -85,7 +85,7 @@ export default function NewRunPage() {
         <button onClick={handleCreate} disabled={creating || selectedDims.size === 0}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand-light disabled:opacity-50">
           <Play size={16} />
-          {creating ? '创建中...' : '发起分析'}
+          {creating ? '创建中...' : '发起洞察'}
         </button>
       </div>
     </div>

@@ -42,7 +42,7 @@ export default function SettingsPage() {
           <Users size={18} className="text-accent" />
           <h3 className="text-sm font-semibold text-gray-700">团队成员</h3>
         </div>
-        <p className="text-xs text-gray-400 mb-4">配置团队成员和角色描述，分析完成后任务会自动推荐给匹配的成员</p>
+        <p className="text-xs text-gray-400 mb-4">配置团队成员和角色描述，洞察完成后任务会自动推荐给匹配的成员</p>
 
         <div className="space-y-2 mb-4">
           {team.map(m => (

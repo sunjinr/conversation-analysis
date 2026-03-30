@@ -54,7 +54,7 @@ export default function ScenariosPage() {
             <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
               placeholder="场景名称" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
             <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              placeholder="用自然语言描述你想分析的场景，如：AI客服回答错误导致买家不满意的会话" rows={3}
+              placeholder="用自然语言描述你想洞察的场景，如：AI客服回答错误导致买家不满意的会话" rows={3}
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
             <div className="flex gap-4">
               <div className="flex-1">

@@ -186,6 +186,11 @@ export async function initDB() {
       task_resolved_ids TEXT DEFAULT '[]', notes TEXT DEFAULT '',
       created_at TEXT DEFAULT (datetime('now'))
   )`)
+  db.exec(`CREATE TABLE IF NOT EXISTS data_source_requests (
+      id TEXT PRIMARY KEY, description TEXT NOT NULL, status TEXT DEFAULT 'pending',
+      response TEXT DEFAULT '', created_by TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+  )`)
 
   // Seed admin
   const adminExists = db.prepare('SELECT id FROM users WHERE id = ?').get('admin-001')
@@ -236,6 +241,12 @@ export async function initDB() {
   }
 
   console.log('[DB] Initialized successfully')
+
+  // Seed production mock data when DB is empty
+  if (process.env.NODE_ENV === 'production') {
+    const { seedProductionData } = await import('./seed-production.js')
+    seedProductionData()
+  }
 }
 
 export default db

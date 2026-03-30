@@ -1,172 +1,185 @@
-import { useEffect, useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
-import { Upload, Sparkles, Search, ChevronLeft, ChevronRight } from 'lucide-react'
-import * as XLSX from 'xlsx'
+import { Database, Plus, Clock, MessageSquare, X } from 'lucide-react'
+
+const FIELD_LABELS: Record<string, string> = {
+  sequence_num: '序号',
+  session_id: 'Session ID',
+  user_id: 'User ID',
+  ocs_session_id: 'OCS Session ID',
+  bot_conversation: '会员与机器人对话',
+  human_conversation: '会员与客服对话',
+  dissatisfaction_info: '会员点击不满意',
+  session_date: '会话日期',
+  imported_at: '导入时间',
+  summary_text: 'AI 摘要',
+  key_topics: '关键主题',
+}
 
 export default function SessionsPage() {
-  const [sessions, setSessions] = useState<any[]>([])
+  const [sample, setSample] = useState<any>(null)
   const [total, setTotal] = useState(0)
-  const [summarized, setSummarized] = useState(0)
-  const [page, setPage] = useState(0)
-  const [importing, setImporting] = useState(false)
-  const [summarizing, setSummarizing] = useState(false)
-  const [sumProgress, setSumProgress] = useState('')
-  const fileRef = useRef<HTMLInputElement>(null)
-  const navigate = useNavigate()
-  const pageSize = 30
+  const [columns, setColumns] = useState<string[]>([])
+  const [requests, setRequests] = useState<any[]>([])
+  const [showForm, setShowForm] = useState(false)
+  const [newDesc, setNewDesc] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  const load = () => {
-    api.getSessions(pageSize, page * pageSize).then(res => {
-      setSessions(res.data)
+  const loadSample = () => {
+    api.getSessionSample().then(res => {
+      setSample(res.sample)
       setTotal(res.total)
-      setSummarized(res.summarized)
+      setColumns(res.columns)
     })
   }
 
-  useEffect(() => { load() }, [page])
+  const loadRequests = () => {
+    api.getDataRequests().then(setRequests)
+  }
 
-  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setImporting(true)
+  useEffect(() => {
+    loadSample()
+    loadRequests()
+  }, [])
+
+  const handleSubmitRequest = async () => {
+    if (!newDesc.trim()) return
+    setSubmitting(true)
     try {
-      const data = await file.arrayBuffer()
-      const wb = XLSX.read(data)
-      const ws = wb.Sheets[wb.SheetNames[0]]
-      const rows = XLSX.utils.sheet_to_json(ws) as any[]
-
-      const mapped = rows.map((r: any, i: number) => ({
-        sequence_num: r['序号'] || i + 1,
-        session_id: r['session_id'] || '',
-        user_id: r['user_id'] || '',
-        ocs_session_id: r['ocs_session_id'] || '',
-        bot_conversation: r['会员与机器人对话'] || '',
-        human_conversation: r['会员与客服对话'] || '',
-        dissatisfaction_info: r['会员点击不满意'] || '',
-      }))
-
-      await api.importSessions(mapped)
-      setPage(0)
-      load()
+      await api.createDataRequest(newDesc)
+      setNewDesc('')
+      setShowForm(false)
+      loadRequests()
     } catch (err: any) {
-      alert('Import failed: ' + err.message)
+      alert('提交失败: ' + err.message)
     } finally {
-      setImporting(false)
-      if (fileRef.current) fileRef.current.value = ''
+      setSubmitting(false)
     }
   }
 
-  const handleSummarize = async () => {
-    setSummarizing(true)
-    setSumProgress('Starting...')
-    let done = false
-    while (!done) {
-      try {
-        const res = await api.summarizeSessions(10)
-        done = res.done
-        setSumProgress(`已总结 ${summarized + res.processed} / ${total}，剩余 ${res.remaining}`)
-        if (!done) setSummarized(prev => prev + res.processed)
-      } catch (err: any) {
-        setSumProgress('Error: ' + err.message)
-        break
-      }
-    }
-    setSummarizing(false)
-    load()
-  }
-
-  const totalPages = Math.ceil(total / pageSize)
+  const isLongText = (val: string) => val && val.length > 100
 
   return (
     <div>
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">会话数据</h2>
-          <p className="text-sm text-gray-500 mt-1">共 {total} 条会话，已总结 {summarized} 条</p>
+          <h2 className="text-xl font-bold text-gray-900">平台洞察数据源</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            当前数据源共 <span className="font-medium text-gray-700">{total}</span> 条会话记录，以下展示一条完整的数据样例
+          </p>
         </div>
-        <div className="flex gap-3">
-          <input ref={fileRef} type="file" accept=".xlsx,.csv" onChange={handleImport} className="hidden" />
-          <button
-            onClick={() => fileRef.current?.click()}
-            disabled={importing}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50"
-          >
-            <Upload size={16} />
-            {importing ? '导入中...' : '导入 XLSX'}
-          </button>
-          {total > 0 && summarized < total && (
-            <button
-              onClick={handleSummarize}
-              disabled={summarizing}
-              className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light disabled:opacity-50"
-            >
-              <Sparkles size={16} />
-              {summarizing ? sumProgress : '生成会话总结'}
-            </button>
-          )}
-        </div>
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light transition-colors"
+        >
+          <Plus size={16} />
+          提交数据源加工需求
+        </button>
       </div>
 
-      {summarizing && (
-        <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <div className="flex items-center gap-2 text-sm text-blue-700">
-            <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full" />
-            {sumProgress}
-          </div>
-          <div className="mt-2 h-1.5 bg-blue-100 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${total > 0 ? (summarized / total * 100) : 0}%` }} />
-          </div>
+      {/* Sample Record */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+          <Database size={16} className="text-gray-400" />
+          <h3 className="text-sm font-semibold text-gray-700">数据样例</h3>
+          <span className="text-xs text-gray-400 ml-2">展示第 1 条会话的完整字段</span>
         </div>
-      )}
+        {sample ? (
+          <div className="divide-y divide-gray-50">
+            {columns.map(col => {
+              const val = sample[col]
+              const displayVal = val === null || val === undefined || val === '' ? '-' : String(val)
+              const long = isLongText(displayVal)
+              return (
+                <div key={col} className={`px-5 py-3 ${long ? 'flex flex-col gap-1.5' : 'flex items-start gap-4'}`}>
+                  <div className={`text-xs font-medium text-gray-400 uppercase tracking-wide ${long ? '' : 'w-40 shrink-0 pt-0.5'}`}>
+                    {FIELD_LABELS[col] || col}
+                  </div>
+                  <div className={`text-sm text-gray-800 ${long ? 'bg-gray-50 rounded-lg p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap max-h-60 overflow-y-auto' : 'flex-1 break-all'}`}>
+                    {displayVal}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="px-5 py-12 text-center text-gray-400 text-sm">暂无数据</div>
+        )}
+      </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-gray-50 text-left text-xs text-gray-500 uppercase">
-              <th className="px-4 py-3 w-16">#</th>
-              <th className="px-4 py-3">Session ID</th>
-              <th className="px-4 py-3">日期</th>
-              <th className="px-4 py-3">不满意</th>
-              <th className="px-4 py-3">摘要</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sessions.map((s: any) => (
-              <tr
-                key={s.id}
-                onClick={() => navigate(`/analysis/sessions/${s.id}`)}
-                className="border-t border-gray-50 hover:bg-gray-50/50 cursor-pointer"
-              >
-                <td className="px-4 py-3 text-gray-400">{s.sequence_num}</td>
-                <td className="px-4 py-3 font-mono text-xs text-gray-600">{(s.session_id || '').slice(0, 12)}...</td>
-                <td className="px-4 py-3 text-gray-500">{s.session_date}</td>
-                <td className="px-4 py-3">
-                  {s.dissatisfaction_info?.includes('点了不满意') && <span className="badge badge-urgent">不满意</span>}
-                </td>
-                <td className="px-4 py-3 text-gray-500 truncate max-w-xs">{s.summary_text || <span className="text-gray-300">未总结</span>}</td>
-              </tr>
+      {/* Request History */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+          <Clock size={16} className="text-gray-400" />
+          <h3 className="text-sm font-semibold text-gray-700">需求历史</h3>
+          <span className="text-xs text-gray-400 ml-2">已提交的数据源加工需求</span>
+        </div>
+        {requests.length > 0 ? (
+          <div className="divide-y divide-gray-50">
+            {requests.map((r: any) => (
+              <div key={r.id} className="px-5 py-3.5 flex items-start gap-3">
+                <MessageSquare size={14} className="text-gray-300 mt-0.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-gray-800">{r.description}</p>
+                  <div className="flex items-center gap-3 mt-1.5">
+                    <span className="text-xs text-gray-400">{r.created_at?.replace('T', ' ').slice(0, 16)}</span>
+                    <span className={`text-xs px-1.5 py-0.5 rounded ${
+                      r.status === 'done' ? 'bg-green-50 text-green-600' :
+                      r.status === 'in_progress' ? 'bg-blue-50 text-blue-600' :
+                      'bg-gray-100 text-gray-500'
+                    }`}>
+                      {r.status === 'done' ? '已完成' : r.status === 'in_progress' ? '处理中' : '待处理'}
+                    </span>
+                  </div>
+                  {r.response && (
+                    <p className="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">{r.response}</p>
+                  )}
+                </div>
+              </div>
             ))}
-            {sessions.length === 0 && (
-              <tr><td colSpan={5} className="text-center py-12 text-gray-400">暂无数据，请导入 XLSX 文件</td></tr>
-            )}
-          </tbody>
-        </table>
+          </div>
+        ) : (
+          <div className="px-5 py-8 text-center text-gray-400 text-sm">暂无需求记录</div>
+        )}
+      </div>
 
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-            <span className="text-xs text-gray-400">第 {page + 1} / {totalPages} 页</span>
-            <div className="flex gap-1">
-              <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-1.5 rounded hover:bg-gray-100 disabled:opacity-30">
-                <ChevronLeft size={16} />
+      {/* Submit Request Modal */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50" onClick={() => setShowForm(false)}>
+          <div className="bg-white rounded-xl shadow-xl w-[480px] max-w-[90vw]" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <h3 className="text-sm font-semibold text-gray-900">提交数据源加工需求</h3>
+              <button onClick={() => setShowForm(false)} className="p-1 hover:bg-gray-100 rounded-lg">
+                <X size={16} className="text-gray-400" />
               </button>
-              <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-1.5 rounded hover:bg-gray-100 disabled:opacity-30">
-                <ChevronRight size={16} />
+            </div>
+            <div className="px-5 py-4">
+              <p className="text-xs text-gray-500 mb-3">
+                描述你希望对数据源做的加工处理，例如增加字段、数据清洗规则等
+              </p>
+              <textarea
+                value={newDesc}
+                onChange={e => setNewDesc(e.target.value)}
+                placeholder="例如：希望增加「会话时长」字段，记录每通会话从开始到结束的总时长..."
+                className="w-full h-28 px-3 py-2.5 border border-gray-200 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
+              />
+            </div>
+            <div className="flex justify-end gap-2 px-5 py-3 border-t border-gray-100">
+              <button onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
+                取消
+              </button>
+              <button
+                onClick={handleSubmitRequest}
+                disabled={!newDesc.trim() || submitting}
+                className="px-4 py-2 text-sm bg-brand text-white rounded-lg hover:bg-brand-light disabled:opacity-50"
+              >
+                {submitting ? '提交中...' : '提交需求'}
               </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

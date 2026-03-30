@@ -47,7 +47,7 @@ export default function DashboardPage() {
             <LineChart data={satisfaction}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={d => d.slice(5)} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
+              <YAxis domain={[40, 70]} tick={{ fontSize: 11 }} />
               <Tooltip
                 formatter={(value: any, name: string) => {
                   if (name === 'satisfaction_rate') return [`${value}%`, '满意率']
@@ -72,7 +72,7 @@ export default function DashboardPage() {
 
       {summary?.latest_run && (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-700 mb-2">最近分析</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">最近洞察</h3>
           <p className="text-sm text-gray-500">
             状态: <span className={`badge badge-${summary.latest_run.status}`}>{summary.latest_run.status}</span>
             {' '}| 会话: {summary.latest_run.total_sessions}条

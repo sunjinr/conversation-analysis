@@ -1,40 +1,87 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { LayoutDashboard, MessageSquare, Target, Layers, Play, CheckSquare, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, Target, Layers, Search, CheckSquare, Settings, Database, LogOut, Lightbulb, ChevronDown } from 'lucide-react'
 
-const links = [
+const insightChildren = [
+  { to: '/analysis/scenarios', icon: Target, label: '自由圈场景' },
+  { to: '/analysis/dimensions', icon: Layers, label: '洞察维度' },
+  { to: '/analysis/runs', icon: Search, label: '洞察' },
+]
+
+const topLinks = [
   { to: '/analysis', icon: LayoutDashboard, label: '概览', end: true },
-  { to: '/analysis/sessions', icon: MessageSquare, label: '会话数据' },
-  { to: '/analysis/scenarios', icon: Target, label: '圈场景' },
-  { to: '/analysis/dimensions', icon: Layers, label: '分析维度' },
-  { to: '/analysis/runs', icon: Play, label: '分析任务' },
-  { to: '/analysis/tasks', icon: CheckSquare, label: '待办任务' },
+]
+
+const bottomLinks = [
+  { to: '/analysis/tasks', icon: CheckSquare, label: '任务' },
+  { to: '/analysis/sessions', icon: Database, label: '数据' },
   { to: '/analysis/settings', icon: Settings, label: '设置' },
 ]
+
+const linkClass = (isActive: boolean) =>
+  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mt-0.5 ${
+    isActive ? 'bg-sidebar-active text-gray-900 font-medium' : 'text-gray-500 hover:bg-sidebar-hover hover:text-gray-800'
+  }`
 
 export default function Sidebar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const insightActive = insightChildren.some(c => location.pathname.startsWith(c.to))
+  const [insightOpen, setInsightOpen] = useState(true)
 
   return (
     <aside className="w-[240px] bg-sidebar text-gray-800 flex flex-col shrink-0 border-r border-sidebar-border">
       <div className="px-5 py-5 border-b border-sidebar-border">
-        <h1 className="text-lg font-bold tracking-tight">CS Analysis</h1>
-        <p className="text-xs text-[#86868B] mt-0.5">会话分析与优化平台</p>
+        <div className="flex items-center gap-2.5">
+          <img src="/skisight-logo.png" alt="SkiSight" className="w-8 h-8 rounded-lg" />
+          <h1 className="text-[17px] font-bold tracking-tight" style={{ fontFamily: "'SF Pro Display', 'PingFang SC', system-ui, sans-serif" }}>SkiSight<span className="font-normal text-[15px] text-gray-500">洞察平台</span></h1>
+        </div>
+        <p className="text-[10px] text-[#AEAEB2] mt-2 leading-relaxed">Powered by SKILLS & CLAW</p>
+        <p className="text-[10px] text-[#AEAEB2] leading-relaxed">Created by Matt</p>
       </div>
 
-      <nav className="flex-1 py-3 px-3 space-y-0.5 overflow-auto">
-        {links.map(link => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            end={link.end}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                isActive ? 'bg-sidebar-active text-gray-900 font-medium' : 'text-gray-500 hover:bg-sidebar-hover hover:text-gray-800'
-              }`
-            }
-          >
+      <nav className="flex-1 py-3 px-3 overflow-auto">
+        {topLinks.map(link => (
+          <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => linkClass(isActive)}>
+            <link.icon size={18} />
+            {link.label}
+          </NavLink>
+        ))}
+
+        <button
+          onClick={() => setInsightOpen(v => !v)}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mt-0.5 ${
+            insightActive ? 'bg-sidebar-active text-gray-900 font-medium' : 'text-gray-500 hover:bg-sidebar-hover hover:text-gray-800'
+          }`}
+        >
+          <Lightbulb size={18} />
+          <span className="flex-1 text-left">Insight</span>
+          <ChevronDown size={14} className={`transition-transform duration-200 ${insightOpen ? '' : '-rotate-90'}`} />
+        </button>
+        {insightOpen && (
+          <div className="ml-3 pl-3 border-l border-sidebar-border">
+            {insightChildren.map(link => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] transition-colors mt-0.5 ${
+                    isActive ? 'text-gray-900 font-medium bg-sidebar-active' : 'text-gray-400 hover:text-gray-700 hover:bg-sidebar-hover'
+                  }`
+                }
+              >
+                <link.icon size={15} />
+                {link.label}
+              </NavLink>
+            ))}
+          </div>
+        )}
+
+        {bottomLinks.map(link => (
+          <NavLink key={link.to} to={link.to} className={({ isActive }) => linkClass(isActive)}>
             <link.icon size={18} />
             {link.label}
           </NavLink>

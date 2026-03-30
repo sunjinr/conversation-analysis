@@ -109,8 +109,8 @@ var require_package = __commonJS({
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module) {
-    var fs3 = __require("fs");
-    var path3 = __require("path");
+    var fs4 = __require("fs");
+    var path4 = __require("path");
     var os = __require("os");
     var crypto3 = __require("crypto");
     var packageJson = require_package();
@@ -248,7 +248,7 @@ var require_main = __commonJS({
       if (options && options.path && options.path.length > 0) {
         if (Array.isArray(options.path)) {
           for (const filepath of options.path) {
-            if (fs3.existsSync(filepath)) {
+            if (fs4.existsSync(filepath)) {
               possibleVaultPath = filepath.endsWith(".vault") ? filepath : `${filepath}.vault`;
             }
           }
@@ -256,15 +256,15 @@ var require_main = __commonJS({
           possibleVaultPath = options.path.endsWith(".vault") ? options.path : `${options.path}.vault`;
         }
       } else {
-        possibleVaultPath = path3.resolve(process.cwd(), ".env.vault");
+        possibleVaultPath = path4.resolve(process.cwd(), ".env.vault");
       }
-      if (fs3.existsSync(possibleVaultPath)) {
+      if (fs4.existsSync(possibleVaultPath)) {
         return possibleVaultPath;
       }
       return null;
     }
     function _resolveHome(envPath) {
-      return envPath[0] === "~" ? path3.join(os.homedir(), envPath.slice(1)) : envPath;
+      return envPath[0] === "~" ? path4.join(os.homedir(), envPath.slice(1)) : envPath;
     }
     function _configVault(options) {
       const debug2 = parseBoolean(process.env.DOTENV_CONFIG_DEBUG || options && options.debug);
@@ -281,7 +281,7 @@ var require_main = __commonJS({
       return { parsed };
     }
     function configDotenv(options) {
-      const dotenvPath = path3.resolve(process.cwd(), ".env");
+      const dotenvPath = path4.resolve(process.cwd(), ".env");
       let encoding = "utf8";
       let processEnv = process.env;
       if (options && options.processEnv != null) {
@@ -309,13 +309,13 @@ var require_main = __commonJS({
       }
       let lastError;
       const parsedAll = {};
-      for (const path4 of optionPaths) {
+      for (const path5 of optionPaths) {
         try {
-          const parsed = DotenvModule.parse(fs3.readFileSync(path4, { encoding }));
+          const parsed = DotenvModule.parse(fs4.readFileSync(path5, { encoding }));
           DotenvModule.populate(parsedAll, parsed, options);
         } catch (e2) {
           if (debug2) {
-            _debug(`Failed to load ${path4} ${e2.message}`);
+            _debug(`Failed to load ${path5} ${e2.message}`);
           }
           lastError = e2;
         }
@@ -328,7 +328,7 @@ var require_main = __commonJS({
         const shortPaths = [];
         for (const filePath of optionPaths) {
           try {
-            const relative = path3.relative(process.cwd(), filePath);
+            const relative = path4.relative(process.cwd(), filePath);
             shortPaths.push(relative);
           } catch (e2) {
             if (debug2) {
@@ -1738,8 +1738,8 @@ var require_node = __commonJS({
           }
           break;
         case "FILE":
-          var fs3 = __require("fs");
-          stream2 = new fs3.SyncWriteStream(fd2, { autoClose: false });
+          var fs4 = __require("fs");
+          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -14526,11 +14526,11 @@ var require_mime_types = __commonJS({
       }
       return exts[0];
     }
-    function lookup(path3) {
-      if (!path3 || typeof path3 !== "string") {
+    function lookup(path4) {
+      if (!path4 || typeof path4 !== "string") {
         return false;
       }
-      var extension2 = extname("x." + path3).toLowerCase().substr(1);
+      var extension2 = extname("x." + path4).toLowerCase().substr(1);
       if (!extension2) {
         return false;
       }
@@ -18085,8 +18085,8 @@ var require_node2 = __commonJS({
           }
           break;
         case "FILE":
-          var fs3 = __require("fs");
-          stream2 = new fs3.SyncWriteStream(fd2, { autoClose: false });
+          var fs4 = __require("fs");
+          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -18804,8 +18804,8 @@ var require_node3 = __commonJS({
           }
           break;
         case "FILE":
-          var fs3 = __require("fs");
-          stream2 = new fs3.SyncWriteStream(fd2, { autoClose: false });
+          var fs4 = __require("fs");
+          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -18893,7 +18893,7 @@ var require_path_to_regexp = __commonJS({
   "node_modules/path-to-regexp/index.js"(exports, module) {
     module.exports = pathToRegexp;
     var MATCHING_GROUP_REGEXP = /\\.|\((?:\?<(.*?)>)?(?!\?)/g;
-    function pathToRegexp(path3, keys, options) {
+    function pathToRegexp(path4, keys, options) {
       options = options || {};
       keys = keys || [];
       var strict = options.strict;
@@ -18907,8 +18907,8 @@ var require_path_to_regexp = __commonJS({
       var pos = 0;
       var backtrack = "";
       var m2;
-      if (path3 instanceof RegExp) {
-        while (m2 = MATCHING_GROUP_REGEXP.exec(path3.source)) {
+      if (path4 instanceof RegExp) {
+        while (m2 = MATCHING_GROUP_REGEXP.exec(path4.source)) {
           if (m2[0][0] === "\\") continue;
           keys.push({
             name: m2[1] || name++,
@@ -18916,18 +18916,18 @@ var require_path_to_regexp = __commonJS({
             offset: m2.index
           });
         }
-        return path3;
+        return path4;
       }
-      if (Array.isArray(path3)) {
-        path3 = path3.map(function(value) {
+      if (Array.isArray(path4)) {
+        path4 = path4.map(function(value) {
           return pathToRegexp(value, keys, options).source;
         });
-        return new RegExp(path3.join("|"), flags);
+        return new RegExp(path4.join("|"), flags);
       }
-      if (typeof path3 !== "string") {
+      if (typeof path4 !== "string") {
         throw new TypeError("path must be a string, array of strings, or regular expression");
       }
-      path3 = path3.replace(
+      path4 = path4.replace(
         /\\.|(\/)?(\.)?:(\w+)(\(.*?\))?(\*)?(\?)?|[.*]|\/\(/g,
         function(match, slash, format, key, capture, star, optional, offset) {
           if (match[0] === "\\") {
@@ -18944,7 +18944,7 @@ var require_path_to_regexp = __commonJS({
           if (slash || format) {
             backtrack = "";
           } else {
-            backtrack += path3.slice(pos, offset);
+            backtrack += path4.slice(pos, offset);
           }
           pos = offset + match.length;
           if (match === "*") {
@@ -18974,7 +18974,7 @@ var require_path_to_regexp = __commonJS({
           return result;
         }
       );
-      while (m2 = MATCHING_GROUP_REGEXP.exec(path3)) {
+      while (m2 = MATCHING_GROUP_REGEXP.exec(path4)) {
         if (m2[0][0] === "\\") continue;
         if (keysOffset + i2 === keys.length || keys[keysOffset + i2].offset > m2.index) {
           keys.splice(keysOffset + i2, 0, {
@@ -18986,13 +18986,13 @@ var require_path_to_regexp = __commonJS({
         }
         i2++;
       }
-      path3 += strict ? "" : path3[path3.length - 1] === "/" ? "?" : "/?";
+      path4 += strict ? "" : path4[path4.length - 1] === "/" ? "?" : "/?";
       if (end) {
-        path3 += "$";
-      } else if (path3[path3.length - 1] !== "/") {
-        path3 += lookahead ? "(?=/|$)" : "(?:/|$)";
+        path4 += "$";
+      } else if (path4[path4.length - 1] !== "/") {
+        path4 += lookahead ? "(?=/|$)" : "(?:/|$)";
       }
-      return new RegExp("^" + path3, flags);
+      return new RegExp("^" + path4, flags);
     }
   }
 });
@@ -19005,19 +19005,19 @@ var require_layer = __commonJS({
     var debug2 = require_src3()("express:router:layer");
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     module.exports = Layer;
-    function Layer(path3, options, fn) {
+    function Layer(path4, options, fn) {
       if (!(this instanceof Layer)) {
-        return new Layer(path3, options, fn);
+        return new Layer(path4, options, fn);
       }
-      debug2("new %o", path3);
+      debug2("new %o", path4);
       var opts = options || {};
       this.handle = fn;
       this.name = fn.name || "<anonymous>";
       this.params = void 0;
       this.path = void 0;
-      this.regexp = pathRegexp(path3, this.keys = [], opts);
-      this.regexp.fast_star = path3 === "*";
-      this.regexp.fast_slash = path3 === "/" && opts.end === false;
+      this.regexp = pathRegexp(path4, this.keys = [], opts);
+      this.regexp.fast_star = path4 === "*";
+      this.regexp.fast_slash = path4 === "/" && opts.end === false;
     }
     Layer.prototype.handle_error = function handle_error(error, req, res, next) {
       var fn = this.handle;
@@ -19041,20 +19041,20 @@ var require_layer = __commonJS({
         next(err);
       }
     };
-    Layer.prototype.match = function match(path3) {
+    Layer.prototype.match = function match(path4) {
       var match2;
-      if (path3 != null) {
+      if (path4 != null) {
         if (this.regexp.fast_slash) {
           this.params = {};
           this.path = "";
           return true;
         }
         if (this.regexp.fast_star) {
-          this.params = { "0": decode_param(path3) };
-          this.path = path3;
+          this.params = { "0": decode_param(path4) };
+          this.path = path4;
           return true;
         }
-        match2 = this.regexp.exec(path3);
+        match2 = this.regexp.exec(path4);
       }
       if (!match2) {
         this.params = void 0;
@@ -19147,10 +19147,10 @@ var require_route = __commonJS({
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     module.exports = Route;
-    function Route(path3) {
-      this.path = path3;
+    function Route(path4) {
+      this.path = path4;
       this.stack = [];
-      debug2("new %o", path3);
+      debug2("new %o", path4);
       this.methods = {};
     }
     Route.prototype._handles_method = function _handles_method(method) {
@@ -19362,8 +19362,8 @@ var require_router = __commonJS({
         if (++sync > 100) {
           return setImmediate(next, err);
         }
-        var path3 = getPathname(req);
-        if (path3 == null) {
+        var path4 = getPathname(req);
+        if (path4 == null) {
           return done(layerError);
         }
         var layer;
@@ -19371,7 +19371,7 @@ var require_router = __commonJS({
         var route;
         while (match !== true && idx < stack.length) {
           layer = stack[idx++];
-          match = matchLayer(layer, path3);
+          match = matchLayer(layer, path4);
           route = layer.route;
           if (typeof match !== "boolean") {
             layerError = layerError || match;
@@ -19409,18 +19409,18 @@ var require_router = __commonJS({
           } else if (route) {
             layer.handle_request(req, res, next);
           } else {
-            trim_prefix(layer, layerError, layerPath, path3);
+            trim_prefix(layer, layerError, layerPath, path4);
           }
           sync = 0;
         });
       }
-      function trim_prefix(layer, layerError, layerPath, path3) {
+      function trim_prefix(layer, layerError, layerPath, path4) {
         if (layerPath.length !== 0) {
-          if (layerPath !== path3.slice(0, layerPath.length)) {
+          if (layerPath !== path4.slice(0, layerPath.length)) {
             next(layerError);
             return;
           }
-          var c2 = path3[layerPath.length];
+          var c2 = path4[layerPath.length];
           if (c2 && c2 !== "/" && c2 !== ".") return next(layerError);
           debug2("trim prefix (%s) from url %s", layerPath, req.url);
           removed = layerPath;
@@ -19498,7 +19498,7 @@ var require_router = __commonJS({
     };
     proto.use = function use(fn) {
       var offset = 0;
-      var path3 = "/";
+      var path4 = "/";
       if (typeof fn !== "function") {
         var arg = fn;
         while (Array.isArray(arg) && arg.length !== 0) {
@@ -19506,7 +19506,7 @@ var require_router = __commonJS({
         }
         if (typeof arg !== "function") {
           offset = 1;
-          path3 = fn;
+          path4 = fn;
         }
       }
       var callbacks = flatten(slice.call(arguments, offset));
@@ -19518,8 +19518,8 @@ var require_router = __commonJS({
         if (typeof fn !== "function") {
           throw new TypeError("Router.use() requires a middleware function but got a " + gettype(fn));
         }
-        debug2("use %o %s", path3, fn.name || "<anonymous>");
-        var layer = new Layer(path3, {
+        debug2("use %o %s", path4, fn.name || "<anonymous>");
+        var layer = new Layer(path4, {
           sensitive: this.caseSensitive,
           strict: false,
           end: false
@@ -19529,9 +19529,9 @@ var require_router = __commonJS({
       }
       return this;
     };
-    proto.route = function route(path3) {
-      var route2 = new Route(path3);
-      var layer = new Layer(path3, {
+    proto.route = function route(path4) {
+      var route2 = new Route(path4);
+      var layer = new Layer(path4, {
         sensitive: this.caseSensitive,
         strict: this.strict,
         end: true
@@ -19541,8 +19541,8 @@ var require_router = __commonJS({
       return route2;
     };
     methods.concat("all").forEach(function(method) {
-      proto[method] = function(path3) {
-        var route = this.route(path3);
+      proto[method] = function(path4) {
+        var route = this.route(path4);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
       };
@@ -19578,9 +19578,9 @@ var require_router = __commonJS({
       }
       return toString.call(obj).replace(objectRegExp, "$1");
     }
-    function matchLayer(layer, path3) {
+    function matchLayer(layer, path4) {
       try {
-        return layer.match(path3);
+        return layer.match(path4);
       } catch (err) {
         return err;
       }
@@ -19698,13 +19698,13 @@ var require_view = __commonJS({
   "node_modules/express/lib/view.js"(exports, module) {
     "use strict";
     var debug2 = require_src3()("express:view");
-    var path3 = __require("path");
-    var fs3 = __require("fs");
-    var dirname = path3.dirname;
-    var basename2 = path3.basename;
-    var extname = path3.extname;
-    var join = path3.join;
-    var resolve = path3.resolve;
+    var path4 = __require("path");
+    var fs4 = __require("fs");
+    var dirname = path4.dirname;
+    var basename2 = path4.basename;
+    var extname = path4.extname;
+    var join = path4.join;
+    var resolve = path4.resolve;
     module.exports = View;
     function View(name, options) {
       var opts = options || {};
@@ -19733,17 +19733,17 @@ var require_view = __commonJS({
       this.path = this.lookup(fileName);
     }
     View.prototype.lookup = function lookup(name) {
-      var path4;
+      var path5;
       var roots = [].concat(this.root);
       debug2('lookup "%s"', name);
-      for (var i2 = 0; i2 < roots.length && !path4; i2++) {
+      for (var i2 = 0; i2 < roots.length && !path5; i2++) {
         var root = roots[i2];
         var loc = resolve(root, name);
         var dir = dirname(loc);
         var file = basename2(loc);
-        path4 = this.resolve(dir, file);
+        path5 = this.resolve(dir, file);
       }
-      return path4;
+      return path5;
     };
     View.prototype.render = function render(options, callback) {
       debug2('render "%s"', this.path);
@@ -19751,21 +19751,21 @@ var require_view = __commonJS({
     };
     View.prototype.resolve = function resolve2(dir, file) {
       var ext = this.ext;
-      var path4 = join(dir, file);
-      var stat = tryStat(path4);
+      var path5 = join(dir, file);
+      var stat = tryStat(path5);
       if (stat && stat.isFile()) {
-        return path4;
+        return path5;
       }
-      path4 = join(dir, basename2(file, ext), "index" + ext);
-      stat = tryStat(path4);
+      path5 = join(dir, basename2(file, ext), "index" + ext);
+      stat = tryStat(path5);
       if (stat && stat.isFile()) {
-        return path4;
+        return path5;
       }
     };
-    function tryStat(path4) {
-      debug2('stat "%s"', path4);
+    function tryStat(path5) {
+      debug2('stat "%s"', path5);
       try {
-        return fs3.statSync(path4);
+        return fs4.statSync(path5);
       } catch (e2) {
         return void 0;
       }
@@ -20370,8 +20370,8 @@ var require_node4 = __commonJS({
           }
           break;
         case "FILE":
-          var fs3 = __require("fs");
-          stream2 = new fs3.SyncWriteStream(fd2, { autoClose: false });
+          var fs4 = __require("fs");
+          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -20543,8 +20543,8 @@ var require_types = __commonJS({
 // node_modules/mime/mime.js
 var require_mime = __commonJS({
   "node_modules/mime/mime.js"(exports, module) {
-    var path3 = __require("path");
-    var fs3 = __require("fs");
+    var path4 = __require("path");
+    var fs4 = __require("fs");
     function Mime() {
       this.types = /* @__PURE__ */ Object.create(null);
       this.extensions = /* @__PURE__ */ Object.create(null);
@@ -20565,7 +20565,7 @@ var require_mime = __commonJS({
     };
     Mime.prototype.load = function(file) {
       this._loading = file;
-      var map = {}, content = fs3.readFileSync(file, "ascii"), lines = content.split(/[\r\n]+/);
+      var map = {}, content = fs4.readFileSync(file, "ascii"), lines = content.split(/[\r\n]+/);
       lines.forEach(function(line) {
         var fields = line.replace(/\s*#.*|^\s*|\s*$/g, "").split(/\s+/);
         map[fields.shift()] = fields;
@@ -20573,8 +20573,8 @@ var require_mime = __commonJS({
       this.define(map);
       this._loading = null;
     };
-    Mime.prototype.lookup = function(path4, fallback) {
-      var ext = path4.replace(/^.*[\.\/\\]/, "").toLowerCase();
+    Mime.prototype.lookup = function(path5, fallback) {
+      var ext = path5.replace(/^.*[\.\/\\]/, "").toLowerCase();
       return this.types[ext] || fallback || this.default_type;
     };
     Mime.prototype.extension = function(mimeType) {
@@ -20803,33 +20803,33 @@ var require_send = __commonJS({
     var escapeHtml = require_escape_html();
     var etag = require_etag();
     var fresh = require_fresh();
-    var fs3 = __require("fs");
+    var fs4 = __require("fs");
     var mime = require_mime();
     var ms = require_ms5();
     var onFinished = require_on_finished();
     var parseRange = require_range_parser();
-    var path3 = __require("path");
+    var path4 = __require("path");
     var statuses = require_statuses();
     var Stream2 = __require("stream");
     var util = __require("util");
-    var extname = path3.extname;
-    var join = path3.join;
-    var normalize = path3.normalize;
-    var resolve = path3.resolve;
-    var sep = path3.sep;
+    var extname = path4.extname;
+    var join = path4.join;
+    var normalize = path4.normalize;
+    var resolve = path4.resolve;
+    var sep = path4.sep;
     var BYTES_RANGE_REGEXP = /^ *bytes=/;
     var MAX_MAXAGE = 60 * 60 * 24 * 365 * 1e3;
     var UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
     module.exports = send;
     module.exports.mime = mime;
-    function send(req, path4, options) {
-      return new SendStream(req, path4, options);
+    function send(req, path5, options) {
+      return new SendStream(req, path5, options);
     }
-    function SendStream(req, path4, options) {
+    function SendStream(req, path5, options) {
       Stream2.call(this);
       var opts = options || {};
       this.options = opts;
-      this.path = path4;
+      this.path = path5;
       this.req = req;
       this._acceptRanges = opts.acceptRanges !== void 0 ? Boolean(opts.acceptRanges) : true;
       this._cacheControl = opts.cacheControl !== void 0 ? Boolean(opts.cacheControl) : true;
@@ -20875,8 +20875,8 @@ var require_send = __commonJS({
       this._index = index2;
       return this;
     }, "send.index: pass index as option");
-    SendStream.prototype.root = function root(path4) {
-      this._root = resolve(String(path4));
+    SendStream.prototype.root = function root(path5) {
+      this._root = resolve(String(path5));
       debug2("root %s", this._root);
       return this;
     };
@@ -20989,10 +20989,10 @@ var require_send = __commonJS({
       var lastModified = this.res.getHeader("Last-Modified");
       return parseHttpDate(lastModified) <= parseHttpDate(ifRange);
     };
-    SendStream.prototype.redirect = function redirect(path4) {
+    SendStream.prototype.redirect = function redirect(path5) {
       var res = this.res;
       if (hasListeners(this, "directory")) {
-        this.emit("directory", res, path4);
+        this.emit("directory", res, path5);
         return;
       }
       if (this.hasTrailingSlash()) {
@@ -21012,42 +21012,42 @@ var require_send = __commonJS({
     SendStream.prototype.pipe = function pipe(res) {
       var root = this._root;
       this.res = res;
-      var path4 = decode(this.path);
-      if (path4 === -1) {
+      var path5 = decode(this.path);
+      if (path5 === -1) {
         this.error(400);
         return res;
       }
-      if (~path4.indexOf("\0")) {
+      if (~path5.indexOf("\0")) {
         this.error(400);
         return res;
       }
       var parts;
       if (root !== null) {
-        if (path4) {
-          path4 = normalize("." + sep + path4);
+        if (path5) {
+          path5 = normalize("." + sep + path5);
         }
-        if (UP_PATH_REGEXP.test(path4)) {
-          debug2('malicious path "%s"', path4);
+        if (UP_PATH_REGEXP.test(path5)) {
+          debug2('malicious path "%s"', path5);
           this.error(403);
           return res;
         }
-        parts = path4.split(sep);
-        path4 = normalize(join(root, path4));
+        parts = path5.split(sep);
+        path5 = normalize(join(root, path5));
       } else {
-        if (UP_PATH_REGEXP.test(path4)) {
-          debug2('malicious path "%s"', path4);
+        if (UP_PATH_REGEXP.test(path5)) {
+          debug2('malicious path "%s"', path5);
           this.error(403);
           return res;
         }
-        parts = normalize(path4).split(sep);
-        path4 = resolve(path4);
+        parts = normalize(path5).split(sep);
+        path5 = resolve(path5);
       }
       if (containsDotFile(parts)) {
         var access = this._dotfiles;
         if (access === void 0) {
           access = parts[parts.length - 1][0] === "." ? this._hidden ? "allow" : "ignore" : "allow";
         }
-        debug2('%s dotfile "%s"', access, path4);
+        debug2('%s dotfile "%s"', access, path5);
         switch (access) {
           case "allow":
             break;
@@ -21061,13 +21061,13 @@ var require_send = __commonJS({
         }
       }
       if (this._index.length && this.hasTrailingSlash()) {
-        this.sendIndex(path4);
+        this.sendIndex(path5);
         return res;
       }
-      this.sendFile(path4);
+      this.sendFile(path5);
       return res;
     };
-    SendStream.prototype.send = function send2(path4, stat) {
+    SendStream.prototype.send = function send2(path5, stat) {
       var len = stat.size;
       var options = this.options;
       var opts = {};
@@ -21079,9 +21079,9 @@ var require_send = __commonJS({
         this.headersAlreadySent();
         return;
       }
-      debug2('pipe "%s"', path4);
-      this.setHeader(path4, stat);
-      this.type(path4);
+      debug2('pipe "%s"', path5);
+      this.setHeader(path5, stat);
+      this.type(path5);
       if (this.isConditionalGET()) {
         if (this.isPreconditionFailure()) {
           this.error(412);
@@ -21130,28 +21130,28 @@ var require_send = __commonJS({
         res.end();
         return;
       }
-      this.stream(path4, opts);
+      this.stream(path5, opts);
     };
-    SendStream.prototype.sendFile = function sendFile(path4) {
+    SendStream.prototype.sendFile = function sendFile(path5) {
       var i2 = 0;
       var self2 = this;
-      debug2('stat "%s"', path4);
-      fs3.stat(path4, function onstat(err, stat) {
-        if (err && err.code === "ENOENT" && !extname(path4) && path4[path4.length - 1] !== sep) {
+      debug2('stat "%s"', path5);
+      fs4.stat(path5, function onstat(err, stat) {
+        if (err && err.code === "ENOENT" && !extname(path5) && path5[path5.length - 1] !== sep) {
           return next(err);
         }
         if (err) return self2.onStatError(err);
-        if (stat.isDirectory()) return self2.redirect(path4);
-        self2.emit("file", path4, stat);
-        self2.send(path4, stat);
+        if (stat.isDirectory()) return self2.redirect(path5);
+        self2.emit("file", path5, stat);
+        self2.send(path5, stat);
       });
       function next(err) {
         if (self2._extensions.length <= i2) {
           return err ? self2.onStatError(err) : self2.error(404);
         }
-        var p2 = path4 + "." + self2._extensions[i2++];
+        var p2 = path5 + "." + self2._extensions[i2++];
         debug2('stat "%s"', p2);
-        fs3.stat(p2, function(err2, stat) {
+        fs4.stat(p2, function(err2, stat) {
           if (err2) return next(err2);
           if (stat.isDirectory()) return next();
           self2.emit("file", p2, stat);
@@ -21159,7 +21159,7 @@ var require_send = __commonJS({
         });
       }
     };
-    SendStream.prototype.sendIndex = function sendIndex(path4) {
+    SendStream.prototype.sendIndex = function sendIndex(path5) {
       var i2 = -1;
       var self2 = this;
       function next(err) {
@@ -21167,9 +21167,9 @@ var require_send = __commonJS({
           if (err) return self2.onStatError(err);
           return self2.error(404);
         }
-        var p2 = join(path4, self2._index[i2]);
+        var p2 = join(path5, self2._index[i2]);
         debug2('stat "%s"', p2);
-        fs3.stat(p2, function(err2, stat) {
+        fs4.stat(p2, function(err2, stat) {
           if (err2) return next(err2);
           if (stat.isDirectory()) return next();
           self2.emit("file", p2, stat);
@@ -21178,10 +21178,10 @@ var require_send = __commonJS({
       }
       next();
     };
-    SendStream.prototype.stream = function stream(path4, options) {
+    SendStream.prototype.stream = function stream(path5, options) {
       var self2 = this;
       var res = this.res;
-      var stream2 = fs3.createReadStream(path4, options);
+      var stream2 = fs4.createReadStream(path5, options);
       this.emit("stream", stream2);
       stream2.pipe(res);
       function cleanup() {
@@ -21196,10 +21196,10 @@ var require_send = __commonJS({
         self2.emit("end");
       });
     };
-    SendStream.prototype.type = function type(path4) {
+    SendStream.prototype.type = function type(path5) {
       var res = this.res;
       if (res.getHeader("Content-Type")) return;
-      var type2 = mime.lookup(path4);
+      var type2 = mime.lookup(path5);
       if (!type2) {
         debug2("no content-type");
         return;
@@ -21208,9 +21208,9 @@ var require_send = __commonJS({
       debug2("content-type %s", type2);
       res.setHeader("Content-Type", type2 + (charset ? "; charset=" + charset : ""));
     };
-    SendStream.prototype.setHeader = function setHeader(path4, stat) {
+    SendStream.prototype.setHeader = function setHeader(path5, stat) {
       var res = this.res;
-      this.emit("headers", res, path4, stat);
+      this.emit("headers", res, path5, stat);
       if (this._acceptRanges && !res.getHeader("Accept-Ranges")) {
         debug2("accept ranges");
         res.setHeader("Accept-Ranges", "bytes");
@@ -21269,9 +21269,9 @@ var require_send = __commonJS({
       }
       return err instanceof Error ? createError(status, err, { expose: false }) : createError(status, err);
     }
-    function decode(path4) {
+    function decode(path5) {
       try {
-        return decodeURIComponent(path4);
+        return decodeURIComponent(path5);
       } catch (err) {
         return -1;
       }
@@ -22180,10 +22180,10 @@ var require_utils2 = __commonJS({
     var querystring = __require("querystring");
     exports.etag = createETagGenerator({ weak: false });
     exports.wetag = createETagGenerator({ weak: true });
-    exports.isAbsolute = function(path3) {
-      if ("/" === path3[0]) return true;
-      if (":" === path3[1] && ("\\" === path3[2] || "/" === path3[2])) return true;
-      if ("\\\\" === path3.substring(0, 2)) return true;
+    exports.isAbsolute = function(path4) {
+      if ("/" === path4[0]) return true;
+      if (":" === path4[1] && ("\\" === path4[2] || "/" === path4[2])) return true;
+      if ("\\\\" === path4.substring(0, 2)) return true;
     };
     exports.flatten = deprecate2.function(
       flatten,
@@ -22394,7 +22394,7 @@ var require_application = __commonJS({
     };
     app2.use = function use(fn) {
       var offset = 0;
-      var path3 = "/";
+      var path4 = "/";
       if (typeof fn !== "function") {
         var arg = fn;
         while (Array.isArray(arg) && arg.length !== 0) {
@@ -22402,7 +22402,7 @@ var require_application = __commonJS({
         }
         if (typeof arg !== "function") {
           offset = 1;
-          path3 = fn;
+          path4 = fn;
         }
       }
       var fns = flatten(slice.call(arguments, offset));
@@ -22413,12 +22413,12 @@ var require_application = __commonJS({
       var router11 = this._router;
       fns.forEach(function(fn2) {
         if (!fn2 || !fn2.handle || !fn2.set) {
-          return router11.use(path3, fn2);
+          return router11.use(path4, fn2);
         }
-        debug2(".use app under %s", path3);
-        fn2.mountpath = path3;
+        debug2(".use app under %s", path4);
+        fn2.mountpath = path4;
         fn2.parent = this;
-        router11.use(path3, function mounted_app(req, res, next) {
+        router11.use(path4, function mounted_app(req, res, next) {
           var orig = req.app;
           fn2.handle(req, res, function(err) {
             setPrototypeOf(req, orig.request);
@@ -22430,9 +22430,9 @@ var require_application = __commonJS({
       }, this);
       return this;
     };
-    app2.route = function route(path3) {
+    app2.route = function route(path4) {
       this.lazyrouter();
-      return this._router.route(path3);
+      return this._router.route(path4);
     };
     app2.engine = function engine(ext, fn) {
       if (typeof fn !== "function") {
@@ -22483,7 +22483,7 @@ var require_application = __commonJS({
       }
       return this;
     };
-    app2.path = function path3() {
+    app2.path = function path4() {
       return this.parent ? this.parent.path() + this.mountpath : "";
     };
     app2.enabled = function enabled(setting) {
@@ -22499,19 +22499,19 @@ var require_application = __commonJS({
       return this.set(setting, false);
     };
     methods.forEach(function(method) {
-      app2[method] = function(path3) {
+      app2[method] = function(path4) {
         if (method === "get" && arguments.length === 1) {
-          return this.set(path3);
+          return this.set(path4);
         }
         this.lazyrouter();
-        var route = this._router.route(path3);
+        var route = this._router.route(path4);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
       };
     });
-    app2.all = function all(path3) {
+    app2.all = function all(path4) {
       this.lazyrouter();
-      var route = this._router.route(path3);
+      var route = this._router.route(path4);
       var args = slice.call(arguments, 1);
       for (var i2 = 0; i2 < methods.length; i2++) {
         route[methods[i2]].apply(route, args);
@@ -23270,7 +23270,7 @@ var require_request = __commonJS({
       var subdomains2 = !isIP(hostname) ? hostname.split(".").reverse() : [hostname];
       return subdomains2.slice(offset);
     });
-    defineGetter(req, "path", function path3() {
+    defineGetter(req, "path", function path4() {
       return parse(this).pathname;
     });
     defineGetter(req, "hostname", function hostname() {
@@ -23592,7 +23592,7 @@ var require_response = __commonJS({
     var http = __require("http");
     var isAbsolute = require_utils2().isAbsolute;
     var onFinished = require_on_finished();
-    var path3 = __require("path");
+    var path4 = __require("path");
     var statuses = require_statuses();
     var merge = require_utils_merge();
     var sign = require_cookie_signature().sign;
@@ -23601,9 +23601,9 @@ var require_response = __commonJS({
     var setCharset = require_utils2().setCharset;
     var cookie = require_cookie();
     var send = require_send();
-    var extname = path3.extname;
+    var extname = path4.extname;
     var mime = send.mime;
-    var resolve = path3.resolve;
+    var resolve = path4.resolve;
     var vary = require_vary();
     var res = Object.create(http.ServerResponse.prototype);
     module.exports = res;
@@ -23780,26 +23780,26 @@ var require_response = __commonJS({
       this.type("txt");
       return this.send(body);
     };
-    res.sendFile = function sendFile(path4, options, callback) {
+    res.sendFile = function sendFile(path5, options, callback) {
       var done = callback;
       var req = this.req;
       var res2 = this;
       var next = req.next;
       var opts = options || {};
-      if (!path4) {
+      if (!path5) {
         throw new TypeError("path argument is required to res.sendFile");
       }
-      if (typeof path4 !== "string") {
+      if (typeof path5 !== "string") {
         throw new TypeError("path must be a string to res.sendFile");
       }
       if (typeof options === "function") {
         done = options;
         opts = {};
       }
-      if (!opts.root && !isAbsolute(path4)) {
+      if (!opts.root && !isAbsolute(path5)) {
         throw new TypeError("path must be absolute or specify root to res.sendFile");
       }
-      var pathname = encodeURI(path4);
+      var pathname = encodeURI(path5);
       var file = send(req, pathname, opts);
       sendfile(res2, file, opts, function(err) {
         if (done) return done(err);
@@ -23809,7 +23809,7 @@ var require_response = __commonJS({
         }
       });
     };
-    res.sendfile = function(path4, options, callback) {
+    res.sendfile = function(path5, options, callback) {
       var done = callback;
       var req = this.req;
       var res2 = this;
@@ -23819,7 +23819,7 @@ var require_response = __commonJS({
         done = options;
         opts = {};
       }
-      var file = send(req, path4, opts);
+      var file = send(req, path5, opts);
       sendfile(res2, file, opts, function(err) {
         if (done) return done(err);
         if (err && err.code === "EISDIR") return next();
@@ -23832,7 +23832,7 @@ var require_response = __commonJS({
       res.sendfile,
       "res.sendfile: Use res.sendFile instead"
     );
-    res.download = function download(path4, filename, options, callback) {
+    res.download = function download(path5, filename, options, callback) {
       var done = callback;
       var name = filename;
       var opts = options || null;
@@ -23849,7 +23849,7 @@ var require_response = __commonJS({
         opts = filename;
       }
       var headers = {
-        "Content-Disposition": contentDisposition(name || path4)
+        "Content-Disposition": contentDisposition(name || path5)
       };
       if (opts && opts.headers) {
         var keys = Object.keys(opts.headers);
@@ -23862,7 +23862,7 @@ var require_response = __commonJS({
       }
       opts = Object.create(opts);
       opts.headers = headers;
-      var fullPath = !opts.root ? resolve(path4) : path4;
+      var fullPath = !opts.root ? resolve(path5) : path5;
       return this.sendFile(fullPath, opts, done);
     };
     res.contentType = res.type = function contentType(type) {
@@ -24163,11 +24163,11 @@ var require_serve_static = __commonJS({
         }
         var forwardError = !fallthrough;
         var originalUrl = parseUrl.original(req);
-        var path3 = parseUrl(req).pathname;
-        if (path3 === "/" && originalUrl.pathname.substr(-1) !== "/") {
-          path3 = "";
+        var path4 = parseUrl(req).pathname;
+        if (path4 === "/" && originalUrl.pathname.substr(-1) !== "/") {
+          path4 = "";
         }
-        var stream = send(req, path3, opts);
+        var stream = send(req, path4, opts);
         stream.on("directory", onDirectory);
         if (setHeaders) {
           stream.on("headers", setHeaders);
@@ -25113,15 +25113,15 @@ var require_sql_wasm = __commonJS({
         "undefined" != typeof __filename ? ya = __filename : ba && (ya = self.location.href);
         var za = "", Aa, Ba;
         if (ca) {
-          var fs3 = __require("node:fs");
+          var fs4 = __require("node:fs");
           za = __dirname + "/";
           Ba = (a2) => {
             a2 = Ca(a2) ? new URL(a2) : a2;
-            return fs3.readFileSync(a2);
+            return fs4.readFileSync(a2);
           };
           Aa = async (a2) => {
             a2 = Ca(a2) ? new URL(a2) : a2;
-            return fs3.readFileSync(a2, void 0);
+            return fs4.readFileSync(a2, void 0);
           };
           1 < process.argv.length && (wa = process.argv[1].replace(/\\/g, "/"));
           process.argv.slice(2);
@@ -25403,7 +25403,7 @@ var require_sql_wasm = __commonJS({
               if (ca) {
                 var b2 = Buffer.alloc(256), c2 = 0, d2 = process.stdin.fd;
                 try {
-                  c2 = fs3.readSync(d2, b2, 0, 256);
+                  c2 = fs4.readSync(d2, b2, 0, 256);
                 } catch (e2) {
                   if (e2.toString().includes("EOF")) c2 = 0;
                   else throw e2;
@@ -26724,6 +26724,443 @@ var require_sql_wasm = __commonJS({
   }
 });
 
+// server/seed-production.ts
+var seed_production_exports = {};
+__export(seed_production_exports, {
+  satisfactionSeedData: () => satisfactionSeedData,
+  seedProductionData: () => seedProductionData
+});
+function seedProductionData() {
+  const sessionCount = db_default.prepare("SELECT COUNT(*) as cnt FROM sessions").get().cnt;
+  if (sessionCount > 0) return;
+  console.log("[Seed] Seeding production mock data...");
+  const sampleSessionId = "mock-session-001";
+  db_default.prepare(`INSERT INTO sessions (id, sequence_num, session_id, user_id, ocs_session_id, bot_conversation, human_conversation, dissatisfaction_info, session_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+    sampleSessionId,
+    1,
+    "00247c3f709a49e8b1aa984eb9fa8eba",
+    "4500000000000",
+    "cb6b6c5b6c3b48cf803b3606bae20290",
+    `[2026-03-15 20:29:03] \u4F1A\u5458: Ticaret G\xFCvencesi sipari\u015Fim i\xE7in nas\u0131l uyu\u015Fmazl\u0131k a\xE7abilirim?
+[2026-03-15 20:29:04] \u673A\u5668\u4EBA: \u6D88\u606F\u5361\u7247: \u6B64\u5361\u7247\u662F\u4E00\u4E2A\u8BA2\u5355\u9009\u62E9\u5668
+[2026-03-15 20:29:08] \u4F1A\u5458: {"id":"289860971501027473","parentId":""}
+[2026-03-15 20:30:18] \u4F1A\u5458: The item was returned by customs and I did not receive the product. I requested a full refund to my original payment method. However, part of the refund was given as a coupon. I do not want a coupon. Please refund the full amount to my credit card.
+[2026-03-15 20:34:23] \u4F1A\u5458: I do not accept the refund as a coupon. According to consumer rights, since the product was not delivered, I am entitled to a full refund to my original payment method.
+[2026-03-15 20:37:08] \u4F1A\u5458: The system is incorrect. I need a live agent to fix this and refund the remaining balance to my card.
+[2026-03-15 20:37:25] \u673A\u5668\u4EBA: \u547D\u4EE4\u6D88\u606F\uFF1AAGENT_ENTRANCE_DISPLAY`,
+    `[2026-03-15 20:38:54] \u5BA2\u670D: Hello! This is Denice from the Alibaba.com Customer Service Team. May I know how can I help you?
+[2026-03-15 20:39:07] \u4F1A\u5458: Merhaba. Sipari\u015Fim stokta olmad\u0131\u011F\u0131 veya g\xFCmr\xFCk sorunu nedeniyle g\xF6ndericiye iade edildi. Alibaba kupon verdi. Kupon istemiyorum. T\xFCm tutar\u0131n orijinal kredi kart\u0131ma iade edilmesini istiyorum.
+[2026-03-15 20:40:12] \u5BA2\u670D: Can you provide me your order number please?
+[2026-03-15 20:44:08] \u5BA2\u670D: Thank you for patiently waiting here
+[2026-03-15 20:50:07] \u5BA2\u670D: I will forward your case to the department for further assistance on this issue.
+[2026-03-15 20:50:46] \u5BA2\u670D: I will mark this "Extremely Urgent" and "Top Priority" just for you.
+[2026-03-15 20:53:19] \u4F1A\u5458: Tamam mutlu haberlerinizi bekliyorum kolay gelsin`,
+    "[\u4F1A\u5458\u5728 2026-03-15 20:29:31 \u65F6\u95F4 \u70B9\u4E86\u4E0D\u6EE1\u610F\uFF0C\u4E0D\u6EE1\u610F\u539F\u56E0\u4E3A\uFF1AA\xE7\u0131klamalar anla\u015F\u0131l\u0131r de\u011Fil ve karma\u015F\u0131k]",
+    "2026-03-15"
+  );
+  db_default.prepare(`INSERT INTO session_summaries (id, session_id, summary_text, key_topics) VALUES (?, ?, ?, ?)`).run(
+    "mock-summary-001",
+    sampleSessionId,
+    "\u4E70\u5BB6\u56E0\u8BA2\u5355\u88AB\u6D77\u5173\u9000\u56DE\u672A\u6536\u5230\u8D27\uFF0C\u7533\u8BF7\u5168\u989D\u9000\u6B3E\u4F46\u90E8\u5206\u91D1\u989D\u4EE5\u4F18\u60E0\u5238\u5F62\u5F0F\u8FD4\u8FD8\uFF0C\u8981\u6C42\u5C06\u5168\u90E8\u91D1\u989D\u9000\u81F3\u4FE1\u7528\u5361\u3002AI\u5BA2\u670D\u63D0\u4F9B\u4E86\u4E00\u822C\u6027\u89E3\u91CA\u540E\u8F6C\u4EBA\u5DE5\u5BA2\u670D\u5904\u7406\u3002\u4EBA\u5DE5\u5BA2\u670DDenice\u786E\u8BA4\u8BA2\u5355\u72B6\u6001\u5E76\u6307\u5BFC\u4E70\u5BB6\u7533\u8BF7\u9000\u6B3E\uFF0C\u6700\u7EC8\u5C06\u6848\u4F8B\u6807\u8BB0\u4E3A\u7D27\u6025\u4F18\u5148\u5904\u7406\u5E76\u8F6C\u53D1\u76F8\u5173\u90E8\u95E8\u3002",
+    "\u9000\u6B3E,\u9000\u6B3E\u4E89\u8BAE,\u6D77\u5173\u9000\u56DE,\u4F18\u60E0\u5238\u9000\u6B3E,\u4EBA\u5DE5\u5BA2\u670D,\u8BA2\u5355\u7EA0\u7EB7,\u8DE8\u5883\u7269\u6D41,\u4E0D\u6EE1\u610F\u53CD\u9988,\u7D27\u6025\u5904\u7406"
+  );
+  db_default.prepare(`INSERT INTO scenarios (id, name, description, matched_count, created_by) VALUES (?, ?, ?, ?, ?)`).run(
+    "mock-scenario-001",
+    "\u6700\u8FD1\u6EE1\u610F\u5EA6\u4E0B\u964D\u4E3A\u5565",
+    "\u4E70\u5BB6\u5728\u667A\u80FD\u4FA7\u7684\u6EE1\u610F\u5EA6\u4E0B\u964D\u4E86xxxxxx\u5E2E\u6211\u5168\u91CF\u5206\u6790\xB7",
+    0,
+    "admin-001"
+  );
+  db_default.prepare(`INSERT INTO scenarios (id, name, description, matched_session_ids, matched_count, created_by) VALUES (?, ?, ?, ?, ?, ?)`).run(
+    "mock-scenario-002",
+    "\u4E70\u5BB6\u4E0D\u6EE1\u610F\u7684\u4F1A\u8BDD",
+    "\u4E70\u5BB6\u5728\u5BF9\u8BDD\u8FC7\u7A0B\u4E2D\u8868\u8FBE\u4E86\u4E0D\u6EE1\u610F\uFF0C\u5305\u62EC\u5BF9AI\u5BA2\u670D\u56DE\u7B54\u4E0D\u6EE1\u610F\u3001\u89E3\u51B3\u65B9\u6848\u4E0D\u6EE1\u610F\u3001\u670D\u52A1\u6001\u5EA6\u4E0D\u6EE1\u610F\u7B49",
+    JSON.stringify([sampleSessionId]),
+    1,
+    "admin-001"
+  );
+  db_default.prepare(`INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)`).run(
+    "mock-config-001",
+    "\u4E0D\u6EE1\u610F\u4F1A\u8BDD\u6D1E\u5BDF",
+    "mock-scenario-002",
+    JSON.stringify(["dim-dissatisfaction", "dim-transfer-reason", "dim-topic"]),
+    "admin-001"
+  );
+  const summaryJson = JSON.stringify([
+    { dimension_id: "dim-dissatisfaction", category: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", cnt: 10 },
+    { dimension_id: "dim-dissatisfaction", category: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", cnt: 5 },
+    { dimension_id: "dim-dissatisfaction", category: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", cnt: 1 },
+    { dimension_id: "dim-dissatisfaction", category: "\u6587\u5B57\u592A\u591A", cnt: 2 },
+    { dimension_id: "dim-dissatisfaction", category: "\u754C\u9762\u96BE\u7528", cnt: 2 }
+  ]);
+  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, completed_at, summary_json, triggered_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+    "mock-run-001",
+    "mock-config-001",
+    "completed",
+    20,
+    20,
+    "2026-03-29 09:36:16",
+    "2026-03-29 09:37:54",
+    summaryJson,
+    "admin-001"
+  );
+  const tasks = [
+    { id: "mock-task-001", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF (10\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u670910\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "medium", status: "resolved", resolution: "\u5DF2\u4F18\u5316AI\u5BA2\u670D\u56DE\u7B54\u51C6\u786E\u6027\uFF0C\u66F4\u65B0\u4E86\u77E5\u8BC6\u5E93\u4E2D\u76F8\u5173\u95EE\u9898\u7684\u56DE\u7B54", resolvedAt: "2026-03-29 09:52:18" },
+    { id: "mock-task-002", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898 (5\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67095\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
+    { id: "mock-task-003", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u754C\u9762\u96BE\u7528 (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u754C\u9762\u96BE\u7528"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
+    { id: "mock-task-004", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u6587\u5B57\u592A\u591A (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u6587\u5B57\u592A\u591A"\u3002\u9700\u8981\u6539\u8FDBAI\u56DE\u590D\u957F\u5EA6\u3002', priority: "medium", status: "claimed", resolution: "", resolvedAt: null }
+  ];
+  const taskStmt = db_default.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, resolution_text, resolved_at, related_session_ids)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  for (const t2 of tasks) {
+    taskStmt.run(t2.id, "mock-run-001", t2.dimId, t2.title, t2.desc, t2.priority, t2.status, t2.resolution, t2.resolvedAt, JSON.stringify([sampleSessionId]));
+  }
+  db_default.prepare(`INSERT INTO data_source_requests (id, description, status, created_by) VALUES (?, ?, ?, ?)`).run(
+    "mock-req-001",
+    "\u5E0C\u671B\u589E\u52A0\u300C\u4F1A\u8BDD\u65F6\u957F\u300D\u5B57\u6BB5\uFF0C\u8BB0\u5F55\u6BCF\u901A\u4F1A\u8BDD\u4ECE\u5F00\u59CB\u5230\u7ED3\u675F\u7684\u603B\u65F6\u957F",
+    "pending",
+    "Admin"
+  );
+  console.log("[Seed] Production mock data seeded successfully");
+}
+var satisfactionSeedData;
+var init_seed_production = __esm({
+  "server/seed-production.ts"() {
+    "use strict";
+    init_db();
+    satisfactionSeedData = [
+      { date: "2026-02-01", total: 561, dissatisfied: 253, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-02", total: 702, dissatisfied: 336, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-03", total: 743, dissatisfied: 348, satisfaction_rate: 53.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-04", total: 703, dissatisfied: 369, satisfaction_rate: 47.5, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-05", total: 729, dissatisfied: 381, satisfaction_rate: 47.7, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-06", total: 665, dissatisfied: 353, satisfaction_rate: 46.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-07", total: 628, dissatisfied: 288, satisfaction_rate: 54.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-08", total: 581, dissatisfied: 282, satisfaction_rate: 51.5, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-09", total: 653, dissatisfied: 305, satisfaction_rate: 53.3, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-10", total: 693, dissatisfied: 345, satisfaction_rate: 50.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-11", total: 655, dissatisfied: 322, satisfaction_rate: 50.8, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-12", total: 673, dissatisfied: 338, satisfaction_rate: 49.8, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-13", total: 702, dissatisfied: 350, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-14", total: 649, dissatisfied: 283, satisfaction_rate: 56.4, tasks_resolved: 2, task_notes: "\u4F18\u5316\u9000\u6B3E\u6D41\u7A0BAI\u8BDD\u672F\uFF0C\u4FEE\u590D\u8BA2\u5355\u67E5\u8BE2\u8D85\u65F6\u95EE\u9898" },
+      { date: "2026-02-15", total: 618, dissatisfied: 274, satisfaction_rate: 55.7, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-16", total: 601, dissatisfied: 262, satisfaction_rate: 56.4, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-17", total: 608, dissatisfied: 268, satisfaction_rate: 55.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-18", total: 665, dissatisfied: 305, satisfaction_rate: 54.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-19", total: 648, dissatisfied: 295, satisfaction_rate: 54.5, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-20", total: 687, dissatisfied: 302, satisfaction_rate: 56, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-21", total: 639, dissatisfied: 287, satisfaction_rate: 55.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-22", total: 604, dissatisfied: 249, satisfaction_rate: 58.8, tasks_resolved: 1, task_notes: "\u66F4\u65B0\u7269\u6D41\u8FFD\u8E2A\u81EA\u52A8\u56DE\u590D\u6A21\u677F" },
+      { date: "2026-02-23", total: 630, dissatisfied: 291, satisfaction_rate: 53.8, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-24", total: 726, dissatisfied: 371, satisfaction_rate: 48.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-25", total: 801, dissatisfied: 390, satisfaction_rate: 51.3, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-26", total: 794, dissatisfied: 403, satisfaction_rate: 49.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-27", total: 716, dissatisfied: 353, satisfaction_rate: 50.7, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-02-28", total: 686, dissatisfied: 319, satisfaction_rate: 53.5, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-01", total: 566, dissatisfied: 224, satisfaction_rate: 60.4, tasks_resolved: 3, task_notes: "\u4FEE\u590DAI\u65E0\u6CD5\u8BC6\u522B\u7EA0\u7EB7\u7C7B\u578B\u95EE\u9898\uFF0C\u589E\u52A0\u9000\u8D27\u573A\u666F\u8986\u76D6\uFF0C\u4F18\u5316\u9996\u6B21\u54CD\u5E94\u901F\u5EA6" },
+      { date: "2026-03-02", total: 673, dissatisfied: 326, satisfaction_rate: 51.6, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-03", total: 736, dissatisfied: 359, satisfaction_rate: 51.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-04", total: 754, dissatisfied: 392, satisfaction_rate: 48, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-05", total: 794, dissatisfied: 396, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-06", total: 799, dissatisfied: 381, satisfaction_rate: 52.3, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-07", total: 757, dissatisfied: 347, satisfaction_rate: 54.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-08", total: 607, dissatisfied: 258, satisfaction_rate: 57.5, tasks_resolved: 1, task_notes: "\u589E\u52A0VAT/\u7A0E\u52A1\u573A\u666FFAQ\u77E5\u8BC6\u5E93" },
+      { date: "2026-03-09", total: 773, dissatisfied: 385, satisfaction_rate: 50.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-10", total: 923, dissatisfied: 486, satisfaction_rate: 47.3, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-11", total: 933, dissatisfied: 468, satisfaction_rate: 49.8, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-12", total: 913, dissatisfied: 440, satisfaction_rate: 51.8, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-13", total: 815, dissatisfied: 353, satisfaction_rate: 56.7, tasks_resolved: 2, task_notes: "\u6539\u8FDBAI\u56DE\u7B54\u7ED3\u6784\u5316\u5C55\u793A\uFF0C\u4FEE\u590D\u4E0D\u6EE1\u610F\u53CD\u9988\u6536\u96C6\u95EE\u9898" },
+      { date: "2026-03-14", total: 805, dissatisfied: 348, satisfaction_rate: 56.8, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-15", total: 687, dissatisfied: 292, satisfaction_rate: 57.5, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-16", total: 856, dissatisfied: 418, satisfaction_rate: 51.2, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-17", total: 866, dissatisfied: 438, satisfaction_rate: 49.4, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-18", total: 864, dissatisfied: 407, satisfaction_rate: 52.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-19", total: 845, dissatisfied: 428, satisfaction_rate: 49.4, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-20", total: 810, dissatisfied: 359, satisfaction_rate: 55.7, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-21", total: 745, dissatisfied: 354, satisfaction_rate: 52.5, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-22", total: 690, dissatisfied: 311, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-23", total: 858, dissatisfied: 421, satisfaction_rate: 50.9, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-25", total: 842, dissatisfied: 407, satisfaction_rate: 51.7, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-27", total: 774, dissatisfied: 386, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
+      { date: "2026-03-28", total: 787, dissatisfied: 377, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" }
+    ];
+  }
+});
+
+// server/db.ts
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+async function initDB() {
+  await db.init();
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT DEFAULT '',
+      role TEXT DEFAULT 'member',
+      token TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+  db.exec(`CREATE TABLE IF NOT EXISTS sessions (
+      id TEXT PRIMARY KEY, sequence_num INTEGER, session_id TEXT, user_id TEXT,
+      ocs_session_id TEXT, bot_conversation TEXT, human_conversation TEXT,
+      dissatisfaction_info TEXT, session_date TEXT, imported_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS session_summaries (
+      id TEXT PRIMARY KEY, session_id TEXT NOT NULL, summary_text TEXT NOT NULL,
+      embedding TEXT, key_topics TEXT DEFAULT '[]', generated_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS scenarios (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL,
+      date_from TEXT, date_to TEXT, matched_session_ids TEXT DEFAULT '[]',
+      matched_count INTEGER DEFAULT 0, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS dimensions (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, definition TEXT NOT NULL,
+      categories_json TEXT DEFAULT '[]', auto_discover INTEGER DEFAULT 0,
+      sub_skill_ref TEXT DEFAULT '', sort_order INTEGER DEFAULT 0,
+      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS analysis_configs (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, scenario_id TEXT,
+      frequency TEXT DEFAULT 'manual', dimension_ids TEXT DEFAULT '[]',
+      is_active INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS analysis_runs (
+      id TEXT PRIMARY KEY, config_id TEXT, status TEXT DEFAULT 'pending',
+      total_sessions INTEGER DEFAULT 0, processed_sessions INTEGER DEFAULT 0,
+      started_at TEXT, completed_at TEXT, error_message TEXT DEFAULT '',
+      summary_json TEXT DEFAULT '{}', triggered_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS analysis_results (
+      id TEXT PRIMARY KEY, run_id TEXT NOT NULL, session_id TEXT NOT NULL,
+      dimension_id TEXT NOT NULL, category TEXT NOT NULL, confidence REAL DEFAULT 0,
+      reasoning TEXT DEFAULT '', is_auto_discovered INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS tasks (
+      id TEXT PRIMARY KEY, run_id TEXT, dimension_id TEXT, title TEXT NOT NULL,
+      description TEXT NOT NULL, priority TEXT DEFAULT 'medium', status TEXT DEFAULT 'open',
+      assignee_id TEXT, resolution_text TEXT DEFAULT '', resolved_at TEXT,
+      related_session_ids TEXT DEFAULT '[]', created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS team_members (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, role_description TEXT NOT NULL,
+      email TEXT DEFAULT '', user_id TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS classification_feedback (
+      id TEXT PRIMARY KEY, result_id TEXT NOT NULL, original_category TEXT NOT NULL,
+      corrected_category TEXT, feedback_note TEXT DEFAULT '', submitted_by TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS dingtalk_configs (
+      id TEXT PRIMARY KEY, webhook_url TEXT NOT NULL, secret TEXT DEFAULT '',
+      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS notification_logs (
+      id TEXT PRIMARY KEY, channel TEXT DEFAULT 'dingtalk', run_id TEXT,
+      payload_json TEXT NOT NULL, status TEXT DEFAULT 'sent', sent_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS satisfaction_events (
+      id TEXT PRIMARY KEY, event_date TEXT NOT NULL, satisfaction_score REAL,
+      total_sessions INTEGER DEFAULT 0, dissatisfied_count INTEGER DEFAULT 0,
+      task_resolved_ids TEXT DEFAULT '[]', notes TEXT DEFAULT '',
+      created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS data_source_requests (
+      id TEXT PRIMARY KEY, description TEXT NOT NULL, status TEXT DEFAULT 'pending',
+      response TEXT DEFAULT '', created_by TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+  )`);
+  const adminExists = db.prepare("SELECT id FROM users WHERE id = ?").get("admin-001");
+  if (!adminExists) {
+    db.prepare("INSERT INTO users (id, name, email, role, token) VALUES (?, ?, ?, ?, ?)").run(
+      "admin-001",
+      "Admin",
+      "admin@example.com",
+      "admin",
+      "admin123"
+    );
+  }
+  const dimCount = db.prepare("SELECT COUNT(*) as cnt FROM dimensions").get();
+  if (dimCount.cnt === 0) {
+    const dims = [
+      {
+        id: "dim-transfer-reason",
+        name: "\u8F6C\u4EBA\u5DE5\u539F\u56E0\u5206\u7C7B",
+        definition: "\u5206\u6790\u4E70\u5BB6\u4ECEAI\u5BA2\u670D\u8F6C\u5230\u4EBA\u5DE5\u5BA2\u670D\u7684\u6839\u672C\u539F\u56E0\u3002\u9700\u8981\u5BF9\u6BD4AI\u5BA2\u670D\u5BF9\u8BDD\u548C\u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD\u7684\u5185\u5BB9\uFF0C\u5224\u65AD\u8F6C\u4EBA\u5DE5\u7684\u6838\u5FC3\u52A8\u56E0\u3002",
+        categories: [
+          { name: "\u4EBA\u5DE5\u5E2E\u52A9\u6267\u884C\u64CD\u4F5C", description: "AI\u53EA\u80FD\u63D0\u4F9B\u901A\u7528\u6D41\u7A0B\u8BF4\u660E\uFF0C\u4E70\u5BB6\u9700\u8981\u4EBA\u5DE5\u67E5\u8BE2/\u64CD\u4F5C\u5177\u4F53\u8BA2\u5355\u3001\u8D26\u6237\u7B49" },
+          { name: "AI\u56DE\u7B54\u9519\u8BEF\u6216\u65E0\u6CD5\u56DE\u7B54", description: "AI\u7ED9\u51FA\u4E86\u9519\u8BEF\u7B54\u6848\u6216\u515C\u5E95\u56DE\u590D\uFF0C\u4EBA\u5DE5\u5BA2\u670D\u7ED9\u51FA\u4E86\u6B63\u786E\u65B9\u6848" },
+          { name: "\u4E70\u5BB6\u66F4\u4FE1\u4EFB\u4EBA\u5DE5", description: "AI\u548C\u4EBA\u5DE5\u7ED9\u51FA\u76F8\u4F3C\u7B54\u6848\uFF0C\u4F46\u4E70\u5BB6\u4E0D\u4FE1\u4EFBAI\u6216\u9700\u8981\u4EBA\u5DE5\u786E\u8BA4" },
+          { name: "\u4EBA\u5DE5\u4E5F\u9700\u5347\u7EA7", description: "\u95EE\u9898\u8F83\u590D\u6742\uFF0C\u4EBA\u5DE5\u4E5F\u9700\u8981\u63D0\u4EA4\u5DE5\u5355\u6216\u5347\u7EA7\u81F3\u4E13\u4E1A\u56E2\u961F" },
+          { name: "\u4EBA\u5DE5\u66F4\u6709\u4EBA\u60C5\u5473", description: "AI\u548C\u4EBA\u5DE5\u56DE\u7B54\u5185\u5BB9\u76F8\u8FD1\uFF0C\u4F46\u4EBA\u5DE5\u5728\u63AA\u8F9E\u4E0A\u66F4\u6709\u6E29\u5EA6\u548C\u5171\u60C5" },
+          { name: "\u8F6C\u4EBA\u5DE5\u540E\u95EE\u4E86\u4E0D\u540C\u95EE\u9898", description: "\u4E70\u5BB6\u5728AI\u5904\u548C\u4EBA\u5DE5\u5904\u8BA8\u8BBA\u4E86\u4E0D\u540C\u7684\u95EE\u9898" },
+          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u5165\u4EE5\u4E0A\u7C7B\u522B" }
+        ],
+        sort_order: 0
+      },
+      {
+        id: "dim-topic",
+        name: "\u4E70\u5BB6\u95EE\u9898\u7C7B\u578B",
+        definition: "\u8BC6\u522B\u4E70\u5BB6\u54A8\u8BE2\u7684\u5177\u4F53\u95EE\u9898\u7C7B\u578B\uFF0C\u7528\u4E8E\u4E86\u89E3\u5BA2\u6237\u9700\u6C42\u5206\u5E03\u3002",
+        categories: [
+          { name: "\u9000\u6B3E\u7533\u8BF7/\u8FDB\u5EA6", description: "\u9000\u6B3E\u76F8\u5173\u54A8\u8BE2" },
+          { name: "\u7EA0\u7EB7/Dispute\u5904\u7406", description: "\u7EA0\u7EB7\u4E89\u8BAE\u76F8\u5173" },
+          { name: "\u8BA2\u5355\u7269\u6D41\u8FFD\u8E2A", description: "\u7269\u6D41\u8DDF\u8E2A\u67E5\u8BE2" },
+          { name: "VAT/\u7A0E\u52A1\u76F8\u5173", description: "\u7A0E\u52A1\u3001\u53D1\u7968\u3001\u5173\u7A0E" },
+          { name: "\u652F\u4ED8\u65B9\u5F0F/\u4ED8\u6B3E\u95EE\u9898", description: "\u652F\u4ED8\u65B9\u5F0F\u76F8\u5173" },
+          { name: "\u9000\u8D27/\u5546\u54C1\u95EE\u9898", description: "\u9000\u8D27\u3001\u8D28\u91CF\u95EE\u9898" },
+          { name: "\u8D26\u6237/\u767B\u5F55", description: "\u8D26\u6237\u95EE\u9898" },
+          { name: "\u4F9B\u5E94\u5546/\u5546\u54C1\u54A8\u8BE2", description: "\u4F9B\u5E94\u5546\u8BE2\u76D8" },
+          { name: "\u5176\u4ED6\u54A8\u8BE2", description: "\u5176\u4ED6\u7C7B\u578B" }
+        ],
+        sort_order: 1
+      },
+      {
+        id: "dim-dissatisfaction",
+        name: "\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790",
+        definition: "\u5206\u6790\u4E70\u5BB6\u70B9\u51FB\u4E0D\u6EE1\u610F\u7684\u5177\u4F53\u539F\u56E0\u548C\u65F6\u95F4\u8282\u70B9\uFF0C\u7ED3\u5408\u5BF9\u8BDD\u4E0A\u4E0B\u6587\u5224\u65AD\u4E0D\u6EE1\u610F\u7684\u6839\u56E0\u3002",
+        categories: [
+          { name: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", description: "AI\u7ED9\u51FA\u7684\u7B54\u6848\u4E0E\u4E70\u5BB6\u95EE\u9898\u4E0D\u5339\u914D\u6216\u5B8C\u5168\u9519\u8BEF" },
+          { name: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", description: "AI\u56DE\u7B54\u8FC7\u4E8E\u590D\u6742\u6216\u63AA\u8F9E\u8BA9\u4EBA\u96BE\u4EE5\u7406\u89E3" },
+          { name: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", description: "AI\u6CA1\u6709\u9488\u5BF9\u6027\u56DE\u7B54\u4E70\u5BB6\u7684\u5177\u4F53\u95EE\u9898" },
+          { name: "\u4E0D\u540C\u610F\u5E73\u53F0\u653F\u7B56", description: "\u4E70\u5BB6\u5BF9\u5E73\u53F0\u7684\u9000\u6B3E/\u9000\u8D27\u7B49\u653F\u7B56\u4E0D\u6EE1" },
+          { name: "\u754C\u9762\u96BE\u7528", description: "\u804A\u5929\u754C\u9762\u6216\u4EA4\u4E92\u4F53\u9A8C\u5DEE" },
+          { name: "\u6587\u5B57\u592A\u591A", description: "AI\u56DE\u590D\u8FC7\u957F\u4E0D\u60F3\u9605\u8BFB" },
+          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u7C7B" }
+        ],
+        sort_order: 2
+      }
+    ];
+    for (const d2 of dims) {
+      db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, '', ?, 1, 'admin-001')").run(
+        d2.id,
+        d2.name,
+        d2.definition,
+        JSON.stringify(d2.categories),
+        d2.sort_order
+      );
+    }
+  }
+  console.log("[DB] Initialized successfully");
+  if (process.env.NODE_ENV === "production") {
+    const { seedProductionData: seedProductionData2 } = await Promise.resolve().then(() => (init_seed_production(), seed_production_exports));
+    seedProductionData2();
+  }
+}
+var import_sql, __dirname2, dataDir, dbPath, BetterSqlite3Compat, db, db_default;
+var init_db = __esm({
+  "server/db.ts"() {
+    "use strict";
+    import_sql = __toESM(require_sql_wasm(), 1);
+    __dirname2 = path.dirname(fileURLToPath(import.meta.url));
+    dataDir = process.env.NODE_ENV === "production" ? "/tmp/data" : path.join(__dirname2, "..", "data");
+    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+    dbPath = path.join(dataDir, "analysis.db");
+    BetterSqlite3Compat = class {
+      sqlDb;
+      dirty = false;
+      saveTimer = null;
+      async init() {
+        const SQL = await (0, import_sql.default)();
+        if (fs.existsSync(dbPath)) {
+          const buf = fs.readFileSync(dbPath);
+          this.sqlDb = new SQL.Database(buf);
+        } else {
+          this.sqlDb = new SQL.Database();
+        }
+        this.sqlDb.run("PRAGMA journal_mode = WAL");
+        this.sqlDb.run("PRAGMA foreign_keys = ON");
+      }
+      save() {
+        if (this.saveTimer) return;
+        this.saveTimer = setTimeout(() => {
+          try {
+            const data = this.sqlDb.export();
+            fs.writeFileSync(dbPath, Buffer.from(data));
+          } catch {
+          }
+          this.saveTimer = null;
+        }, 500);
+      }
+      exec(sql) {
+        this.sqlDb.run(sql);
+        this.save();
+      }
+      pragma(str2) {
+        this.sqlDb.run(`PRAGMA ${str2}`);
+      }
+      prepare(sql) {
+        const db2 = this.sqlDb;
+        const self2 = this;
+        return {
+          run(...params) {
+            db2.run(sql, params);
+            self2.save();
+            return { changes: db2.getRowsModified() };
+          },
+          get(...params) {
+            const stmt = db2.prepare(sql);
+            if (params.length > 0) stmt.bind(params);
+            if (stmt.step()) {
+              const cols = stmt.getColumnNames();
+              const vals = stmt.get();
+              stmt.free();
+              const row = {};
+              cols.forEach((c2, i2) => {
+                row[c2] = vals[i2];
+              });
+              return row;
+            }
+            stmt.free();
+            return void 0;
+          },
+          all(...params) {
+            const stmt = db2.prepare(sql);
+            if (params.length > 0) stmt.bind(params);
+            const rows = [];
+            while (stmt.step()) {
+              const cols = stmt.getColumnNames();
+              const vals = stmt.get();
+              const row = {};
+              cols.forEach((c2, i2) => {
+                row[c2] = vals[i2];
+              });
+              rows.push(row);
+            }
+            stmt.free();
+            return rows;
+          }
+        };
+      }
+      transaction(fn) {
+        const self2 = this;
+        return ((...args) => {
+          self2.sqlDb.run("BEGIN");
+          try {
+            fn(...args);
+            self2.sqlDb.run("COMMIT");
+            self2.save();
+          } catch (e2) {
+            self2.sqlDb.run("ROLLBACK");
+            throw e2;
+          }
+        });
+      }
+    };
+    db = new BetterSqlite3Compat();
+    db_default = db;
+  }
+});
+
 // node_modules/webidl-conversions/lib/index.js
 var require_lib4 = __commonJS({
   "node_modules/webidl-conversions/lib/index.js"(exports, module) {
@@ -27456,14 +27893,14 @@ var require_url_state_machine = __commonJS({
       return url.replace(/\u0009|\u000A|\u000D/g, "");
     }
     function shortenPath(url) {
-      const path3 = url.path;
-      if (path3.length === 0) {
+      const path4 = url.path;
+      if (path4.length === 0) {
         return;
       }
-      if (url.scheme === "file" && path3.length === 1 && isNormalizedWindowsDriveLetter(path3[0])) {
+      if (url.scheme === "file" && path4.length === 1 && isNormalizedWindowsDriveLetter(path4[0])) {
         return;
       }
-      path3.pop();
+      path4.pop();
     }
     function includesCredentials(url) {
       return url.username !== "" || url.password !== "";
@@ -32928,14 +33365,14 @@ __export(fileFromPath_exports, {
 });
 import { statSync, createReadStream, promises as fs2 } from "fs";
 import { basename } from "path";
-function createFileFromPath(path3, { mtimeMs, size }, filenameOrOptions, options = {}) {
+function createFileFromPath(path4, { mtimeMs, size }, filenameOrOptions, options = {}) {
   let filename;
   if (isPlainObject_default2(filenameOrOptions)) {
     [options, filename] = [filenameOrOptions, void 0];
   } else {
     filename = filenameOrOptions;
   }
-  const file = new FileFromPath({ path: path3, size, lastModified: mtimeMs });
+  const file = new FileFromPath({ path: path4, size, lastModified: mtimeMs });
   if (!filename) {
     filename = file.name;
   }
@@ -32944,13 +33381,13 @@ function createFileFromPath(path3, { mtimeMs, size }, filenameOrOptions, options
     lastModified: file.lastModified
   });
 }
-function fileFromPathSync(path3, filenameOrOptions, options = {}) {
-  const stats = statSync(path3);
-  return createFileFromPath(path3, stats, filenameOrOptions, options);
+function fileFromPathSync(path4, filenameOrOptions, options = {}) {
+  const stats = statSync(path4);
+  return createFileFromPath(path4, stats, filenameOrOptions, options);
 }
-async function fileFromPath2(path3, filenameOrOptions, options) {
-  const stats = await fs2.stat(path3);
-  return createFileFromPath(path3, stats, filenameOrOptions, options);
+async function fileFromPath2(path4, filenameOrOptions, options) {
+  const stats = await fs2.stat(path4);
+  return createFileFromPath(path4, stats, filenameOrOptions, options);
 }
 var import_node_domexception, __classPrivateFieldSet4, __classPrivateFieldGet5, _FileFromPath_path, _FileFromPath_start, MESSAGE, FileFromPath;
 var init_fileFromPath = __esm({
@@ -33022,266 +33459,13 @@ var init_fileFromPath = __esm({
 // server/index.ts
 var import_express11 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
-import path2 from "path";
-import { fileURLToPath as fileURLToPath2 } from "url";
-
-// server/db.ts
-var import_sql = __toESM(require_sql_wasm(), 1);
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
-var __dirname2 = path.dirname(fileURLToPath(import.meta.url));
-var dataDir = process.env.NODE_ENV === "production" ? "/tmp/data" : path.join(__dirname2, "..", "data");
-if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-var dbPath = path.join(dataDir, "analysis.db");
-var BetterSqlite3Compat = class {
-  sqlDb;
-  dirty = false;
-  saveTimer = null;
-  async init() {
-    const SQL = await (0, import_sql.default)();
-    if (fs.existsSync(dbPath)) {
-      const buf = fs.readFileSync(dbPath);
-      this.sqlDb = new SQL.Database(buf);
-    } else {
-      this.sqlDb = new SQL.Database();
-    }
-    this.sqlDb.run("PRAGMA journal_mode = WAL");
-    this.sqlDb.run("PRAGMA foreign_keys = ON");
-  }
-  save() {
-    if (this.saveTimer) return;
-    this.saveTimer = setTimeout(() => {
-      try {
-        const data = this.sqlDb.export();
-        fs.writeFileSync(dbPath, Buffer.from(data));
-      } catch {
-      }
-      this.saveTimer = null;
-    }, 500);
-  }
-  exec(sql) {
-    this.sqlDb.run(sql);
-    this.save();
-  }
-  pragma(str2) {
-    this.sqlDb.run(`PRAGMA ${str2}`);
-  }
-  prepare(sql) {
-    const db2 = this.sqlDb;
-    const self2 = this;
-    return {
-      run(...params) {
-        db2.run(sql, params);
-        self2.save();
-        return { changes: db2.getRowsModified() };
-      },
-      get(...params) {
-        const stmt = db2.prepare(sql);
-        if (params.length > 0) stmt.bind(params);
-        if (stmt.step()) {
-          const cols = stmt.getColumnNames();
-          const vals = stmt.get();
-          stmt.free();
-          const row = {};
-          cols.forEach((c2, i2) => {
-            row[c2] = vals[i2];
-          });
-          return row;
-        }
-        stmt.free();
-        return void 0;
-      },
-      all(...params) {
-        const stmt = db2.prepare(sql);
-        if (params.length > 0) stmt.bind(params);
-        const rows = [];
-        while (stmt.step()) {
-          const cols = stmt.getColumnNames();
-          const vals = stmt.get();
-          const row = {};
-          cols.forEach((c2, i2) => {
-            row[c2] = vals[i2];
-          });
-          rows.push(row);
-        }
-        stmt.free();
-        return rows;
-      }
-    };
-  }
-  transaction(fn) {
-    const self2 = this;
-    return ((...args) => {
-      self2.sqlDb.run("BEGIN");
-      try {
-        fn(...args);
-        self2.sqlDb.run("COMMIT");
-        self2.save();
-      } catch (e2) {
-        self2.sqlDb.run("ROLLBACK");
-        throw e2;
-      }
-    });
-  }
-};
-var db = new BetterSqlite3Compat();
-async function initDB() {
-  await db.init();
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT DEFAULT '',
-      role TEXT DEFAULT 'member',
-      token TEXT NOT NULL,
-      created_at TEXT DEFAULT (datetime('now'))
-    )
-  `);
-  db.exec(`CREATE TABLE IF NOT EXISTS sessions (
-      id TEXT PRIMARY KEY, sequence_num INTEGER, session_id TEXT, user_id TEXT,
-      ocs_session_id TEXT, bot_conversation TEXT, human_conversation TEXT,
-      dissatisfaction_info TEXT, session_date TEXT, imported_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS session_summaries (
-      id TEXT PRIMARY KEY, session_id TEXT NOT NULL, summary_text TEXT NOT NULL,
-      embedding TEXT, key_topics TEXT DEFAULT '[]', generated_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS scenarios (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL,
-      date_from TEXT, date_to TEXT, matched_session_ids TEXT DEFAULT '[]',
-      matched_count INTEGER DEFAULT 0, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS dimensions (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, definition TEXT NOT NULL,
-      categories_json TEXT DEFAULT '[]', auto_discover INTEGER DEFAULT 0,
-      sub_skill_ref TEXT DEFAULT '', sort_order INTEGER DEFAULT 0,
-      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS analysis_configs (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, scenario_id TEXT,
-      frequency TEXT DEFAULT 'manual', dimension_ids TEXT DEFAULT '[]',
-      is_active INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS analysis_runs (
-      id TEXT PRIMARY KEY, config_id TEXT, status TEXT DEFAULT 'pending',
-      total_sessions INTEGER DEFAULT 0, processed_sessions INTEGER DEFAULT 0,
-      started_at TEXT, completed_at TEXT, error_message TEXT DEFAULT '',
-      summary_json TEXT DEFAULT '{}', triggered_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS analysis_results (
-      id TEXT PRIMARY KEY, run_id TEXT NOT NULL, session_id TEXT NOT NULL,
-      dimension_id TEXT NOT NULL, category TEXT NOT NULL, confidence REAL DEFAULT 0,
-      reasoning TEXT DEFAULT '', is_auto_discovered INTEGER DEFAULT 0,
-      created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS tasks (
-      id TEXT PRIMARY KEY, run_id TEXT, dimension_id TEXT, title TEXT NOT NULL,
-      description TEXT NOT NULL, priority TEXT DEFAULT 'medium', status TEXT DEFAULT 'open',
-      assignee_id TEXT, resolution_text TEXT DEFAULT '', resolved_at TEXT,
-      related_session_ids TEXT DEFAULT '[]', created_at TEXT DEFAULT (datetime('now')),
-      updated_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS team_members (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, role_description TEXT NOT NULL,
-      email TEXT DEFAULT '', user_id TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS classification_feedback (
-      id TEXT PRIMARY KEY, result_id TEXT NOT NULL, original_category TEXT NOT NULL,
-      corrected_category TEXT, feedback_note TEXT DEFAULT '', submitted_by TEXT,
-      created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS dingtalk_configs (
-      id TEXT PRIMARY KEY, webhook_url TEXT NOT NULL, secret TEXT DEFAULT '',
-      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS notification_logs (
-      id TEXT PRIMARY KEY, channel TEXT DEFAULT 'dingtalk', run_id TEXT,
-      payload_json TEXT NOT NULL, status TEXT DEFAULT 'sent', sent_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS satisfaction_events (
-      id TEXT PRIMARY KEY, event_date TEXT NOT NULL, satisfaction_score REAL,
-      total_sessions INTEGER DEFAULT 0, dissatisfied_count INTEGER DEFAULT 0,
-      task_resolved_ids TEXT DEFAULT '[]', notes TEXT DEFAULT '',
-      created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  const adminExists = db.prepare("SELECT id FROM users WHERE id = ?").get("admin-001");
-  if (!adminExists) {
-    db.prepare("INSERT INTO users (id, name, email, role, token) VALUES (?, ?, ?, ?, ?)").run(
-      "admin-001",
-      "Admin",
-      "admin@example.com",
-      "admin",
-      "admin123"
-    );
-  }
-  const dimCount = db.prepare("SELECT COUNT(*) as cnt FROM dimensions").get();
-  if (dimCount.cnt === 0) {
-    const dims = [
-      {
-        id: "dim-transfer-reason",
-        name: "\u8F6C\u4EBA\u5DE5\u539F\u56E0\u5206\u7C7B",
-        definition: "\u5206\u6790\u4E70\u5BB6\u4ECEAI\u5BA2\u670D\u8F6C\u5230\u4EBA\u5DE5\u5BA2\u670D\u7684\u6839\u672C\u539F\u56E0\u3002\u9700\u8981\u5BF9\u6BD4AI\u5BA2\u670D\u5BF9\u8BDD\u548C\u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD\u7684\u5185\u5BB9\uFF0C\u5224\u65AD\u8F6C\u4EBA\u5DE5\u7684\u6838\u5FC3\u52A8\u56E0\u3002",
-        categories: [
-          { name: "\u4EBA\u5DE5\u5E2E\u52A9\u6267\u884C\u64CD\u4F5C", description: "AI\u53EA\u80FD\u63D0\u4F9B\u901A\u7528\u6D41\u7A0B\u8BF4\u660E\uFF0C\u4E70\u5BB6\u9700\u8981\u4EBA\u5DE5\u67E5\u8BE2/\u64CD\u4F5C\u5177\u4F53\u8BA2\u5355\u3001\u8D26\u6237\u7B49" },
-          { name: "AI\u56DE\u7B54\u9519\u8BEF\u6216\u65E0\u6CD5\u56DE\u7B54", description: "AI\u7ED9\u51FA\u4E86\u9519\u8BEF\u7B54\u6848\u6216\u515C\u5E95\u56DE\u590D\uFF0C\u4EBA\u5DE5\u5BA2\u670D\u7ED9\u51FA\u4E86\u6B63\u786E\u65B9\u6848" },
-          { name: "\u4E70\u5BB6\u66F4\u4FE1\u4EFB\u4EBA\u5DE5", description: "AI\u548C\u4EBA\u5DE5\u7ED9\u51FA\u76F8\u4F3C\u7B54\u6848\uFF0C\u4F46\u4E70\u5BB6\u4E0D\u4FE1\u4EFBAI\u6216\u9700\u8981\u4EBA\u5DE5\u786E\u8BA4" },
-          { name: "\u4EBA\u5DE5\u4E5F\u9700\u5347\u7EA7", description: "\u95EE\u9898\u8F83\u590D\u6742\uFF0C\u4EBA\u5DE5\u4E5F\u9700\u8981\u63D0\u4EA4\u5DE5\u5355\u6216\u5347\u7EA7\u81F3\u4E13\u4E1A\u56E2\u961F" },
-          { name: "\u4EBA\u5DE5\u66F4\u6709\u4EBA\u60C5\u5473", description: "AI\u548C\u4EBA\u5DE5\u56DE\u7B54\u5185\u5BB9\u76F8\u8FD1\uFF0C\u4F46\u4EBA\u5DE5\u5728\u63AA\u8F9E\u4E0A\u66F4\u6709\u6E29\u5EA6\u548C\u5171\u60C5" },
-          { name: "\u8F6C\u4EBA\u5DE5\u540E\u95EE\u4E86\u4E0D\u540C\u95EE\u9898", description: "\u4E70\u5BB6\u5728AI\u5904\u548C\u4EBA\u5DE5\u5904\u8BA8\u8BBA\u4E86\u4E0D\u540C\u7684\u95EE\u9898" },
-          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u5165\u4EE5\u4E0A\u7C7B\u522B" }
-        ],
-        sort_order: 0
-      },
-      {
-        id: "dim-topic",
-        name: "\u4E70\u5BB6\u95EE\u9898\u7C7B\u578B",
-        definition: "\u8BC6\u522B\u4E70\u5BB6\u54A8\u8BE2\u7684\u5177\u4F53\u95EE\u9898\u7C7B\u578B\uFF0C\u7528\u4E8E\u4E86\u89E3\u5BA2\u6237\u9700\u6C42\u5206\u5E03\u3002",
-        categories: [
-          { name: "\u9000\u6B3E\u7533\u8BF7/\u8FDB\u5EA6", description: "\u9000\u6B3E\u76F8\u5173\u54A8\u8BE2" },
-          { name: "\u7EA0\u7EB7/Dispute\u5904\u7406", description: "\u7EA0\u7EB7\u4E89\u8BAE\u76F8\u5173" },
-          { name: "\u8BA2\u5355\u7269\u6D41\u8FFD\u8E2A", description: "\u7269\u6D41\u8DDF\u8E2A\u67E5\u8BE2" },
-          { name: "VAT/\u7A0E\u52A1\u76F8\u5173", description: "\u7A0E\u52A1\u3001\u53D1\u7968\u3001\u5173\u7A0E" },
-          { name: "\u652F\u4ED8\u65B9\u5F0F/\u4ED8\u6B3E\u95EE\u9898", description: "\u652F\u4ED8\u65B9\u5F0F\u76F8\u5173" },
-          { name: "\u9000\u8D27/\u5546\u54C1\u95EE\u9898", description: "\u9000\u8D27\u3001\u8D28\u91CF\u95EE\u9898" },
-          { name: "\u8D26\u6237/\u767B\u5F55", description: "\u8D26\u6237\u95EE\u9898" },
-          { name: "\u4F9B\u5E94\u5546/\u5546\u54C1\u54A8\u8BE2", description: "\u4F9B\u5E94\u5546\u8BE2\u76D8" },
-          { name: "\u5176\u4ED6\u54A8\u8BE2", description: "\u5176\u4ED6\u7C7B\u578B" }
-        ],
-        sort_order: 1
-      },
-      {
-        id: "dim-dissatisfaction",
-        name: "\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790",
-        definition: "\u5206\u6790\u4E70\u5BB6\u70B9\u51FB\u4E0D\u6EE1\u610F\u7684\u5177\u4F53\u539F\u56E0\u548C\u65F6\u95F4\u8282\u70B9\uFF0C\u7ED3\u5408\u5BF9\u8BDD\u4E0A\u4E0B\u6587\u5224\u65AD\u4E0D\u6EE1\u610F\u7684\u6839\u56E0\u3002",
-        categories: [
-          { name: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", description: "AI\u7ED9\u51FA\u7684\u7B54\u6848\u4E0E\u4E70\u5BB6\u95EE\u9898\u4E0D\u5339\u914D\u6216\u5B8C\u5168\u9519\u8BEF" },
-          { name: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", description: "AI\u56DE\u7B54\u8FC7\u4E8E\u590D\u6742\u6216\u63AA\u8F9E\u8BA9\u4EBA\u96BE\u4EE5\u7406\u89E3" },
-          { name: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", description: "AI\u6CA1\u6709\u9488\u5BF9\u6027\u56DE\u7B54\u4E70\u5BB6\u7684\u5177\u4F53\u95EE\u9898" },
-          { name: "\u4E0D\u540C\u610F\u5E73\u53F0\u653F\u7B56", description: "\u4E70\u5BB6\u5BF9\u5E73\u53F0\u7684\u9000\u6B3E/\u9000\u8D27\u7B49\u653F\u7B56\u4E0D\u6EE1" },
-          { name: "\u754C\u9762\u96BE\u7528", description: "\u804A\u5929\u754C\u9762\u6216\u4EA4\u4E92\u4F53\u9A8C\u5DEE" },
-          { name: "\u6587\u5B57\u592A\u591A", description: "AI\u56DE\u590D\u8FC7\u957F\u4E0D\u60F3\u9605\u8BFB" },
-          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u7C7B" }
-        ],
-        sort_order: 2
-      }
-    ];
-    for (const d2 of dims) {
-      db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, '', ?, 1, 'admin-001')").run(
-        d2.id,
-        d2.name,
-        d2.definition,
-        JSON.stringify(d2.categories),
-        d2.sort_order
-      );
-    }
-  }
-  console.log("[DB] Initialized successfully");
-}
-var db_default = db;
+init_db();
+import path3 from "path";
+import { fileURLToPath as fileURLToPath3 } from "url";
 
 // server/routes/auth.ts
 var import_express = __toESM(require_express2(), 1);
+init_db();
 var router = (0, import_express.Router)();
 router.post("/login", (req, res) => {
   const { token } = req.body;
@@ -33294,6 +33478,7 @@ var auth_default = router;
 
 // server/routes/sessions.ts
 var import_express2 = __toESM(require_express2(), 1);
+init_db();
 
 // node_modules/uuid/dist/esm/stringify.js
 var byteToHex = [];
@@ -33347,6 +33532,7 @@ function v4(options, buf, offset) {
 var v4_default = v4;
 
 // server/middleware/auth.ts
+init_db();
 function authMiddleware(req, res, next) {
   const token = req.headers["x-auth-token"];
   if (!token) {
@@ -34107,13 +34293,13 @@ var MultipartBody = class {
 // node_modules/openai/_shims/node-runtime.mjs
 import { ReadableStream as ReadableStream3 } from "node:stream/web";
 var fileFromPathWarned = false;
-async function fileFromPath3(path3, ...args) {
+async function fileFromPath3(path4, ...args) {
   const { fileFromPath: _fileFromPath } = await Promise.resolve().then(() => (init_fileFromPath(), fileFromPath_exports));
   if (!fileFromPathWarned) {
-    console.warn(`fileFromPath is deprecated; use fs.createReadStream(${JSON.stringify(path3)}) instead`);
+    console.warn(`fileFromPath is deprecated; use fs.createReadStream(${JSON.stringify(path4)}) instead`);
     fileFromPathWarned = true;
   }
-  return await _fileFromPath(path3, ...args);
+  return await _fileFromPath(path4, ...args);
 }
 var defaultHttpAgent = new import_agentkeepalive.default({ keepAlive: true, timeout: 5 * 60 * 1e3 });
 var defaultHttpsAgent = new import_agentkeepalive.default.HttpsAgent({ keepAlive: true, timeout: 5 * 60 * 1e3 });
@@ -34897,29 +35083,29 @@ var APIClient = class {
   defaultIdempotencyKey() {
     return `stainless-node-retry-${uuid4()}`;
   }
-  get(path3, opts) {
-    return this.methodRequest("get", path3, opts);
+  get(path4, opts) {
+    return this.methodRequest("get", path4, opts);
   }
-  post(path3, opts) {
-    return this.methodRequest("post", path3, opts);
+  post(path4, opts) {
+    return this.methodRequest("post", path4, opts);
   }
-  patch(path3, opts) {
-    return this.methodRequest("patch", path3, opts);
+  patch(path4, opts) {
+    return this.methodRequest("patch", path4, opts);
   }
-  put(path3, opts) {
-    return this.methodRequest("put", path3, opts);
+  put(path4, opts) {
+    return this.methodRequest("put", path4, opts);
   }
-  delete(path3, opts) {
-    return this.methodRequest("delete", path3, opts);
+  delete(path4, opts) {
+    return this.methodRequest("delete", path4, opts);
   }
-  methodRequest(method, path3, opts) {
+  methodRequest(method, path4, opts) {
     return this.request(Promise.resolve(opts).then(async (opts2) => {
       const body = opts2 && isBlobLike(opts2?.body) ? new DataView(await opts2.body.arrayBuffer()) : opts2?.body instanceof DataView ? opts2.body : opts2?.body instanceof ArrayBuffer ? new DataView(opts2.body) : opts2 && ArrayBuffer.isView(opts2?.body) ? new DataView(opts2.body.buffer) : opts2?.body;
-      return { method, path: path3, ...opts2, body };
+      return { method, path: path4, ...opts2, body };
     }));
   }
-  getAPIList(path3, Page2, opts) {
-    return this.requestAPIList(Page2, { method: "get", path: path3, ...opts });
+  getAPIList(path4, Page2, opts) {
+    return this.requestAPIList(Page2, { method: "get", path: path4, ...opts });
   }
   calculateContentLength(body) {
     if (typeof body === "string") {
@@ -34938,10 +35124,10 @@ var APIClient = class {
   }
   buildRequest(inputOptions, { retryCount = 0 } = {}) {
     const options = { ...inputOptions };
-    const { method, path: path3, query, headers = {} } = options;
+    const { method, path: path4, query, headers = {} } = options;
     const body = ArrayBuffer.isView(options.body) || options.__binaryRequest && typeof options.body === "string" ? options.body : isMultipartBody(options.body) ? options.body.body : options.body ? JSON.stringify(options.body, null, 2) : null;
     const contentLength = this.calculateContentLength(body);
-    const url = this.buildURL(path3, query);
+    const url = this.buildURL(path4, query);
     if ("timeout" in options)
       validatePositiveInteger("timeout", options.timeout);
     options.timeout = options.timeout ?? this.timeout;
@@ -35057,8 +35243,8 @@ var APIClient = class {
     const request = this.makeRequest(options, null);
     return new PagePromise(this, request, Page2);
   }
-  buildURL(path3, query) {
-    const url = isAbsoluteURL(path3) ? new URL(path3) : new URL(this.baseURL + (this.baseURL.endsWith("/") && path3.startsWith("/") ? path3.slice(1) : path3));
+  buildURL(path4, query) {
+    const url = isAbsoluteURL(path4) ? new URL(path4) : new URL(this.baseURL + (this.baseURL.endsWith("/") && path4.startsWith("/") ? path4.slice(1) : path4));
     const defaultQuery = this.defaultQuery();
     if (!isEmptyObj(defaultQuery)) {
       query = { ...defaultQuery, ...query };
@@ -40000,6 +40186,7 @@ function cosineSimilarity(a2, b2) {
 }
 
 // server/services/summarizer.ts
+init_db();
 async function summarizeSession(sessionId) {
   const session = db_default.prepare("SELECT * FROM sessions WHERE id = ?").get(sessionId);
   if (!session) throw new Error("Session not found");
@@ -40062,6 +40249,7 @@ ${session.dissatisfaction_info}
 }
 
 // server/services/search.ts
+init_db();
 async function semanticSearch(query, dateFrom, dateTo, threshold = 0.3, limit2 = 100) {
   let sql = `
     SELECT ss.session_id, ss.summary_text, ss.key_topics, ss.embedding,
@@ -40089,7 +40277,7 @@ async function semanticSearch(query, dateFrom, dateTo, threshold = 0.3, limit2 =
       return { sessionId: row.session_id, similarity: Math.round(sim * 100) / 100, summary: row.summary_text || "" };
     }).filter((r2) => r2.similarity >= threshold).sort((a2, b2) => b2.similarity - a2.similarity).slice(0, limit2);
   }
-  let searchTerms = [query];
+  let expandedTerms = [];
   try {
     const raw = await chatComplete(
       "\u4F60\u662F\u641C\u7D22\u5173\u952E\u8BCD\u6269\u5C55\u4E13\u5BB6\u3002\u5C06\u7528\u6237\u641C\u7D22\u610F\u56FE\u6269\u5C55\u4E3A\u5173\u952E\u8BCDJSON\u6570\u7EC4\uFF0C\u8986\u76D6\u4E2D\u82F1\u6587\u540C\u4E49\u8BCD\uFF0C5-15\u4E2A\u3002\u53EA\u8FD4\u56DEJSON\u6570\u7EC4\uFF0C\u4E0D\u8981\u5176\u4ED6\u6587\u5B57\u3002",
@@ -40097,24 +40285,27 @@ async function semanticSearch(query, dateFrom, dateTo, threshold = 0.3, limit2 =
     );
     const jsonStr = raw.replace(/```json\s*/g, "").replace(/```\s*/g, "").replace(/<think>[\s\S]*?<\/think>/g, "").trim();
     const parsed = JSON.parse(jsonStr);
-    if (Array.isArray(parsed)) searchTerms = [query, ...parsed];
+    if (Array.isArray(parsed)) expandedTerms = parsed.map((t2) => t2.toLowerCase());
   } catch {
-    searchTerms = query.split(/[\s,，、]+/).filter(Boolean);
   }
-  const lowerTerms = searchTerms.map((t2) => t2.toLowerCase());
+  const coreTerms = query.split(/[\s,，、。；;：:!！?？]+/).filter((t2) => t2.length >= 2).map((t2) => t2.toLowerCase());
   return rows.map((row) => {
     const text = [
       row.summary_text || "",
       row.key_topics || "",
+      row.dissatisfaction_info || "",
       (row.bot_conversation || "").slice(0, 1e3),
       (row.human_conversation || "").slice(0, 1e3)
     ].join(" ").toLowerCase();
-    let matchCount = 0;
-    for (const term of lowerTerms) {
-      if (term && text.includes(term)) matchCount++;
+    let score = 0;
+    for (const term of coreTerms) {
+      if (term && text.includes(term)) score += 0.25;
     }
-    const similarity = lowerTerms.length > 0 ? matchCount / lowerTerms.length : 0;
-    return { sessionId: row.session_id, similarity: Math.round(similarity * 100) / 100, summary: row.summary_text || "" };
+    for (const term of expandedTerms) {
+      if (term && text.includes(term)) score += 0.08;
+    }
+    const similarity = Math.min(Math.round(score * 100) / 100, 1);
+    return { sessionId: row.session_id, similarity, summary: row.summary_text || "" };
   }).filter((r2) => r2.similarity > 0).sort((a2, b2) => b2.similarity - a2.similarity).slice(0, limit2);
 }
 
@@ -40141,6 +40332,28 @@ router2.get("/", (req, res) => {
   const total = db_default.prepare("SELECT COUNT(*) as cnt FROM sessions").get();
   const summarized = db_default.prepare("SELECT COUNT(*) as cnt FROM session_summaries").get();
   res.json({ data: rows, total: total.cnt, summarized: summarized.cnt });
+});
+router2.get("/sample/first", (_req, res) => {
+  const row = db_default.prepare(`
+    SELECT s.*, ss.summary_text, ss.key_topics
+    FROM sessions s LEFT JOIN session_summaries ss ON ss.session_id = s.id
+    ORDER BY s.sequence_num ASC LIMIT 1
+  `).get();
+  const total = db_default.prepare("SELECT COUNT(*) as cnt FROM sessions").get();
+  const columns = ["sequence_num", "session_id", "user_id", "ocs_session_id", "bot_conversation", "human_conversation", "dissatisfaction_info", "session_date", "imported_at", "summary_text", "key_topics"];
+  res.json({ sample: row || null, total: total.cnt, columns });
+});
+router2.get("/data-requests", (_req, res) => {
+  const rows = db_default.prepare("SELECT * FROM data_source_requests ORDER BY created_at DESC").all();
+  res.json(rows);
+});
+router2.post("/data-requests", authMiddleware, (req, res) => {
+  const { description } = req.body;
+  if (!description || !description.trim()) return res.status(400).json({ error: "description required" });
+  const id = v4_default();
+  db_default.prepare("INSERT INTO data_source_requests (id, description, created_by) VALUES (?, ?, ?)").run(id, description.trim(), req.user?.name || "");
+  const row = db_default.prepare("SELECT * FROM data_source_requests WHERE id = ?").get(id);
+  res.json(row);
 });
 router2.get("/:id", (req, res) => {
   const row = db_default.prepare(`
@@ -40223,6 +40436,7 @@ var sessions_default = router2;
 
 // server/routes/scenarios.ts
 var import_express3 = __toESM(require_express2(), 1);
+init_db();
 var router3 = (0, import_express3.Router)();
 router3.get("/", (req, res) => {
   const rows = db_default.prepare("SELECT * FROM scenarios ORDER BY created_at DESC").all();
@@ -40265,6 +40479,7 @@ var scenarios_default = router3;
 
 // server/routes/dimensions.ts
 var import_express4 = __toESM(require_express2(), 1);
+init_db();
 var router4 = (0, import_express4.Router)();
 router4.get("/", (req, res) => {
   const rows = db_default.prepare("SELECT * FROM dimensions ORDER BY sort_order ASC").all();
@@ -40305,8 +40520,10 @@ var dimensions_default = router4;
 
 // server/routes/runs.ts
 var import_express5 = __toESM(require_express2(), 1);
+init_db();
 
 // server/services/analyzer.ts
+init_db();
 async function analyzeSession(sessionId, dimension, runId, feedbackList = []) {
   const session = db_default.prepare("SELECT * FROM sessions WHERE id = ?").get(sessionId);
   if (!session) throw new Error("Session not found");
@@ -40426,6 +40643,51 @@ function generateTasksForRun(runId) {
   }
 }
 
+// server/services/dingtalk.ts
+init_db();
+import crypto2 from "crypto";
+async function sendDingTalkNotification(runId, baseUrl = "http://localhost:5173") {
+  const config = db_default.prepare("SELECT * FROM dingtalk_configs WHERE enabled = 1 LIMIT 1").get();
+  if (!config) return { ok: false, error: "DingTalk not configured" };
+  const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(runId);
+  if (!run) return { ok: false, error: "Run not found" };
+  const urgentTasks = db_default.prepare(`
+    SELECT title, priority FROM tasks WHERE run_id = ? AND priority IN ('urgent', 'high')
+    ORDER BY CASE priority WHEN 'urgent' THEN 0 ELSE 1 END LIMIT 5
+  `).all(runId);
+  const markdown = `## \u4F1A\u8BDD\u5206\u6790\u62A5\u544A\u5B8C\u6210
+**\u5206\u6790\u65F6\u95F4**: ${run.completed_at || run.started_at}
+**\u4F1A\u8BDD\u6570\u91CF**: ${run.total_sessions} \u6761
+
+### \u7D27\u6025\u53D1\u73B0
+${urgentTasks.length > 0 ? urgentTasks.map((t2) => `- **[${t2.priority}]** ${t2.title}`).join("\n") : "\u65E0\u7D27\u6025\u4EFB\u52A1"}
+
+[\u67E5\u770B\u8BE6\u7EC6\u62A5\u544A](${baseUrl}/#/analysis/runs/${run.id})`;
+  let url = config.webhook_url;
+  if (config.secret) {
+    const timestamp = Date.now();
+    const sign = crypto2.createHmac("sha256", config.secret).update(`${timestamp}
+${config.secret}`).digest("base64");
+    url += `&timestamp=${timestamp}&sign=${encodeURIComponent(sign)}`;
+  }
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        msgtype: "markdown",
+        markdown: { title: "\u4F1A\u8BDD\u5206\u6790\u62A5\u544A", text: markdown }
+      })
+    });
+    const result = await resp.json();
+    db_default.prepare("INSERT INTO notification_logs (id, channel, run_id, payload_json, status) VALUES (?, ?, ?, ?, ?)").run(v4_default(), "dingtalk", runId, JSON.stringify({ markdown }), "sent");
+    return { ok: true, result };
+  } catch (e2) {
+    db_default.prepare("INSERT INTO notification_logs (id, channel, run_id, payload_json, status) VALUES (?, ?, ?, ?, ?)").run(v4_default(), "dingtalk", runId, JSON.stringify({ error: e2.message }), "failed");
+    return { ok: false, error: e2.message };
+  }
+}
+
 // server/routes/runs.ts
 var router5 = (0, import_express5.Router)();
 router5.get("/", (req, res) => {
@@ -40473,6 +40735,10 @@ router5.post("/:id/process", authMiddleware, async (req, res) => {
     const stats = db_default.prepare(`SELECT dimension_id, category, COUNT(*) as cnt FROM analysis_results WHERE run_id = ? GROUP BY dimension_id, category`).all(run.id);
     db_default.prepare("UPDATE analysis_runs SET summary_json = ? WHERE id = ?").run(JSON.stringify(stats), run.id);
     generateTasksForRun(run.id);
+    const baseUrl = req.headers.origin || "http://localhost:5173";
+    sendDingTalkNotification(run.id, baseUrl).catch((e2) => {
+      console.error("Auto DingTalk notification failed:", e2);
+    });
     return res.json({ done: true, processed: run.total_sessions, total: run.total_sessions });
   }
   const batch = remaining.slice(0, batchSize);
@@ -40557,6 +40823,7 @@ var runs_default = router5;
 
 // server/routes/tasks.ts
 var import_express6 = __toESM(require_express2(), 1);
+init_db();
 var router6 = (0, import_express6.Router)();
 router6.get("/", (req, res) => {
   const status = req.query.status;
@@ -40611,6 +40878,7 @@ var tasks_default = router6;
 
 // server/routes/team.ts
 var import_express7 = __toESM(require_express2(), 1);
+init_db();
 var router7 = (0, import_express7.Router)();
 router7.get("/", (req, res) => {
   res.json(db_default.prepare("SELECT * FROM team_members ORDER BY created_at").all());
@@ -40634,6 +40902,7 @@ var team_default = router7;
 
 // server/routes/settings.ts
 var import_express8 = __toESM(require_express2(), 1);
+init_db();
 var router8 = (0, import_express8.Router)();
 router8.get("/", (req, res) => {
   const dingtalk = db_default.prepare("SELECT * FROM dingtalk_configs LIMIT 1").get() || null;
@@ -40655,6 +40924,24 @@ var settings_default = router8;
 
 // server/routes/dashboard.ts
 var import_express9 = __toESM(require_express2(), 1);
+init_db();
+init_seed_production();
+import fs3 from "fs";
+import path2 from "path";
+import { fileURLToPath as fileURLToPath2 } from "url";
+var __dirname3 = path2.dirname(fileURLToPath2(import.meta.url));
+var dataDir2 = path2.join(__dirname3, "..", "..", "data");
+var seedPath = path2.join(dataDir2, "satisfaction-seed.json");
+var satisfactionSeed = [];
+try {
+  if (fs3.existsSync(seedPath)) {
+    satisfactionSeed = JSON.parse(fs3.readFileSync(seedPath, "utf-8"));
+  }
+} catch {
+}
+if (satisfactionSeed.length === 0 && satisfactionSeedData.length > 0) {
+  satisfactionSeed = satisfactionSeedData;
+}
 var router9 = (0, import_express9.Router)();
 router9.get("/summary", (req, res) => {
   const totalSessions = db_default.prepare("SELECT COUNT(*) as cnt FROM sessions").get();
@@ -40678,6 +40965,9 @@ router9.get("/summary", (req, res) => {
   });
 });
 router9.get("/satisfaction", (req, res) => {
+  if (satisfactionSeed.length > 0) {
+    return res.json(satisfactionSeed);
+  }
   const daily = db_default.prepare(`
     SELECT session_date as date, COUNT(*) as total,
     SUM(CASE WHEN dissatisfaction_info LIKE '%\u70B9\u4E86\u4E0D\u6EE1\u610F%' THEN 1 ELSE 0 END) as dissatisfied
@@ -40701,56 +40991,21 @@ var dashboard_default = router9;
 
 // server/routes/notify.ts
 var import_express10 = __toESM(require_express2(), 1);
-import crypto2 from "crypto";
 var router10 = (0, import_express10.Router)();
 router10.post("/dingtalk", authMiddleware, async (req, res) => {
   const { run_id } = req.body;
-  const config = db_default.prepare("SELECT * FROM dingtalk_configs WHERE enabled = 1 LIMIT 1").get();
-  if (!config) return res.status(400).json({ error: "DingTalk not configured" });
-  const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(run_id);
-  if (!run) return res.status(404).json({ error: "Run not found" });
-  const urgentTasks = db_default.prepare(`
-    SELECT title, priority FROM tasks WHERE run_id = ? AND priority IN ('urgent', 'high')
-    ORDER BY CASE priority WHEN 'urgent' THEN 0 ELSE 1 END LIMIT 5
-  `).all(run_id);
-  const summary = JSON.parse(run.summary_json || "[]");
   const baseUrl = req.headers.origin || "http://localhost:5173";
-  const markdown = `## \u4F1A\u8BDD\u5206\u6790\u62A5\u544A\u5B8C\u6210
-**\u5206\u6790\u65F6\u95F4**: ${run.completed_at || run.started_at}
-**\u4F1A\u8BDD\u6570\u91CF**: ${run.total_sessions} \u6761
-
-### \u7D27\u6025\u53D1\u73B0
-${urgentTasks.length > 0 ? urgentTasks.map((t2) => `- **[${t2.priority}]** ${t2.title}`).join("\n") : "\u65E0\u7D27\u6025\u4EFB\u52A1"}
-
-[\u67E5\u770B\u8BE6\u7EC6\u62A5\u544A](${baseUrl}/#/analysis/runs/${run.id})`;
-  let url = config.webhook_url;
-  if (config.secret) {
-    const timestamp = Date.now();
-    const sign = crypto2.createHmac("sha256", config.secret).update(`${timestamp}
-${config.secret}`).digest("base64");
-    url += `&timestamp=${timestamp}&sign=${encodeURIComponent(sign)}`;
-  }
-  try {
-    const resp = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        msgtype: "markdown",
-        markdown: { title: "\u4F1A\u8BDD\u5206\u6790\u62A5\u544A", text: markdown }
-      })
-    });
-    const result = await resp.json();
-    db_default.prepare("INSERT INTO notification_logs (id, channel, run_id, payload_json, status) VALUES (?, ?, ?, ?, ?)").run(v4_default(), "dingtalk", run_id, JSON.stringify({ markdown }), "sent");
-    res.json({ ok: true, result });
-  } catch (e2) {
-    db_default.prepare("INSERT INTO notification_logs (id, channel, run_id, payload_json, status) VALUES (?, ?, ?, ?, ?)").run(v4_default(), "dingtalk", run_id, JSON.stringify({ error: e2.message }), "failed");
-    res.status(500).json({ error: e2.message });
+  const result = await sendDingTalkNotification(run_id, baseUrl);
+  if (result.ok) {
+    res.json(result);
+  } else {
+    res.status(result.error === "Run not found" ? 404 : 400).json({ error: result.error });
   }
 });
 var notify_default = router10;
 
 // server/index.ts
-var __dirname3 = path2.dirname(fileURLToPath2(import.meta.url));
+var __dirname4 = path3.dirname(fileURLToPath3(import.meta.url));
 var app = (0, import_express11.default)();
 app.use((0, import_cors.default)());
 app.use(import_express11.default.json({ limit: "50mb" }));
@@ -40764,10 +41019,10 @@ app.use("/api/team", team_default);
 app.use("/api/settings", settings_default);
 app.use("/api/dashboard", dashboard_default);
 app.use("/api/notify", notify_default);
-var distPath = path2.join(__dirname3, "..", "dist");
+var distPath = path3.join(__dirname4, "..", "dist");
 app.use(import_express11.default.static(distPath));
 app.get("*", (_req, res) => {
-  res.sendFile(path2.join(distPath, "index.html"));
+  res.sendFile(path3.join(distPath, "index.html"));
 });
 var PORT = parseInt(process.env.PORT || "3001");
 initDB().then(() => {

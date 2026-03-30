@@ -1,5 +1,23 @@
 import { Router } from 'express'
 import db from '../db.js'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { satisfactionSeedData } from '../seed-production.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const dataDir = path.join(__dirname, '..', '..', 'data')
+const seedPath = path.join(dataDir, 'satisfaction-seed.json')
+let satisfactionSeed: any[] = []
+try {
+  if (fs.existsSync(seedPath)) {
+    satisfactionSeed = JSON.parse(fs.readFileSync(seedPath, 'utf-8'))
+  }
+} catch { /* fallback */ }
+// In production, use embedded seed data
+if (satisfactionSeed.length === 0 && satisfactionSeedData.length > 0) {
+  satisfactionSeed = satisfactionSeedData
+}
 
 const router = Router()
 
@@ -29,7 +47,12 @@ router.get('/summary', (req, res) => {
 })
 
 router.get('/satisfaction', (req, res) => {
-  // Get daily dissatisfaction data from sessions
+  // Prefer pre-processed seed data from xlsx
+  if (satisfactionSeed.length > 0) {
+    return res.json(satisfactionSeed)
+  }
+
+  // Fallback: calculate from sessions DB
   const daily = db.prepare(`
     SELECT session_date as date, COUNT(*) as total,
     SUM(CASE WHEN dissatisfaction_info LIKE '%点了不满意%' THEN 1 ELSE 0 END) as dissatisfied

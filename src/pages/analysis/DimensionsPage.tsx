@@ -56,8 +56,8 @@ export default function DimensionsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">分析维度</h2>
-          <p className="text-sm text-gray-500 mt-1">配置分析目标和分类体系</p>
+          <h2 className="text-xl font-bold text-gray-900">洞察维度</h2>
+          <p className="text-sm text-gray-500 mt-1">配置洞察目标和分类体系</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', definition: '', categories: [], auto_discover: true, sub_skill_ref: '' }) }}
           className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm hover:bg-brand-light">
@@ -73,9 +73,9 @@ export default function DimensionsPage() {
           </div>
           <div className="space-y-4">
             <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              placeholder="维度名称（如：不满意原因分析）" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
+              placeholder="维度名称（如：不满意原因洞察）" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
             <textarea value={form.definition} onChange={e => setForm(f => ({ ...f, definition: e.target.value }))}
-              placeholder="维度定义（详细描述分析目标和分类规则）" rows={3}
+              placeholder="维度定义（详细描述洞察目标和分类规则）" rows={3}
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
 
             <div>
