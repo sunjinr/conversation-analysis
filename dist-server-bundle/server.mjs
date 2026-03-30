@@ -26724,443 +26724,6 @@ var require_sql_wasm = __commonJS({
   }
 });
 
-// server/seed-production.ts
-var seed_production_exports = {};
-__export(seed_production_exports, {
-  satisfactionSeedData: () => satisfactionSeedData,
-  seedProductionData: () => seedProductionData
-});
-function seedProductionData() {
-  const sessionCount = db_default.prepare("SELECT COUNT(*) as cnt FROM sessions").get().cnt;
-  if (sessionCount > 0) return;
-  console.log("[Seed] Seeding production mock data...");
-  const sampleSessionId = "mock-session-001";
-  db_default.prepare(`INSERT INTO sessions (id, sequence_num, session_id, user_id, ocs_session_id, bot_conversation, human_conversation, dissatisfaction_info, session_date)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-    sampleSessionId,
-    1,
-    "00247c3f709a49e8b1aa984eb9fa8eba",
-    "4500000000000",
-    "cb6b6c5b6c3b48cf803b3606bae20290",
-    `[2026-03-15 20:29:03] \u4F1A\u5458: Ticaret G\xFCvencesi sipari\u015Fim i\xE7in nas\u0131l uyu\u015Fmazl\u0131k a\xE7abilirim?
-[2026-03-15 20:29:04] \u673A\u5668\u4EBA: \u6D88\u606F\u5361\u7247: \u6B64\u5361\u7247\u662F\u4E00\u4E2A\u8BA2\u5355\u9009\u62E9\u5668
-[2026-03-15 20:29:08] \u4F1A\u5458: {"id":"289860971501027473","parentId":""}
-[2026-03-15 20:30:18] \u4F1A\u5458: The item was returned by customs and I did not receive the product. I requested a full refund to my original payment method. However, part of the refund was given as a coupon. I do not want a coupon. Please refund the full amount to my credit card.
-[2026-03-15 20:34:23] \u4F1A\u5458: I do not accept the refund as a coupon. According to consumer rights, since the product was not delivered, I am entitled to a full refund to my original payment method.
-[2026-03-15 20:37:08] \u4F1A\u5458: The system is incorrect. I need a live agent to fix this and refund the remaining balance to my card.
-[2026-03-15 20:37:25] \u673A\u5668\u4EBA: \u547D\u4EE4\u6D88\u606F\uFF1AAGENT_ENTRANCE_DISPLAY`,
-    `[2026-03-15 20:38:54] \u5BA2\u670D: Hello! This is Denice from the Alibaba.com Customer Service Team. May I know how can I help you?
-[2026-03-15 20:39:07] \u4F1A\u5458: Merhaba. Sipari\u015Fim stokta olmad\u0131\u011F\u0131 veya g\xFCmr\xFCk sorunu nedeniyle g\xF6ndericiye iade edildi. Alibaba kupon verdi. Kupon istemiyorum. T\xFCm tutar\u0131n orijinal kredi kart\u0131ma iade edilmesini istiyorum.
-[2026-03-15 20:40:12] \u5BA2\u670D: Can you provide me your order number please?
-[2026-03-15 20:44:08] \u5BA2\u670D: Thank you for patiently waiting here
-[2026-03-15 20:50:07] \u5BA2\u670D: I will forward your case to the department for further assistance on this issue.
-[2026-03-15 20:50:46] \u5BA2\u670D: I will mark this "Extremely Urgent" and "Top Priority" just for you.
-[2026-03-15 20:53:19] \u4F1A\u5458: Tamam mutlu haberlerinizi bekliyorum kolay gelsin`,
-    "[\u4F1A\u5458\u5728 2026-03-15 20:29:31 \u65F6\u95F4 \u70B9\u4E86\u4E0D\u6EE1\u610F\uFF0C\u4E0D\u6EE1\u610F\u539F\u56E0\u4E3A\uFF1AA\xE7\u0131klamalar anla\u015F\u0131l\u0131r de\u011Fil ve karma\u015F\u0131k]",
-    "2026-03-15"
-  );
-  db_default.prepare(`INSERT INTO session_summaries (id, session_id, summary_text, key_topics) VALUES (?, ?, ?, ?)`).run(
-    "mock-summary-001",
-    sampleSessionId,
-    "\u4E70\u5BB6\u56E0\u8BA2\u5355\u88AB\u6D77\u5173\u9000\u56DE\u672A\u6536\u5230\u8D27\uFF0C\u7533\u8BF7\u5168\u989D\u9000\u6B3E\u4F46\u90E8\u5206\u91D1\u989D\u4EE5\u4F18\u60E0\u5238\u5F62\u5F0F\u8FD4\u8FD8\uFF0C\u8981\u6C42\u5C06\u5168\u90E8\u91D1\u989D\u9000\u81F3\u4FE1\u7528\u5361\u3002AI\u5BA2\u670D\u63D0\u4F9B\u4E86\u4E00\u822C\u6027\u89E3\u91CA\u540E\u8F6C\u4EBA\u5DE5\u5BA2\u670D\u5904\u7406\u3002\u4EBA\u5DE5\u5BA2\u670DDenice\u786E\u8BA4\u8BA2\u5355\u72B6\u6001\u5E76\u6307\u5BFC\u4E70\u5BB6\u7533\u8BF7\u9000\u6B3E\uFF0C\u6700\u7EC8\u5C06\u6848\u4F8B\u6807\u8BB0\u4E3A\u7D27\u6025\u4F18\u5148\u5904\u7406\u5E76\u8F6C\u53D1\u76F8\u5173\u90E8\u95E8\u3002",
-    "\u9000\u6B3E,\u9000\u6B3E\u4E89\u8BAE,\u6D77\u5173\u9000\u56DE,\u4F18\u60E0\u5238\u9000\u6B3E,\u4EBA\u5DE5\u5BA2\u670D,\u8BA2\u5355\u7EA0\u7EB7,\u8DE8\u5883\u7269\u6D41,\u4E0D\u6EE1\u610F\u53CD\u9988,\u7D27\u6025\u5904\u7406"
-  );
-  db_default.prepare(`INSERT INTO scenarios (id, name, description, matched_count, created_by) VALUES (?, ?, ?, ?, ?)`).run(
-    "mock-scenario-001",
-    "\u6700\u8FD1\u6EE1\u610F\u5EA6\u4E0B\u964D\u4E3A\u5565",
-    "\u4E70\u5BB6\u5728\u667A\u80FD\u4FA7\u7684\u6EE1\u610F\u5EA6\u4E0B\u964D\u4E86xxxxxx\u5E2E\u6211\u5168\u91CF\u5206\u6790\xB7",
-    0,
-    "admin-001"
-  );
-  db_default.prepare(`INSERT INTO scenarios (id, name, description, matched_session_ids, matched_count, created_by) VALUES (?, ?, ?, ?, ?, ?)`).run(
-    "mock-scenario-002",
-    "\u4E70\u5BB6\u4E0D\u6EE1\u610F\u7684\u4F1A\u8BDD",
-    "\u4E70\u5BB6\u5728\u5BF9\u8BDD\u8FC7\u7A0B\u4E2D\u8868\u8FBE\u4E86\u4E0D\u6EE1\u610F\uFF0C\u5305\u62EC\u5BF9AI\u5BA2\u670D\u56DE\u7B54\u4E0D\u6EE1\u610F\u3001\u89E3\u51B3\u65B9\u6848\u4E0D\u6EE1\u610F\u3001\u670D\u52A1\u6001\u5EA6\u4E0D\u6EE1\u610F\u7B49",
-    JSON.stringify([sampleSessionId]),
-    1,
-    "admin-001"
-  );
-  db_default.prepare(`INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)`).run(
-    "mock-config-001",
-    "\u4E0D\u6EE1\u610F\u4F1A\u8BDD\u6D1E\u5BDF",
-    "mock-scenario-002",
-    JSON.stringify(["dim-dissatisfaction", "dim-transfer-reason", "dim-topic"]),
-    "admin-001"
-  );
-  const summaryJson = JSON.stringify([
-    { dimension_id: "dim-dissatisfaction", category: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", cnt: 10 },
-    { dimension_id: "dim-dissatisfaction", category: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", cnt: 5 },
-    { dimension_id: "dim-dissatisfaction", category: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", cnt: 1 },
-    { dimension_id: "dim-dissatisfaction", category: "\u6587\u5B57\u592A\u591A", cnt: 2 },
-    { dimension_id: "dim-dissatisfaction", category: "\u754C\u9762\u96BE\u7528", cnt: 2 }
-  ]);
-  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, completed_at, summary_json, triggered_by)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-    "mock-run-001",
-    "mock-config-001",
-    "completed",
-    20,
-    20,
-    "2026-03-29 09:36:16",
-    "2026-03-29 09:37:54",
-    summaryJson,
-    "admin-001"
-  );
-  const tasks = [
-    { id: "mock-task-001", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF (10\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u670910\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "medium", status: "resolved", resolution: "\u5DF2\u4F18\u5316AI\u5BA2\u670D\u56DE\u7B54\u51C6\u786E\u6027\uFF0C\u66F4\u65B0\u4E86\u77E5\u8BC6\u5E93\u4E2D\u76F8\u5173\u95EE\u9898\u7684\u56DE\u7B54", resolvedAt: "2026-03-29 09:52:18" },
-    { id: "mock-task-002", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898 (5\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67095\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
-    { id: "mock-task-003", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u754C\u9762\u96BE\u7528 (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u754C\u9762\u96BE\u7528"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
-    { id: "mock-task-004", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u6587\u5B57\u592A\u591A (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u6587\u5B57\u592A\u591A"\u3002\u9700\u8981\u6539\u8FDBAI\u56DE\u590D\u957F\u5EA6\u3002', priority: "medium", status: "claimed", resolution: "", resolvedAt: null }
-  ];
-  const taskStmt = db_default.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, resolution_text, resolved_at, related_session_ids)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-  for (const t2 of tasks) {
-    taskStmt.run(t2.id, "mock-run-001", t2.dimId, t2.title, t2.desc, t2.priority, t2.status, t2.resolution, t2.resolvedAt, JSON.stringify([sampleSessionId]));
-  }
-  db_default.prepare(`INSERT INTO data_source_requests (id, description, status, created_by) VALUES (?, ?, ?, ?)`).run(
-    "mock-req-001",
-    "\u5E0C\u671B\u589E\u52A0\u300C\u4F1A\u8BDD\u65F6\u957F\u300D\u5B57\u6BB5\uFF0C\u8BB0\u5F55\u6BCF\u901A\u4F1A\u8BDD\u4ECE\u5F00\u59CB\u5230\u7ED3\u675F\u7684\u603B\u65F6\u957F",
-    "pending",
-    "Admin"
-  );
-  console.log("[Seed] Production mock data seeded successfully");
-}
-var satisfactionSeedData;
-var init_seed_production = __esm({
-  "server/seed-production.ts"() {
-    "use strict";
-    init_db();
-    satisfactionSeedData = [
-      { date: "2026-02-01", total: 561, dissatisfied: 253, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-02", total: 702, dissatisfied: 336, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-03", total: 743, dissatisfied: 348, satisfaction_rate: 53.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-04", total: 703, dissatisfied: 369, satisfaction_rate: 47.5, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-05", total: 729, dissatisfied: 381, satisfaction_rate: 47.7, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-06", total: 665, dissatisfied: 353, satisfaction_rate: 46.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-07", total: 628, dissatisfied: 288, satisfaction_rate: 54.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-08", total: 581, dissatisfied: 282, satisfaction_rate: 51.5, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-09", total: 653, dissatisfied: 305, satisfaction_rate: 53.3, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-10", total: 693, dissatisfied: 345, satisfaction_rate: 50.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-11", total: 655, dissatisfied: 322, satisfaction_rate: 50.8, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-12", total: 673, dissatisfied: 338, satisfaction_rate: 49.8, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-13", total: 702, dissatisfied: 350, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-14", total: 649, dissatisfied: 283, satisfaction_rate: 56.4, tasks_resolved: 2, task_notes: "\u4F18\u5316\u9000\u6B3E\u6D41\u7A0BAI\u8BDD\u672F\uFF0C\u4FEE\u590D\u8BA2\u5355\u67E5\u8BE2\u8D85\u65F6\u95EE\u9898" },
-      { date: "2026-02-15", total: 618, dissatisfied: 274, satisfaction_rate: 55.7, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-16", total: 601, dissatisfied: 262, satisfaction_rate: 56.4, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-17", total: 608, dissatisfied: 268, satisfaction_rate: 55.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-18", total: 665, dissatisfied: 305, satisfaction_rate: 54.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-19", total: 648, dissatisfied: 295, satisfaction_rate: 54.5, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-20", total: 687, dissatisfied: 302, satisfaction_rate: 56, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-21", total: 639, dissatisfied: 287, satisfaction_rate: 55.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-22", total: 604, dissatisfied: 249, satisfaction_rate: 58.8, tasks_resolved: 1, task_notes: "\u66F4\u65B0\u7269\u6D41\u8FFD\u8E2A\u81EA\u52A8\u56DE\u590D\u6A21\u677F" },
-      { date: "2026-02-23", total: 630, dissatisfied: 291, satisfaction_rate: 53.8, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-24", total: 726, dissatisfied: 371, satisfaction_rate: 48.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-25", total: 801, dissatisfied: 390, satisfaction_rate: 51.3, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-26", total: 794, dissatisfied: 403, satisfaction_rate: 49.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-27", total: 716, dissatisfied: 353, satisfaction_rate: 50.7, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-02-28", total: 686, dissatisfied: 319, satisfaction_rate: 53.5, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-01", total: 566, dissatisfied: 224, satisfaction_rate: 60.4, tasks_resolved: 3, task_notes: "\u4FEE\u590DAI\u65E0\u6CD5\u8BC6\u522B\u7EA0\u7EB7\u7C7B\u578B\u95EE\u9898\uFF0C\u589E\u52A0\u9000\u8D27\u573A\u666F\u8986\u76D6\uFF0C\u4F18\u5316\u9996\u6B21\u54CD\u5E94\u901F\u5EA6" },
-      { date: "2026-03-02", total: 673, dissatisfied: 326, satisfaction_rate: 51.6, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-03", total: 736, dissatisfied: 359, satisfaction_rate: 51.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-04", total: 754, dissatisfied: 392, satisfaction_rate: 48, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-05", total: 794, dissatisfied: 396, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-06", total: 799, dissatisfied: 381, satisfaction_rate: 52.3, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-07", total: 757, dissatisfied: 347, satisfaction_rate: 54.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-08", total: 607, dissatisfied: 258, satisfaction_rate: 57.5, tasks_resolved: 1, task_notes: "\u589E\u52A0VAT/\u7A0E\u52A1\u573A\u666FFAQ\u77E5\u8BC6\u5E93" },
-      { date: "2026-03-09", total: 773, dissatisfied: 385, satisfaction_rate: 50.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-10", total: 923, dissatisfied: 486, satisfaction_rate: 47.3, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-11", total: 933, dissatisfied: 468, satisfaction_rate: 49.8, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-12", total: 913, dissatisfied: 440, satisfaction_rate: 51.8, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-13", total: 815, dissatisfied: 353, satisfaction_rate: 56.7, tasks_resolved: 2, task_notes: "\u6539\u8FDBAI\u56DE\u7B54\u7ED3\u6784\u5316\u5C55\u793A\uFF0C\u4FEE\u590D\u4E0D\u6EE1\u610F\u53CD\u9988\u6536\u96C6\u95EE\u9898" },
-      { date: "2026-03-14", total: 805, dissatisfied: 348, satisfaction_rate: 56.8, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-15", total: 687, dissatisfied: 292, satisfaction_rate: 57.5, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-16", total: 856, dissatisfied: 418, satisfaction_rate: 51.2, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-17", total: 866, dissatisfied: 438, satisfaction_rate: 49.4, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-18", total: 864, dissatisfied: 407, satisfaction_rate: 52.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-19", total: 845, dissatisfied: 428, satisfaction_rate: 49.4, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-20", total: 810, dissatisfied: 359, satisfaction_rate: 55.7, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-21", total: 745, dissatisfied: 354, satisfaction_rate: 52.5, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-22", total: 690, dissatisfied: 311, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-23", total: 858, dissatisfied: 421, satisfaction_rate: 50.9, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-25", total: 842, dissatisfied: 407, satisfaction_rate: 51.7, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-27", total: 774, dissatisfied: 386, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
-      { date: "2026-03-28", total: 787, dissatisfied: 377, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" }
-    ];
-  }
-});
-
-// server/db.ts
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
-async function initDB() {
-  await db.init();
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT DEFAULT '',
-      role TEXT DEFAULT 'member',
-      token TEXT NOT NULL,
-      created_at TEXT DEFAULT (datetime('now'))
-    )
-  `);
-  db.exec(`CREATE TABLE IF NOT EXISTS sessions (
-      id TEXT PRIMARY KEY, sequence_num INTEGER, session_id TEXT, user_id TEXT,
-      ocs_session_id TEXT, bot_conversation TEXT, human_conversation TEXT,
-      dissatisfaction_info TEXT, session_date TEXT, imported_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS session_summaries (
-      id TEXT PRIMARY KEY, session_id TEXT NOT NULL, summary_text TEXT NOT NULL,
-      embedding TEXT, key_topics TEXT DEFAULT '[]', generated_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS scenarios (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL,
-      date_from TEXT, date_to TEXT, matched_session_ids TEXT DEFAULT '[]',
-      matched_count INTEGER DEFAULT 0, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS dimensions (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, definition TEXT NOT NULL,
-      categories_json TEXT DEFAULT '[]', auto_discover INTEGER DEFAULT 0,
-      sub_skill_ref TEXT DEFAULT '', sort_order INTEGER DEFAULT 0,
-      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS analysis_configs (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, scenario_id TEXT,
-      frequency TEXT DEFAULT 'manual', dimension_ids TEXT DEFAULT '[]',
-      is_active INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS analysis_runs (
-      id TEXT PRIMARY KEY, config_id TEXT, status TEXT DEFAULT 'pending',
-      total_sessions INTEGER DEFAULT 0, processed_sessions INTEGER DEFAULT 0,
-      started_at TEXT, completed_at TEXT, error_message TEXT DEFAULT '',
-      summary_json TEXT DEFAULT '{}', triggered_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS analysis_results (
-      id TEXT PRIMARY KEY, run_id TEXT NOT NULL, session_id TEXT NOT NULL,
-      dimension_id TEXT NOT NULL, category TEXT NOT NULL, confidence REAL DEFAULT 0,
-      reasoning TEXT DEFAULT '', is_auto_discovered INTEGER DEFAULT 0,
-      created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS tasks (
-      id TEXT PRIMARY KEY, run_id TEXT, dimension_id TEXT, title TEXT NOT NULL,
-      description TEXT NOT NULL, priority TEXT DEFAULT 'medium', status TEXT DEFAULT 'open',
-      assignee_id TEXT, resolution_text TEXT DEFAULT '', resolved_at TEXT,
-      related_session_ids TEXT DEFAULT '[]', created_at TEXT DEFAULT (datetime('now')),
-      updated_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS team_members (
-      id TEXT PRIMARY KEY, name TEXT NOT NULL, role_description TEXT NOT NULL,
-      email TEXT DEFAULT '', user_id TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS classification_feedback (
-      id TEXT PRIMARY KEY, result_id TEXT NOT NULL, original_category TEXT NOT NULL,
-      corrected_category TEXT, feedback_note TEXT DEFAULT '', submitted_by TEXT,
-      created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS dingtalk_configs (
-      id TEXT PRIMARY KEY, webhook_url TEXT NOT NULL, secret TEXT DEFAULT '',
-      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS notification_logs (
-      id TEXT PRIMARY KEY, channel TEXT DEFAULT 'dingtalk', run_id TEXT,
-      payload_json TEXT NOT NULL, status TEXT DEFAULT 'sent', sent_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS satisfaction_events (
-      id TEXT PRIMARY KEY, event_date TEXT NOT NULL, satisfaction_score REAL,
-      total_sessions INTEGER DEFAULT 0, dissatisfied_count INTEGER DEFAULT 0,
-      task_resolved_ids TEXT DEFAULT '[]', notes TEXT DEFAULT '',
-      created_at TEXT DEFAULT (datetime('now'))
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS data_source_requests (
-      id TEXT PRIMARY KEY, description TEXT NOT NULL, status TEXT DEFAULT 'pending',
-      response TEXT DEFAULT '', created_by TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')),
-      updated_at TEXT DEFAULT (datetime('now'))
-  )`);
-  const adminExists = db.prepare("SELECT id FROM users WHERE id = ?").get("admin-001");
-  if (!adminExists) {
-    db.prepare("INSERT INTO users (id, name, email, role, token) VALUES (?, ?, ?, ?, ?)").run(
-      "admin-001",
-      "Admin",
-      "admin@example.com",
-      "admin",
-      "admin123"
-    );
-  }
-  const dimCount = db.prepare("SELECT COUNT(*) as cnt FROM dimensions").get();
-  if (dimCount.cnt === 0) {
-    const dims = [
-      {
-        id: "dim-transfer-reason",
-        name: "\u8F6C\u4EBA\u5DE5\u539F\u56E0\u5206\u7C7B",
-        definition: "\u5206\u6790\u4E70\u5BB6\u4ECEAI\u5BA2\u670D\u8F6C\u5230\u4EBA\u5DE5\u5BA2\u670D\u7684\u6839\u672C\u539F\u56E0\u3002\u9700\u8981\u5BF9\u6BD4AI\u5BA2\u670D\u5BF9\u8BDD\u548C\u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD\u7684\u5185\u5BB9\uFF0C\u5224\u65AD\u8F6C\u4EBA\u5DE5\u7684\u6838\u5FC3\u52A8\u56E0\u3002",
-        categories: [
-          { name: "\u4EBA\u5DE5\u5E2E\u52A9\u6267\u884C\u64CD\u4F5C", description: "AI\u53EA\u80FD\u63D0\u4F9B\u901A\u7528\u6D41\u7A0B\u8BF4\u660E\uFF0C\u4E70\u5BB6\u9700\u8981\u4EBA\u5DE5\u67E5\u8BE2/\u64CD\u4F5C\u5177\u4F53\u8BA2\u5355\u3001\u8D26\u6237\u7B49" },
-          { name: "AI\u56DE\u7B54\u9519\u8BEF\u6216\u65E0\u6CD5\u56DE\u7B54", description: "AI\u7ED9\u51FA\u4E86\u9519\u8BEF\u7B54\u6848\u6216\u515C\u5E95\u56DE\u590D\uFF0C\u4EBA\u5DE5\u5BA2\u670D\u7ED9\u51FA\u4E86\u6B63\u786E\u65B9\u6848" },
-          { name: "\u4E70\u5BB6\u66F4\u4FE1\u4EFB\u4EBA\u5DE5", description: "AI\u548C\u4EBA\u5DE5\u7ED9\u51FA\u76F8\u4F3C\u7B54\u6848\uFF0C\u4F46\u4E70\u5BB6\u4E0D\u4FE1\u4EFBAI\u6216\u9700\u8981\u4EBA\u5DE5\u786E\u8BA4" },
-          { name: "\u4EBA\u5DE5\u4E5F\u9700\u5347\u7EA7", description: "\u95EE\u9898\u8F83\u590D\u6742\uFF0C\u4EBA\u5DE5\u4E5F\u9700\u8981\u63D0\u4EA4\u5DE5\u5355\u6216\u5347\u7EA7\u81F3\u4E13\u4E1A\u56E2\u961F" },
-          { name: "\u4EBA\u5DE5\u66F4\u6709\u4EBA\u60C5\u5473", description: "AI\u548C\u4EBA\u5DE5\u56DE\u7B54\u5185\u5BB9\u76F8\u8FD1\uFF0C\u4F46\u4EBA\u5DE5\u5728\u63AA\u8F9E\u4E0A\u66F4\u6709\u6E29\u5EA6\u548C\u5171\u60C5" },
-          { name: "\u8F6C\u4EBA\u5DE5\u540E\u95EE\u4E86\u4E0D\u540C\u95EE\u9898", description: "\u4E70\u5BB6\u5728AI\u5904\u548C\u4EBA\u5DE5\u5904\u8BA8\u8BBA\u4E86\u4E0D\u540C\u7684\u95EE\u9898" },
-          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u5165\u4EE5\u4E0A\u7C7B\u522B" }
-        ],
-        sort_order: 0
-      },
-      {
-        id: "dim-topic",
-        name: "\u4E70\u5BB6\u95EE\u9898\u7C7B\u578B",
-        definition: "\u8BC6\u522B\u4E70\u5BB6\u54A8\u8BE2\u7684\u5177\u4F53\u95EE\u9898\u7C7B\u578B\uFF0C\u7528\u4E8E\u4E86\u89E3\u5BA2\u6237\u9700\u6C42\u5206\u5E03\u3002",
-        categories: [
-          { name: "\u9000\u6B3E\u7533\u8BF7/\u8FDB\u5EA6", description: "\u9000\u6B3E\u76F8\u5173\u54A8\u8BE2" },
-          { name: "\u7EA0\u7EB7/Dispute\u5904\u7406", description: "\u7EA0\u7EB7\u4E89\u8BAE\u76F8\u5173" },
-          { name: "\u8BA2\u5355\u7269\u6D41\u8FFD\u8E2A", description: "\u7269\u6D41\u8DDF\u8E2A\u67E5\u8BE2" },
-          { name: "VAT/\u7A0E\u52A1\u76F8\u5173", description: "\u7A0E\u52A1\u3001\u53D1\u7968\u3001\u5173\u7A0E" },
-          { name: "\u652F\u4ED8\u65B9\u5F0F/\u4ED8\u6B3E\u95EE\u9898", description: "\u652F\u4ED8\u65B9\u5F0F\u76F8\u5173" },
-          { name: "\u9000\u8D27/\u5546\u54C1\u95EE\u9898", description: "\u9000\u8D27\u3001\u8D28\u91CF\u95EE\u9898" },
-          { name: "\u8D26\u6237/\u767B\u5F55", description: "\u8D26\u6237\u95EE\u9898" },
-          { name: "\u4F9B\u5E94\u5546/\u5546\u54C1\u54A8\u8BE2", description: "\u4F9B\u5E94\u5546\u8BE2\u76D8" },
-          { name: "\u5176\u4ED6\u54A8\u8BE2", description: "\u5176\u4ED6\u7C7B\u578B" }
-        ],
-        sort_order: 1
-      },
-      {
-        id: "dim-dissatisfaction",
-        name: "\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790",
-        definition: "\u5206\u6790\u4E70\u5BB6\u70B9\u51FB\u4E0D\u6EE1\u610F\u7684\u5177\u4F53\u539F\u56E0\u548C\u65F6\u95F4\u8282\u70B9\uFF0C\u7ED3\u5408\u5BF9\u8BDD\u4E0A\u4E0B\u6587\u5224\u65AD\u4E0D\u6EE1\u610F\u7684\u6839\u56E0\u3002",
-        categories: [
-          { name: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", description: "AI\u7ED9\u51FA\u7684\u7B54\u6848\u4E0E\u4E70\u5BB6\u95EE\u9898\u4E0D\u5339\u914D\u6216\u5B8C\u5168\u9519\u8BEF" },
-          { name: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", description: "AI\u56DE\u7B54\u8FC7\u4E8E\u590D\u6742\u6216\u63AA\u8F9E\u8BA9\u4EBA\u96BE\u4EE5\u7406\u89E3" },
-          { name: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", description: "AI\u6CA1\u6709\u9488\u5BF9\u6027\u56DE\u7B54\u4E70\u5BB6\u7684\u5177\u4F53\u95EE\u9898" },
-          { name: "\u4E0D\u540C\u610F\u5E73\u53F0\u653F\u7B56", description: "\u4E70\u5BB6\u5BF9\u5E73\u53F0\u7684\u9000\u6B3E/\u9000\u8D27\u7B49\u653F\u7B56\u4E0D\u6EE1" },
-          { name: "\u754C\u9762\u96BE\u7528", description: "\u804A\u5929\u754C\u9762\u6216\u4EA4\u4E92\u4F53\u9A8C\u5DEE" },
-          { name: "\u6587\u5B57\u592A\u591A", description: "AI\u56DE\u590D\u8FC7\u957F\u4E0D\u60F3\u9605\u8BFB" },
-          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u7C7B" }
-        ],
-        sort_order: 2
-      }
-    ];
-    for (const d2 of dims) {
-      db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, '', ?, 1, 'admin-001')").run(
-        d2.id,
-        d2.name,
-        d2.definition,
-        JSON.stringify(d2.categories),
-        d2.sort_order
-      );
-    }
-  }
-  console.log("[DB] Initialized successfully");
-  if (process.env.NODE_ENV === "production") {
-    const { seedProductionData: seedProductionData2 } = await Promise.resolve().then(() => (init_seed_production(), seed_production_exports));
-    seedProductionData2();
-  }
-}
-var import_sql, __dirname2, dataDir, dbPath, BetterSqlite3Compat, db, db_default;
-var init_db = __esm({
-  "server/db.ts"() {
-    "use strict";
-    import_sql = __toESM(require_sql_wasm(), 1);
-    __dirname2 = path.dirname(fileURLToPath(import.meta.url));
-    dataDir = process.env.NODE_ENV === "production" ? "/tmp/data" : path.join(__dirname2, "..", "data");
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    dbPath = path.join(dataDir, "analysis.db");
-    BetterSqlite3Compat = class {
-      sqlDb;
-      dirty = false;
-      saveTimer = null;
-      async init() {
-        const SQL = await (0, import_sql.default)();
-        if (fs.existsSync(dbPath)) {
-          const buf = fs.readFileSync(dbPath);
-          this.sqlDb = new SQL.Database(buf);
-        } else {
-          this.sqlDb = new SQL.Database();
-        }
-        this.sqlDb.run("PRAGMA journal_mode = WAL");
-        this.sqlDb.run("PRAGMA foreign_keys = ON");
-      }
-      save() {
-        if (this.saveTimer) return;
-        this.saveTimer = setTimeout(() => {
-          try {
-            const data = this.sqlDb.export();
-            fs.writeFileSync(dbPath, Buffer.from(data));
-          } catch {
-          }
-          this.saveTimer = null;
-        }, 500);
-      }
-      exec(sql) {
-        this.sqlDb.run(sql);
-        this.save();
-      }
-      pragma(str2) {
-        this.sqlDb.run(`PRAGMA ${str2}`);
-      }
-      prepare(sql) {
-        const db2 = this.sqlDb;
-        const self2 = this;
-        return {
-          run(...params) {
-            db2.run(sql, params);
-            self2.save();
-            return { changes: db2.getRowsModified() };
-          },
-          get(...params) {
-            const stmt = db2.prepare(sql);
-            if (params.length > 0) stmt.bind(params);
-            if (stmt.step()) {
-              const cols = stmt.getColumnNames();
-              const vals = stmt.get();
-              stmt.free();
-              const row = {};
-              cols.forEach((c2, i2) => {
-                row[c2] = vals[i2];
-              });
-              return row;
-            }
-            stmt.free();
-            return void 0;
-          },
-          all(...params) {
-            const stmt = db2.prepare(sql);
-            if (params.length > 0) stmt.bind(params);
-            const rows = [];
-            while (stmt.step()) {
-              const cols = stmt.getColumnNames();
-              const vals = stmt.get();
-              const row = {};
-              cols.forEach((c2, i2) => {
-                row[c2] = vals[i2];
-              });
-              rows.push(row);
-            }
-            stmt.free();
-            return rows;
-          }
-        };
-      }
-      transaction(fn) {
-        const self2 = this;
-        return ((...args) => {
-          self2.sqlDb.run("BEGIN");
-          try {
-            fn(...args);
-            self2.sqlDb.run("COMMIT");
-            self2.save();
-          } catch (e2) {
-            self2.sqlDb.run("ROLLBACK");
-            throw e2;
-          }
-        });
-      }
-    };
-    db = new BetterSqlite3Compat();
-    db_default = db;
-  }
-});
-
 // node_modules/webidl-conversions/lib/index.js
 var require_lib4 = __commonJS({
   "node_modules/webidl-conversions/lib/index.js"(exports, module) {
@@ -33459,13 +33022,429 @@ var init_fileFromPath = __esm({
 // server/index.ts
 var import_express11 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
-init_db();
 import path3 from "path";
 import { fileURLToPath as fileURLToPath3 } from "url";
 
+// server/db.ts
+var import_sql = __toESM(require_sql_wasm(), 1);
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+
+// server/seed-production.ts
+var satisfactionSeedData = [
+  { date: "2026-02-01", total: 561, dissatisfied: 253, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-02", total: 702, dissatisfied: 336, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-03", total: 743, dissatisfied: 348, satisfaction_rate: 53.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-04", total: 703, dissatisfied: 369, satisfaction_rate: 47.5, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-05", total: 729, dissatisfied: 381, satisfaction_rate: 47.7, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-06", total: 665, dissatisfied: 353, satisfaction_rate: 46.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-07", total: 628, dissatisfied: 288, satisfaction_rate: 54.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-08", total: 581, dissatisfied: 282, satisfaction_rate: 51.5, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-09", total: 653, dissatisfied: 305, satisfaction_rate: 53.3, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-10", total: 693, dissatisfied: 345, satisfaction_rate: 50.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-11", total: 655, dissatisfied: 322, satisfaction_rate: 50.8, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-12", total: 673, dissatisfied: 338, satisfaction_rate: 49.8, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-13", total: 702, dissatisfied: 350, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-14", total: 649, dissatisfied: 283, satisfaction_rate: 56.4, tasks_resolved: 2, task_notes: "\u4F18\u5316\u9000\u6B3E\u6D41\u7A0BAI\u8BDD\u672F\uFF0C\u4FEE\u590D\u8BA2\u5355\u67E5\u8BE2\u8D85\u65F6\u95EE\u9898" },
+  { date: "2026-02-15", total: 618, dissatisfied: 274, satisfaction_rate: 55.7, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-16", total: 601, dissatisfied: 262, satisfaction_rate: 56.4, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-17", total: 608, dissatisfied: 268, satisfaction_rate: 55.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-18", total: 665, dissatisfied: 305, satisfaction_rate: 54.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-19", total: 648, dissatisfied: 295, satisfaction_rate: 54.5, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-20", total: 687, dissatisfied: 302, satisfaction_rate: 56, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-21", total: 639, dissatisfied: 287, satisfaction_rate: 55.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-22", total: 604, dissatisfied: 249, satisfaction_rate: 58.8, tasks_resolved: 1, task_notes: "\u66F4\u65B0\u7269\u6D41\u8FFD\u8E2A\u81EA\u52A8\u56DE\u590D\u6A21\u677F" },
+  { date: "2026-02-23", total: 630, dissatisfied: 291, satisfaction_rate: 53.8, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-24", total: 726, dissatisfied: 371, satisfaction_rate: 48.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-25", total: 801, dissatisfied: 390, satisfaction_rate: 51.3, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-26", total: 794, dissatisfied: 403, satisfaction_rate: 49.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-27", total: 716, dissatisfied: 353, satisfaction_rate: 50.7, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-02-28", total: 686, dissatisfied: 319, satisfaction_rate: 53.5, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-01", total: 566, dissatisfied: 224, satisfaction_rate: 60.4, tasks_resolved: 3, task_notes: "\u4FEE\u590DAI\u65E0\u6CD5\u8BC6\u522B\u7EA0\u7EB7\u7C7B\u578B\u95EE\u9898\uFF0C\u589E\u52A0\u9000\u8D27\u573A\u666F\u8986\u76D6\uFF0C\u4F18\u5316\u9996\u6B21\u54CD\u5E94\u901F\u5EA6" },
+  { date: "2026-03-02", total: 673, dissatisfied: 326, satisfaction_rate: 51.6, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-03", total: 736, dissatisfied: 359, satisfaction_rate: 51.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-04", total: 754, dissatisfied: 392, satisfaction_rate: 48, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-05", total: 794, dissatisfied: 396, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-06", total: 799, dissatisfied: 381, satisfaction_rate: 52.3, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-07", total: 757, dissatisfied: 347, satisfaction_rate: 54.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-08", total: 607, dissatisfied: 258, satisfaction_rate: 57.5, tasks_resolved: 1, task_notes: "\u589E\u52A0VAT/\u7A0E\u52A1\u573A\u666FFAQ\u77E5\u8BC6\u5E93" },
+  { date: "2026-03-09", total: 773, dissatisfied: 385, satisfaction_rate: 50.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-10", total: 923, dissatisfied: 486, satisfaction_rate: 47.3, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-11", total: 933, dissatisfied: 468, satisfaction_rate: 49.8, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-12", total: 913, dissatisfied: 440, satisfaction_rate: 51.8, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-13", total: 815, dissatisfied: 353, satisfaction_rate: 56.7, tasks_resolved: 2, task_notes: "\u6539\u8FDBAI\u56DE\u7B54\u7ED3\u6784\u5316\u5C55\u793A\uFF0C\u4FEE\u590D\u4E0D\u6EE1\u610F\u53CD\u9988\u6536\u96C6\u95EE\u9898" },
+  { date: "2026-03-14", total: 805, dissatisfied: 348, satisfaction_rate: 56.8, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-15", total: 687, dissatisfied: 292, satisfaction_rate: 57.5, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-16", total: 856, dissatisfied: 418, satisfaction_rate: 51.2, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-17", total: 866, dissatisfied: 438, satisfaction_rate: 49.4, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-18", total: 864, dissatisfied: 407, satisfaction_rate: 52.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-19", total: 845, dissatisfied: 428, satisfaction_rate: 49.4, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-20", total: 810, dissatisfied: 359, satisfaction_rate: 55.7, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-21", total: 745, dissatisfied: 354, satisfaction_rate: 52.5, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-22", total: 690, dissatisfied: 311, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-23", total: 858, dissatisfied: 421, satisfaction_rate: 50.9, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-25", total: 842, dissatisfied: 407, satisfaction_rate: 51.7, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-27", total: 774, dissatisfied: 386, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-28", total: 787, dissatisfied: 377, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" }
+];
+function seedProductionData() {
+  const sessionCount = db_default.prepare("SELECT COUNT(*) as cnt FROM sessions").get().cnt;
+  if (sessionCount > 0) return;
+  console.log("[Seed] Seeding production mock data...");
+  const sampleSessionId = "mock-session-001";
+  db_default.prepare(`INSERT INTO sessions (id, sequence_num, session_id, user_id, ocs_session_id, bot_conversation, human_conversation, dissatisfaction_info, session_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+    sampleSessionId,
+    1,
+    "00247c3f709a49e8b1aa984eb9fa8eba",
+    "4500000000000",
+    "cb6b6c5b6c3b48cf803b3606bae20290",
+    `[2026-03-15 20:29:03] \u4F1A\u5458: Ticaret G\xFCvencesi sipari\u015Fim i\xE7in nas\u0131l uyu\u015Fmazl\u0131k a\xE7abilirim?
+[2026-03-15 20:29:04] \u673A\u5668\u4EBA: \u6D88\u606F\u5361\u7247: \u6B64\u5361\u7247\u662F\u4E00\u4E2A\u8BA2\u5355\u9009\u62E9\u5668
+[2026-03-15 20:29:08] \u4F1A\u5458: {"id":"289860971501027473","parentId":""}
+[2026-03-15 20:30:18] \u4F1A\u5458: The item was returned by customs and I did not receive the product. I requested a full refund to my original payment method. However, part of the refund was given as a coupon. I do not want a coupon. Please refund the full amount to my credit card.
+[2026-03-15 20:34:23] \u4F1A\u5458: I do not accept the refund as a coupon. According to consumer rights, since the product was not delivered, I am entitled to a full refund to my original payment method.
+[2026-03-15 20:37:08] \u4F1A\u5458: The system is incorrect. I need a live agent to fix this and refund the remaining balance to my card.
+[2026-03-15 20:37:25] \u673A\u5668\u4EBA: \u547D\u4EE4\u6D88\u606F\uFF1AAGENT_ENTRANCE_DISPLAY`,
+    `[2026-03-15 20:38:54] \u5BA2\u670D: Hello! This is Denice from the Alibaba.com Customer Service Team. May I know how can I help you?
+[2026-03-15 20:39:07] \u4F1A\u5458: Merhaba. Sipari\u015Fim stokta olmad\u0131\u011F\u0131 veya g\xFCmr\xFCk sorunu nedeniyle g\xF6ndericiye iade edildi. Alibaba kupon verdi. Kupon istemiyorum. T\xFCm tutar\u0131n orijinal kredi kart\u0131ma iade edilmesini istiyorum.
+[2026-03-15 20:40:12] \u5BA2\u670D: Can you provide me your order number please?
+[2026-03-15 20:44:08] \u5BA2\u670D: Thank you for patiently waiting here
+[2026-03-15 20:50:07] \u5BA2\u670D: I will forward your case to the department for further assistance on this issue.
+[2026-03-15 20:50:46] \u5BA2\u670D: I will mark this "Extremely Urgent" and "Top Priority" just for you.
+[2026-03-15 20:53:19] \u4F1A\u5458: Tamam mutlu haberlerinizi bekliyorum kolay gelsin`,
+    "[\u4F1A\u5458\u5728 2026-03-15 20:29:31 \u65F6\u95F4 \u70B9\u4E86\u4E0D\u6EE1\u610F\uFF0C\u4E0D\u6EE1\u610F\u539F\u56E0\u4E3A\uFF1AA\xE7\u0131klamalar anla\u015F\u0131l\u0131r de\u011Fil ve karma\u015F\u0131k]",
+    "2026-03-15"
+  );
+  db_default.prepare(`INSERT INTO session_summaries (id, session_id, summary_text, key_topics) VALUES (?, ?, ?, ?)`).run(
+    "mock-summary-001",
+    sampleSessionId,
+    "\u4E70\u5BB6\u56E0\u8BA2\u5355\u88AB\u6D77\u5173\u9000\u56DE\u672A\u6536\u5230\u8D27\uFF0C\u7533\u8BF7\u5168\u989D\u9000\u6B3E\u4F46\u90E8\u5206\u91D1\u989D\u4EE5\u4F18\u60E0\u5238\u5F62\u5F0F\u8FD4\u8FD8\uFF0C\u8981\u6C42\u5C06\u5168\u90E8\u91D1\u989D\u9000\u81F3\u4FE1\u7528\u5361\u3002AI\u5BA2\u670D\u63D0\u4F9B\u4E86\u4E00\u822C\u6027\u89E3\u91CA\u540E\u8F6C\u4EBA\u5DE5\u5BA2\u670D\u5904\u7406\u3002\u4EBA\u5DE5\u5BA2\u670DDenice\u786E\u8BA4\u8BA2\u5355\u72B6\u6001\u5E76\u6307\u5BFC\u4E70\u5BB6\u7533\u8BF7\u9000\u6B3E\uFF0C\u6700\u7EC8\u5C06\u6848\u4F8B\u6807\u8BB0\u4E3A\u7D27\u6025\u4F18\u5148\u5904\u7406\u5E76\u8F6C\u53D1\u76F8\u5173\u90E8\u95E8\u3002",
+    "\u9000\u6B3E,\u9000\u6B3E\u4E89\u8BAE,\u6D77\u5173\u9000\u56DE,\u4F18\u60E0\u5238\u9000\u6B3E,\u4EBA\u5DE5\u5BA2\u670D,\u8BA2\u5355\u7EA0\u7EB7,\u8DE8\u5883\u7269\u6D41,\u4E0D\u6EE1\u610F\u53CD\u9988,\u7D27\u6025\u5904\u7406"
+  );
+  db_default.prepare(`INSERT INTO scenarios (id, name, description, matched_count, created_by) VALUES (?, ?, ?, ?, ?)`).run(
+    "mock-scenario-001",
+    "\u6700\u8FD1\u6EE1\u610F\u5EA6\u4E0B\u964D\u4E3A\u5565",
+    "\u4E70\u5BB6\u5728\u667A\u80FD\u4FA7\u7684\u6EE1\u610F\u5EA6\u4E0B\u964D\u4E86xxxxxx\u5E2E\u6211\u5168\u91CF\u5206\u6790\xB7",
+    0,
+    "admin-001"
+  );
+  db_default.prepare(`INSERT INTO scenarios (id, name, description, matched_session_ids, matched_count, created_by) VALUES (?, ?, ?, ?, ?, ?)`).run(
+    "mock-scenario-002",
+    "\u4E70\u5BB6\u4E0D\u6EE1\u610F\u7684\u4F1A\u8BDD",
+    "\u4E70\u5BB6\u5728\u5BF9\u8BDD\u8FC7\u7A0B\u4E2D\u8868\u8FBE\u4E86\u4E0D\u6EE1\u610F\uFF0C\u5305\u62EC\u5BF9AI\u5BA2\u670D\u56DE\u7B54\u4E0D\u6EE1\u610F\u3001\u89E3\u51B3\u65B9\u6848\u4E0D\u6EE1\u610F\u3001\u670D\u52A1\u6001\u5EA6\u4E0D\u6EE1\u610F\u7B49",
+    JSON.stringify([sampleSessionId]),
+    1,
+    "admin-001"
+  );
+  db_default.prepare(`INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)`).run(
+    "mock-config-001",
+    "\u4E0D\u6EE1\u610F\u4F1A\u8BDD\u6D1E\u5BDF",
+    "mock-scenario-002",
+    JSON.stringify(["dim-dissatisfaction", "dim-transfer-reason", "dim-topic"]),
+    "admin-001"
+  );
+  const summaryJson = JSON.stringify([
+    { dimension_id: "dim-dissatisfaction", category: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", cnt: 10 },
+    { dimension_id: "dim-dissatisfaction", category: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", cnt: 5 },
+    { dimension_id: "dim-dissatisfaction", category: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", cnt: 1 },
+    { dimension_id: "dim-dissatisfaction", category: "\u6587\u5B57\u592A\u591A", cnt: 2 },
+    { dimension_id: "dim-dissatisfaction", category: "\u754C\u9762\u96BE\u7528", cnt: 2 }
+  ]);
+  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, completed_at, summary_json, triggered_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+    "mock-run-001",
+    "mock-config-001",
+    "completed",
+    20,
+    20,
+    "2026-03-29 09:36:16",
+    "2026-03-29 09:37:54",
+    summaryJson,
+    "admin-001"
+  );
+  const tasks = [
+    { id: "mock-task-001", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF (10\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u670910\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "medium", status: "resolved", resolution: "\u5DF2\u4F18\u5316AI\u5BA2\u670D\u56DE\u7B54\u51C6\u786E\u6027\uFF0C\u66F4\u65B0\u4E86\u77E5\u8BC6\u5E93\u4E2D\u76F8\u5173\u95EE\u9898\u7684\u56DE\u7B54", resolvedAt: "2026-03-29 09:52:18" },
+    { id: "mock-task-002", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898 (5\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67095\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
+    { id: "mock-task-003", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u754C\u9762\u96BE\u7528 (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u754C\u9762\u96BE\u7528"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
+    { id: "mock-task-004", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u6587\u5B57\u592A\u591A (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u6587\u5B57\u592A\u591A"\u3002\u9700\u8981\u6539\u8FDBAI\u56DE\u590D\u957F\u5EA6\u3002', priority: "medium", status: "claimed", resolution: "", resolvedAt: null }
+  ];
+  const taskStmt = db_default.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, resolution_text, resolved_at, related_session_ids)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  for (const t2 of tasks) {
+    taskStmt.run(t2.id, "mock-run-001", t2.dimId, t2.title, t2.desc, t2.priority, t2.status, t2.resolution, t2.resolvedAt, JSON.stringify([sampleSessionId]));
+  }
+  db_default.prepare(`INSERT INTO data_source_requests (id, description, status, created_by) VALUES (?, ?, ?, ?)`).run(
+    "mock-req-001",
+    "\u5E0C\u671B\u589E\u52A0\u300C\u4F1A\u8BDD\u65F6\u957F\u300D\u5B57\u6BB5\uFF0C\u8BB0\u5F55\u6BCF\u901A\u4F1A\u8BDD\u4ECE\u5F00\u59CB\u5230\u7ED3\u675F\u7684\u603B\u65F6\u957F",
+    "pending",
+    "Admin"
+  );
+  console.log("[Seed] Production mock data seeded successfully");
+}
+
+// server/db.ts
+var __dirname2 = path.dirname(fileURLToPath(import.meta.url));
+var dataDir = process.env.NODE_ENV === "production" ? "/tmp/data" : path.join(__dirname2, "..", "data");
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+var dbPath = path.join(dataDir, "analysis.db");
+var BetterSqlite3Compat = class {
+  sqlDb;
+  dirty = false;
+  saveTimer = null;
+  async init() {
+    const SQL = await (0, import_sql.default)();
+    if (fs.existsSync(dbPath)) {
+      const buf = fs.readFileSync(dbPath);
+      this.sqlDb = new SQL.Database(buf);
+    } else {
+      this.sqlDb = new SQL.Database();
+    }
+    this.sqlDb.run("PRAGMA journal_mode = WAL");
+    this.sqlDb.run("PRAGMA foreign_keys = ON");
+  }
+  save() {
+    if (this.saveTimer) return;
+    this.saveTimer = setTimeout(() => {
+      try {
+        const data = this.sqlDb.export();
+        fs.writeFileSync(dbPath, Buffer.from(data));
+      } catch {
+      }
+      this.saveTimer = null;
+    }, 500);
+  }
+  exec(sql) {
+    this.sqlDb.run(sql);
+    this.save();
+  }
+  pragma(str2) {
+    this.sqlDb.run(`PRAGMA ${str2}`);
+  }
+  prepare(sql) {
+    const db2 = this.sqlDb;
+    const self2 = this;
+    return {
+      run(...params) {
+        db2.run(sql, params);
+        self2.save();
+        return { changes: db2.getRowsModified() };
+      },
+      get(...params) {
+        const stmt = db2.prepare(sql);
+        if (params.length > 0) stmt.bind(params);
+        if (stmt.step()) {
+          const cols = stmt.getColumnNames();
+          const vals = stmt.get();
+          stmt.free();
+          const row = {};
+          cols.forEach((c2, i2) => {
+            row[c2] = vals[i2];
+          });
+          return row;
+        }
+        stmt.free();
+        return void 0;
+      },
+      all(...params) {
+        const stmt = db2.prepare(sql);
+        if (params.length > 0) stmt.bind(params);
+        const rows = [];
+        while (stmt.step()) {
+          const cols = stmt.getColumnNames();
+          const vals = stmt.get();
+          const row = {};
+          cols.forEach((c2, i2) => {
+            row[c2] = vals[i2];
+          });
+          rows.push(row);
+        }
+        stmt.free();
+        return rows;
+      }
+    };
+  }
+  transaction(fn) {
+    const self2 = this;
+    return ((...args) => {
+      self2.sqlDb.run("BEGIN");
+      try {
+        fn(...args);
+        self2.sqlDb.run("COMMIT");
+        self2.save();
+      } catch (e2) {
+        self2.sqlDb.run("ROLLBACK");
+        throw e2;
+      }
+    });
+  }
+};
+var db = new BetterSqlite3Compat();
+async function initDB() {
+  await db.init();
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT DEFAULT '',
+      role TEXT DEFAULT 'member',
+      token TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+  db.exec(`CREATE TABLE IF NOT EXISTS sessions (
+      id TEXT PRIMARY KEY, sequence_num INTEGER, session_id TEXT, user_id TEXT,
+      ocs_session_id TEXT, bot_conversation TEXT, human_conversation TEXT,
+      dissatisfaction_info TEXT, session_date TEXT, imported_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS session_summaries (
+      id TEXT PRIMARY KEY, session_id TEXT NOT NULL, summary_text TEXT NOT NULL,
+      embedding TEXT, key_topics TEXT DEFAULT '[]', generated_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS scenarios (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL,
+      date_from TEXT, date_to TEXT, matched_session_ids TEXT DEFAULT '[]',
+      matched_count INTEGER DEFAULT 0, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS dimensions (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, definition TEXT NOT NULL,
+      categories_json TEXT DEFAULT '[]', auto_discover INTEGER DEFAULT 0,
+      sub_skill_ref TEXT DEFAULT '', sort_order INTEGER DEFAULT 0,
+      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS analysis_configs (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, scenario_id TEXT,
+      frequency TEXT DEFAULT 'manual', dimension_ids TEXT DEFAULT '[]',
+      is_active INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS analysis_runs (
+      id TEXT PRIMARY KEY, config_id TEXT, status TEXT DEFAULT 'pending',
+      total_sessions INTEGER DEFAULT 0, processed_sessions INTEGER DEFAULT 0,
+      started_at TEXT, completed_at TEXT, error_message TEXT DEFAULT '',
+      summary_json TEXT DEFAULT '{}', triggered_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS analysis_results (
+      id TEXT PRIMARY KEY, run_id TEXT NOT NULL, session_id TEXT NOT NULL,
+      dimension_id TEXT NOT NULL, category TEXT NOT NULL, confidence REAL DEFAULT 0,
+      reasoning TEXT DEFAULT '', is_auto_discovered INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS tasks (
+      id TEXT PRIMARY KEY, run_id TEXT, dimension_id TEXT, title TEXT NOT NULL,
+      description TEXT NOT NULL, priority TEXT DEFAULT 'medium', status TEXT DEFAULT 'open',
+      assignee_id TEXT, resolution_text TEXT DEFAULT '', resolved_at TEXT,
+      related_session_ids TEXT DEFAULT '[]', created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS team_members (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, role_description TEXT NOT NULL,
+      email TEXT DEFAULT '', user_id TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS classification_feedback (
+      id TEXT PRIMARY KEY, result_id TEXT NOT NULL, original_category TEXT NOT NULL,
+      corrected_category TEXT, feedback_note TEXT DEFAULT '', submitted_by TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS dingtalk_configs (
+      id TEXT PRIMARY KEY, webhook_url TEXT NOT NULL, secret TEXT DEFAULT '',
+      enabled INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS notification_logs (
+      id TEXT PRIMARY KEY, channel TEXT DEFAULT 'dingtalk', run_id TEXT,
+      payload_json TEXT NOT NULL, status TEXT DEFAULT 'sent', sent_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS satisfaction_events (
+      id TEXT PRIMARY KEY, event_date TEXT NOT NULL, satisfaction_score REAL,
+      total_sessions INTEGER DEFAULT 0, dissatisfied_count INTEGER DEFAULT 0,
+      task_resolved_ids TEXT DEFAULT '[]', notes TEXT DEFAULT '',
+      created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE TABLE IF NOT EXISTS data_source_requests (
+      id TEXT PRIMARY KEY, description TEXT NOT NULL, status TEXT DEFAULT 'pending',
+      response TEXT DEFAULT '', created_by TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+  )`);
+  const adminExists = db.prepare("SELECT id FROM users WHERE id = ?").get("admin-001");
+  if (!adminExists) {
+    db.prepare("INSERT INTO users (id, name, email, role, token) VALUES (?, ?, ?, ?, ?)").run(
+      "admin-001",
+      "Admin",
+      "admin@example.com",
+      "admin",
+      "admin123"
+    );
+  }
+  const dimCount = db.prepare("SELECT COUNT(*) as cnt FROM dimensions").get();
+  if (dimCount.cnt === 0) {
+    const dims = [
+      {
+        id: "dim-transfer-reason",
+        name: "\u8F6C\u4EBA\u5DE5\u539F\u56E0\u5206\u7C7B",
+        definition: "\u5206\u6790\u4E70\u5BB6\u4ECEAI\u5BA2\u670D\u8F6C\u5230\u4EBA\u5DE5\u5BA2\u670D\u7684\u6839\u672C\u539F\u56E0\u3002\u9700\u8981\u5BF9\u6BD4AI\u5BA2\u670D\u5BF9\u8BDD\u548C\u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD\u7684\u5185\u5BB9\uFF0C\u5224\u65AD\u8F6C\u4EBA\u5DE5\u7684\u6838\u5FC3\u52A8\u56E0\u3002",
+        categories: [
+          { name: "\u4EBA\u5DE5\u5E2E\u52A9\u6267\u884C\u64CD\u4F5C", description: "AI\u53EA\u80FD\u63D0\u4F9B\u901A\u7528\u6D41\u7A0B\u8BF4\u660E\uFF0C\u4E70\u5BB6\u9700\u8981\u4EBA\u5DE5\u67E5\u8BE2/\u64CD\u4F5C\u5177\u4F53\u8BA2\u5355\u3001\u8D26\u6237\u7B49" },
+          { name: "AI\u56DE\u7B54\u9519\u8BEF\u6216\u65E0\u6CD5\u56DE\u7B54", description: "AI\u7ED9\u51FA\u4E86\u9519\u8BEF\u7B54\u6848\u6216\u515C\u5E95\u56DE\u590D\uFF0C\u4EBA\u5DE5\u5BA2\u670D\u7ED9\u51FA\u4E86\u6B63\u786E\u65B9\u6848" },
+          { name: "\u4E70\u5BB6\u66F4\u4FE1\u4EFB\u4EBA\u5DE5", description: "AI\u548C\u4EBA\u5DE5\u7ED9\u51FA\u76F8\u4F3C\u7B54\u6848\uFF0C\u4F46\u4E70\u5BB6\u4E0D\u4FE1\u4EFBAI\u6216\u9700\u8981\u4EBA\u5DE5\u786E\u8BA4" },
+          { name: "\u4EBA\u5DE5\u4E5F\u9700\u5347\u7EA7", description: "\u95EE\u9898\u8F83\u590D\u6742\uFF0C\u4EBA\u5DE5\u4E5F\u9700\u8981\u63D0\u4EA4\u5DE5\u5355\u6216\u5347\u7EA7\u81F3\u4E13\u4E1A\u56E2\u961F" },
+          { name: "\u4EBA\u5DE5\u66F4\u6709\u4EBA\u60C5\u5473", description: "AI\u548C\u4EBA\u5DE5\u56DE\u7B54\u5185\u5BB9\u76F8\u8FD1\uFF0C\u4F46\u4EBA\u5DE5\u5728\u63AA\u8F9E\u4E0A\u66F4\u6709\u6E29\u5EA6\u548C\u5171\u60C5" },
+          { name: "\u8F6C\u4EBA\u5DE5\u540E\u95EE\u4E86\u4E0D\u540C\u95EE\u9898", description: "\u4E70\u5BB6\u5728AI\u5904\u548C\u4EBA\u5DE5\u5904\u8BA8\u8BBA\u4E86\u4E0D\u540C\u7684\u95EE\u9898" },
+          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u5165\u4EE5\u4E0A\u7C7B\u522B" }
+        ],
+        sort_order: 0
+      },
+      {
+        id: "dim-topic",
+        name: "\u4E70\u5BB6\u95EE\u9898\u7C7B\u578B",
+        definition: "\u8BC6\u522B\u4E70\u5BB6\u54A8\u8BE2\u7684\u5177\u4F53\u95EE\u9898\u7C7B\u578B\uFF0C\u7528\u4E8E\u4E86\u89E3\u5BA2\u6237\u9700\u6C42\u5206\u5E03\u3002",
+        categories: [
+          { name: "\u9000\u6B3E\u7533\u8BF7/\u8FDB\u5EA6", description: "\u9000\u6B3E\u76F8\u5173\u54A8\u8BE2" },
+          { name: "\u7EA0\u7EB7/Dispute\u5904\u7406", description: "\u7EA0\u7EB7\u4E89\u8BAE\u76F8\u5173" },
+          { name: "\u8BA2\u5355\u7269\u6D41\u8FFD\u8E2A", description: "\u7269\u6D41\u8DDF\u8E2A\u67E5\u8BE2" },
+          { name: "VAT/\u7A0E\u52A1\u76F8\u5173", description: "\u7A0E\u52A1\u3001\u53D1\u7968\u3001\u5173\u7A0E" },
+          { name: "\u652F\u4ED8\u65B9\u5F0F/\u4ED8\u6B3E\u95EE\u9898", description: "\u652F\u4ED8\u65B9\u5F0F\u76F8\u5173" },
+          { name: "\u9000\u8D27/\u5546\u54C1\u95EE\u9898", description: "\u9000\u8D27\u3001\u8D28\u91CF\u95EE\u9898" },
+          { name: "\u8D26\u6237/\u767B\u5F55", description: "\u8D26\u6237\u95EE\u9898" },
+          { name: "\u4F9B\u5E94\u5546/\u5546\u54C1\u54A8\u8BE2", description: "\u4F9B\u5E94\u5546\u8BE2\u76D8" },
+          { name: "\u5176\u4ED6\u54A8\u8BE2", description: "\u5176\u4ED6\u7C7B\u578B" }
+        ],
+        sort_order: 1
+      },
+      {
+        id: "dim-dissatisfaction",
+        name: "\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790",
+        definition: "\u5206\u6790\u4E70\u5BB6\u70B9\u51FB\u4E0D\u6EE1\u610F\u7684\u5177\u4F53\u539F\u56E0\u548C\u65F6\u95F4\u8282\u70B9\uFF0C\u7ED3\u5408\u5BF9\u8BDD\u4E0A\u4E0B\u6587\u5224\u65AD\u4E0D\u6EE1\u610F\u7684\u6839\u56E0\u3002",
+        categories: [
+          { name: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", description: "AI\u7ED9\u51FA\u7684\u7B54\u6848\u4E0E\u4E70\u5BB6\u95EE\u9898\u4E0D\u5339\u914D\u6216\u5B8C\u5168\u9519\u8BEF" },
+          { name: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", description: "AI\u56DE\u7B54\u8FC7\u4E8E\u590D\u6742\u6216\u63AA\u8F9E\u8BA9\u4EBA\u96BE\u4EE5\u7406\u89E3" },
+          { name: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", description: "AI\u6CA1\u6709\u9488\u5BF9\u6027\u56DE\u7B54\u4E70\u5BB6\u7684\u5177\u4F53\u95EE\u9898" },
+          { name: "\u4E0D\u540C\u610F\u5E73\u53F0\u653F\u7B56", description: "\u4E70\u5BB6\u5BF9\u5E73\u53F0\u7684\u9000\u6B3E/\u9000\u8D27\u7B49\u653F\u7B56\u4E0D\u6EE1" },
+          { name: "\u754C\u9762\u96BE\u7528", description: "\u804A\u5929\u754C\u9762\u6216\u4EA4\u4E92\u4F53\u9A8C\u5DEE" },
+          { name: "\u6587\u5B57\u592A\u591A", description: "AI\u56DE\u590D\u8FC7\u957F\u4E0D\u60F3\u9605\u8BFB" },
+          { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u7C7B" }
+        ],
+        sort_order: 2
+      }
+    ];
+    for (const d2 of dims) {
+      db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, '', ?, 1, 'admin-001')").run(
+        d2.id,
+        d2.name,
+        d2.definition,
+        JSON.stringify(d2.categories),
+        d2.sort_order
+      );
+    }
+  }
+  console.log("[DB] Initialized successfully");
+  seedProductionData();
+}
+var db_default = db;
+
 // server/routes/auth.ts
 var import_express = __toESM(require_express2(), 1);
-init_db();
 var router = (0, import_express.Router)();
 router.post("/login", (req, res) => {
   const { token } = req.body;
@@ -33478,7 +33457,6 @@ var auth_default = router;
 
 // server/routes/sessions.ts
 var import_express2 = __toESM(require_express2(), 1);
-init_db();
 
 // node_modules/uuid/dist/esm/stringify.js
 var byteToHex = [];
@@ -33532,7 +33510,6 @@ function v4(options, buf, offset) {
 var v4_default = v4;
 
 // server/middleware/auth.ts
-init_db();
 function authMiddleware(req, res, next) {
   const token = req.headers["x-auth-token"];
   if (!token) {
@@ -40186,7 +40163,6 @@ function cosineSimilarity(a2, b2) {
 }
 
 // server/services/summarizer.ts
-init_db();
 async function summarizeSession(sessionId) {
   const session = db_default.prepare("SELECT * FROM sessions WHERE id = ?").get(sessionId);
   if (!session) throw new Error("Session not found");
@@ -40249,7 +40225,6 @@ ${session.dissatisfaction_info}
 }
 
 // server/services/search.ts
-init_db();
 async function semanticSearch(query, dateFrom, dateTo, threshold = 0.3, limit2 = 100) {
   let sql = `
     SELECT ss.session_id, ss.summary_text, ss.key_topics, ss.embedding,
@@ -40436,7 +40411,6 @@ var sessions_default = router2;
 
 // server/routes/scenarios.ts
 var import_express3 = __toESM(require_express2(), 1);
-init_db();
 var router3 = (0, import_express3.Router)();
 router3.get("/", (req, res) => {
   const rows = db_default.prepare("SELECT * FROM scenarios ORDER BY created_at DESC").all();
@@ -40479,7 +40453,6 @@ var scenarios_default = router3;
 
 // server/routes/dimensions.ts
 var import_express4 = __toESM(require_express2(), 1);
-init_db();
 var router4 = (0, import_express4.Router)();
 router4.get("/", (req, res) => {
   const rows = db_default.prepare("SELECT * FROM dimensions ORDER BY sort_order ASC").all();
@@ -40520,10 +40493,8 @@ var dimensions_default = router4;
 
 // server/routes/runs.ts
 var import_express5 = __toESM(require_express2(), 1);
-init_db();
 
 // server/services/analyzer.ts
-init_db();
 async function analyzeSession(sessionId, dimension, runId, feedbackList = []) {
   const session = db_default.prepare("SELECT * FROM sessions WHERE id = ?").get(sessionId);
   if (!session) throw new Error("Session not found");
@@ -40644,7 +40615,6 @@ function generateTasksForRun(runId) {
 }
 
 // server/services/dingtalk.ts
-init_db();
 import crypto2 from "crypto";
 async function sendDingTalkNotification(runId, baseUrl = "http://localhost:5173") {
   const config = db_default.prepare("SELECT * FROM dingtalk_configs WHERE enabled = 1 LIMIT 1").get();
@@ -40823,7 +40793,6 @@ var runs_default = router5;
 
 // server/routes/tasks.ts
 var import_express6 = __toESM(require_express2(), 1);
-init_db();
 var router6 = (0, import_express6.Router)();
 router6.get("/", (req, res) => {
   const status = req.query.status;
@@ -40878,7 +40847,6 @@ var tasks_default = router6;
 
 // server/routes/team.ts
 var import_express7 = __toESM(require_express2(), 1);
-init_db();
 var router7 = (0, import_express7.Router)();
 router7.get("/", (req, res) => {
   res.json(db_default.prepare("SELECT * FROM team_members ORDER BY created_at").all());
@@ -40902,7 +40870,6 @@ var team_default = router7;
 
 // server/routes/settings.ts
 var import_express8 = __toESM(require_express2(), 1);
-init_db();
 var router8 = (0, import_express8.Router)();
 router8.get("/", (req, res) => {
   const dingtalk = db_default.prepare("SELECT * FROM dingtalk_configs LIMIT 1").get() || null;
@@ -40924,8 +40891,6 @@ var settings_default = router8;
 
 // server/routes/dashboard.ts
 var import_express9 = __toESM(require_express2(), 1);
-init_db();
-init_seed_production();
 import fs3 from "fs";
 import path2 from "path";
 import { fileURLToPath as fileURLToPath2 } from "url";

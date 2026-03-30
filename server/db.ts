@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
 import { v4 as uuid } from 'uuid'
+import { seedProductionData } from './seed-production.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const dataDir = process.env.NODE_ENV === 'production' ? '/tmp/data' : path.join(__dirname, '..', 'data')
@@ -243,10 +244,7 @@ export async function initDB() {
   console.log('[DB] Initialized successfully')
 
   // Seed production mock data when DB is empty
-  if (process.env.NODE_ENV === 'production') {
-    const { seedProductionData } = await import('./seed-production.js')
-    seedProductionData()
-  }
+  seedProductionData()
 }
 
 export default db
