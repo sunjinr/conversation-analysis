@@ -47,11 +47,14 @@ export const api = {
 
   // Scenarios
   getScenarios: () => get<any[]>('/scenarios'),
-  createScenario: (data: any) => post<{ id: string }>('/scenarios', data),
+  createScenario: (data: any) => post<{ id: string; match_status: string }>('/scenarios', data),
   getScenario: (id: string) => get<any>(`/scenarios/${id}`),
   updateScenario: (id: string, data: any) => put<any>(`/scenarios/${id}`, data),
   deleteScenario: (id: string) => del<any>(`/scenarios/${id}`),
-  previewScenario: (id: string) => post<{ matched_count: number; results: any[] }>(`/scenarios/${id}/preview`, {}),
+  rematchScenario: (id: string) => post<any>(`/scenarios/${id}/rematch`, {}),
+  getMatchedSessions: (id: string, limit = 20, offset = 0) =>
+    get<{ total: number; sample: any; sessions: any[] }>(`/scenarios/${id}/matched-sessions?limit=${limit}&offset=${offset}`),
+  exportScenario: (id: string) => `${BASE}/scenarios/${id}/export`,
 
   // Dimensions
   getDimensions: () => get<any[]>('/dimensions'),
@@ -65,7 +68,9 @@ export const api = {
   createRun: (data: any) => post<{ id: string; total_sessions: number }>('/runs', data),
   getRun: (id: string) => get<any>(`/runs/${id}`),
   processRun: (id: string, batchSize = 5) => post<{ done: boolean; processed: number; total: number }>(`/runs/${id}/process`, { batch_size: batchSize }),
+  deleteRun: (id: string) => del<any>(`/runs/${id}`),
   getRunReport: (id: string) => get<any>(`/runs/${id}/report`),
+  getExcelReport: (id: string) => get<any>(`/runs/${id}/excel-report`),
   getRunResults: (id: string, limit = 50, offset = 0, dimensionId?: string, category?: string) => {
     let url = `/runs/${id}/results?limit=${limit}&offset=${offset}`
     if (dimensionId) url += `&dimension_id=${dimensionId}`
@@ -100,4 +105,24 @@ export const api = {
   // Dashboard
   getDashboardSummary: () => get<any>('/dashboard/summary'),
   getSatisfaction: () => get<any[]>('/dashboard/satisfaction'),
+
+  // Metrics
+  getMetricsSatisfaction: () => get<any[]>('/metrics/satisfaction'),
+  getMetricsTransferRate: (type: 'buyer' | 'seller') => get<any[]>(`/metrics/transfer-rate?type=${type}`),
+
+  // Feedback
+  getFeedbacks: (params?: { status?: string; run_id?: string; keyword?: string; limit?: number; offset?: number }) => {
+    let url = '/feedback?'
+    if (params?.status) url += `status=${params.status}&`
+    if (params?.run_id) url += `run_id=${params.run_id}&`
+    if (params?.keyword) url += `keyword=${encodeURIComponent(params.keyword)}&`
+    if (params?.limit) url += `limit=${params.limit}&`
+    if (params?.offset) url += `offset=${params.offset}&`
+    return get<{ data: any[]; total: number }>(url)
+  },
+  getFeedbackByRun: (runId: string) => get<any[]>(`/feedback/run/${runId}`),
+  createFeedback: (data: any) => post<{ ok: boolean; id: string }>('/feedback', data),
+  updateFeedback: (id: string, data: any) => put<any>(`/feedback/${id}`, data),
+  deleteFeedback: (id: string) => del<any>(`/feedback/${id}`),
+  getFeedbackStats: () => get<any>('/feedback/stats'),
 }

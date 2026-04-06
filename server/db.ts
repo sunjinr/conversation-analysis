@@ -132,8 +132,14 @@ export async function initDB() {
   db.exec(`CREATE TABLE IF NOT EXISTS scenarios (
       id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL,
       date_from TEXT, date_to TEXT, matched_session_ids TEXT DEFAULT '[]',
-      matched_count INTEGER DEFAULT 0, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+      matched_count INTEGER DEFAULT 0, match_status TEXT DEFAULT 'pending',
+      error_message TEXT DEFAULT '', created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
   )`)
+  // Migrate: add match_status column if missing
+  try { db.exec(`ALTER TABLE scenarios ADD COLUMN match_status TEXT DEFAULT 'pending'`) } catch {}
+  try { db.exec(`ALTER TABLE scenarios ADD COLUMN error_message TEXT DEFAULT ''`) } catch {}
+  // Fix existing scenarios that already have matches
+  db.exec(`UPDATE scenarios SET match_status = 'completed' WHERE matched_count > 0 AND (match_status IS NULL OR match_status = 'pending')`)
   db.exec(`CREATE TABLE IF NOT EXISTS dimensions (
       id TEXT PRIMARY KEY, name TEXT NOT NULL, definition TEXT NOT NULL,
       categories_json TEXT DEFAULT '[]', auto_discover INTEGER DEFAULT 0,
@@ -146,7 +152,8 @@ export async function initDB() {
       is_active INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
   )`)
   db.exec(`CREATE TABLE IF NOT EXISTS analysis_runs (
-      id TEXT PRIMARY KEY, config_id TEXT, status TEXT DEFAULT 'pending',
+      id TEXT PRIMARY KEY, config_id TEXT, name TEXT DEFAULT '', user_question TEXT DEFAULT '',
+      status TEXT DEFAULT 'pending',
       total_sessions INTEGER DEFAULT 0, processed_sessions INTEGER DEFAULT 0,
       started_at TEXT, completed_at TEXT, error_message TEXT DEFAULT '',
       summary_json TEXT DEFAULT '{}', triggered_by TEXT, created_at TEXT DEFAULT (datetime('now'))
@@ -193,13 +200,58 @@ export async function initDB() {
       updated_at TEXT DEFAULT (datetime('now'))
   )`)
 
+  // Migration: add name and user_question to analysis_runs
+  try {
+    db.exec(`ALTER TABLE analysis_runs ADD COLUMN name TEXT DEFAULT ''`)
+  } catch {}
+  try {
+    db.exec(`ALTER TABLE analysis_runs ADD COLUMN user_question TEXT DEFAULT ''`)
+  } catch {}
+
+  // Migration: extend classification_feedback with context fields
+  try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN run_id TEXT NOT NULL DEFAULT ''`) } catch {}
+  try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN session_id TEXT NOT NULL DEFAULT ''`) } catch {}
+  try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN dimension_id TEXT NOT NULL DEFAULT ''`) } catch {}
+  try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN detail_row_json TEXT DEFAULT '{}'`) } catch {}
+  try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN status TEXT DEFAULT 'pending'`) } catch {}
+  try { db.exec(`CREATE INDEX IF NOT EXISTS idx_feedback_run ON classification_feedback(run_id)`) } catch {}
+  try { db.exec(`CREATE INDEX IF NOT EXISTS idx_feedback_status ON classification_feedback(status)`) } catch {}
+  try { db.exec(`CREATE INDEX IF NOT EXISTS idx_feedback_created ON classification_feedback(created_at DESC)`) } catch {}
+
+  // Migration: seed 通用维度 if not exists
+  const genericExists = db.prepare("SELECT id FROM dimensions WHERE id = 'dim-generic'").get()
+  if (!genericExists) {
+    const genericCategories = [
+      { name: '协同效率低下', description: '涉及多个部门或商家时，响应慢，互相推诿' },
+      { name: '交互设计反人类', description: '表单、按钮设计不合理，让用户操作很费劲' },
+      { name: '话术模板化与无效回复', description: '回复全是标准套话，没有针对性，或全是安抚但没有实际解决方案' },
+      { name: '解释不清与信息冗余', description: '解释得云里雾里用户听不懂，或者废话太多重点不突出' },
+      { name: '前后矛盾与口径不一', description: '不同的客服或机器人和人工给的答案不一样' },
+      { name: '意图识别失败', description: '未能识别出用户的真实需求' },
+      { name: '复杂/模糊意图无法处理', description: '遇到复杂问题强行简化为通用答案' },
+      { name: '情绪与风险识别缺失', description: '无法识别用户愤怒、焦虑或高风险事件' },
+      { name: '能力局限（只能查不能办）', description: '机器人只能查询，涉及修改操作必须转人工' },
+      { name: '承诺未兑现与反复无进展', description: '承诺解决结果没解决或永远在处理中' },
+      { name: '缺乏补救与补偿', description: '平台过错导致用户受损却无补偿措施' },
+      { name: '转人工障碍', description: '用户想转人工但系统不给入口' },
+      { name: '转接后的信息丢失', description: '转人工后人工不知道前面发生了什么' },
+    ]
+    db.prepare('INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, \'\', 10, 1, \'admin-001\')').run(
+      'dim-generic', '通用维度',
+      '通用的不满意原因分析维度，适用于任意业务场景。从 13 个维度识别不满根因：协同效率低下、交互设计反人类、话术模板化与无效回复、解释不清与信息冗余、前后矛盾与口径不一、意图识别失败、复杂/模糊意图无法处理、情绪与风险识别缺失、能力局限、承诺未兑现、缺乏补救与补偿、转人工障碍、转接后的信息丢失。',
+      JSON.stringify(genericCategories)
+    )
+  }
+
   // Seed admin
   const adminExists = db.prepare('SELECT id FROM users WHERE id = ?').get('admin-001')
   if (!adminExists) {
     db.prepare('INSERT INTO users (id, name, email, role, token) VALUES (?, ?, ?, ?, ?)').run(
-      'admin-001', 'Admin', 'admin@example.com', 'admin', 'admin123'
+      'admin-001', 'Matt', 'matt@example.com', 'admin', 'admin123'
     )
   }
+  // Ensure admin name is Matt
+  db.prepare("UPDATE users SET name = 'Matt' WHERE id = 'admin-001'").run()
 
   // Seed dimensions
   const dimCount = db.prepare('SELECT COUNT(*) as cnt FROM dimensions').get() as { cnt: number }
@@ -233,10 +285,27 @@ export async function initDB() {
           { name: '文字太多', description: 'AI回复过长不想阅读' },
           { name: '其他', description: '无法归类' },
         ], sort_order: 2 },
+      { id: 'dim-generic', name: '通用维度', definition: '通用的不满意原因分析维度，适用于任意业务场景。从以下 13 个维度识别不满根因：协同效率低下、交互设计反人类、话术模板化与无效回复、解释不清与信息冗余、前后矛盾与口径不一、意图识别失败、复杂/模糊意图无法处理、情绪与风险识别缺失、能力局限、承诺未兑现、缺乏补救与补偿、转人工障碍、转接后的信息丢失。',
+        categories: [
+          { name: '协同效率低下', description: '涉及多个部门或商家时，响应慢，互相推诿' },
+          { name: '交互设计反人类', description: '表单、按钮设计不合理，让用户操作很费劲' },
+          { name: '话术模板化与无效回复', description: '回复全是标准套话，没有针对性，或全是安抚但没有实际解决方案' },
+          { name: '解释不清与信息冗余', description: '解释得云里雾里用户听不懂，或者废话太多重点不突出' },
+          { name: '前后矛盾与口径不一', description: '不同的客服或机器人和人工给的答案不一样' },
+          { name: '意图识别失败', description: '未能识别出用户的真实需求，包括多意图只识别一个或小语种方言导致误判' },
+          { name: '复杂/模糊意图无法处理', description: '遇到稍微复杂的问题，系统无法进行多线程判断，强行简化为通用答案' },
+          { name: '情绪与风险识别缺失', description: '无法识别用户是否愤怒、焦虑，或是否涉及高风险事件' },
+          { name: '能力局限（只能查不能办）', description: '机器人只能做简单的查询和引导，一旦涉及修改、操作就必须转人工' },
+          { name: '承诺未兑现与反复无进展', description: '承诺了能解决结果没解决，或者一直说在处理但永远没结果' },
+          { name: '缺乏补救与补偿', description: '因平台或服务方过错导致用户受损，却没有提供任何补偿或补救措施' },
+          { name: '转人工障碍', description: '用户明确想转人工但系统不给入口，或入口藏得很深' },
+          { name: '转接后的信息丢失', description: '从机器人转到人工后，人工客服不知道前面发生了什么' },
+        ], auto_discover: true, sort_order: 10 },
     ]
     for (const d of dims) {
-      db.prepare('INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, \'\', ?, 1, \'admin-001\')').run(
-        d.id, d.name, d.definition, JSON.stringify(d.categories), d.sort_order
+      const autoDiscover = (d as any).auto_discover !== undefined ? (d as any).auto_discover : 1
+      db.prepare('INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, ?, \'\', ?, 1, \'admin-001\')').run(
+        d.id, d.name, d.definition, JSON.stringify(d.categories), autoDiscover, d.sort_order
       )
     }
   }

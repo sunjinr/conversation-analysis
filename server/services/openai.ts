@@ -33,11 +33,30 @@ export function isEmbeddingAvailable(): boolean {
   return !!embeddingClient
 }
 
+// BGE models use asymmetric retrieval: queries need an instruction prefix, documents don't
+const BGE_QUERY_PREFIX: Record<string, string> = {
+  'BAAI/bge-large-zh-v1.5': '为这个句子生成表示以用于检索中文相关句子：',
+  'BAAI/bge-m3': 'Represent this sentence for searching relevant passages: ',
+}
+
+/** Embed a document (no instruction prefix) */
 export async function getEmbedding(text: string): Promise<number[]> {
   if (!embeddingClient) throw new Error('Embedding API not configured')
   const res = await embeddingClient.embeddings.create({
     model: EMBEDDING_MODEL,
     input: text.slice(0, 8000),
+  })
+  return res.data[0].embedding
+}
+
+/** Embed a search query (with BGE instruction prefix for better retrieval) */
+export async function getQueryEmbedding(text: string): Promise<number[]> {
+  if (!embeddingClient) throw new Error('Embedding API not configured')
+  const prefix = BGE_QUERY_PREFIX[EMBEDDING_MODEL] || ''
+  const input = prefix ? `${prefix}${text}` : text
+  const res = await embeddingClient.embeddings.create({
+    model: EMBEDDING_MODEL,
+    input: input.slice(0, 8000),
   })
   return res.data[0].embedding
 }

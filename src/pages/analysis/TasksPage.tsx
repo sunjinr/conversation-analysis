@@ -1,15 +1,26 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { api } from '@/lib/api'
-import { CheckCircle, User, Clock, XCircle } from 'lucide-react'
+import { User, Link } from 'lucide-react'
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState<any[]>([])
+  const [team, setTeam] = useState<any[]>([])
   const [filter, setFilter] = useState<string>('')
+  const [assigneeFilter, setAssigneeFilter] = useState<string>('')
   const [resolvingId, setResolvingId] = useState<string | null>(null)
   const [resolution, setResolution] = useState('')
+  const navigate = useNavigate()
 
-  const load = () => api.getTasks(filter ? { status: filter } : {}).then(setTasks)
-  useEffect(() => { load() }, [filter])
+  const load = () => {
+    const params: any = {}
+    if (filter) params.status = filter
+    if (assigneeFilter) params.assignee_id = assigneeFilter
+    api.getTasks(params).then(setTasks)
+  }
+
+  useEffect(() => { api.getTeam().then(setTeam) }, [])
+  useEffect(() => { load() }, [filter, assigneeFilter])
 
   const handleClaim = async (id: string) => {
     await api.updateTask(id, { status: 'claimed' })
@@ -38,20 +49,31 @@ export default function TasksPage() {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">待办任务</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-6">任务</h2>
 
-      <div className="flex gap-2 mb-6">
-        {[
-          { value: '', label: `全部 (${statCounts.all})` },
-          { value: 'open', label: `待处理 (${statCounts.open})` },
-          { value: 'claimed', label: `进行中 (${statCounts.claimed})` },
-          { value: 'resolved', label: `已解决 (${statCounts.resolved})` },
-        ].map(f => (
-          <button key={f.value} onClick={() => setFilter(f.value)}
-            className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${filter === f.value ? 'bg-brand text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
-            {f.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex gap-2">
+          {[
+            { value: '', label: `全部 (${statCounts.all})` },
+            { value: 'open', label: `待处理 (${statCounts.open})` },
+            { value: 'claimed', label: `进行中 (${statCounts.claimed})` },
+            { value: 'resolved', label: `已解决 (${statCounts.resolved})` },
+          ].map(f => (
+            <button key={f.value} onClick={() => setFilter(f.value)}
+              className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${filter === f.value ? 'bg-brand text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+        {team.length > 0 && (
+          <select value={assigneeFilter} onChange={e => setAssigneeFilter(e.target.value)}
+            className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-white">
+            <option value="">全部处理人</option>
+            {team.map(m => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div className="space-y-3">
@@ -63,12 +85,19 @@ export default function TasksPage() {
                   <span className={`badge badge-${t.priority}`}>{t.priority}</span>
                   <span className={`badge badge-${t.status}`}>{t.status}</span>
                   {t.assignee_name && (
-                    <span className="flex items-center gap-1 text-xs text-gray-500"><User size={12} />{t.assignee_name}</span>
+                    <span className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded"><User size={12} />推荐处理人: {t.assignee_name}</span>
                   )}
                 </div>
                 <h4 className="text-sm font-medium text-gray-900">{t.title}</h4>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 shrink-0">
+                {t.run_id && (
+                  <button onClick={() => navigate(`/analysis/runs/${t.run_id}`)}
+                    className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50"
+                    title="查看关联洞察">
+                    <Link size={12} /> 关联洞察
+                  </button>
+                )}
                 {t.status === 'open' && (
                   <>
                     <button onClick={() => handleClaim(t.id)} className="px-3 py-1 text-xs bg-brand text-white rounded-lg hover:bg-brand-light">领取</button>

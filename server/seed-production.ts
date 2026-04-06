@@ -58,9 +58,9 @@ export const satisfactionSeedData = [
   { date: "2026-03-21", total: 745, dissatisfied: 354, satisfaction_rate: 52.5, tasks_resolved: 0, task_notes: "" },
   { date: "2026-03-22", total: 690, dissatisfied: 311, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
   { date: "2026-03-23", total: 858, dissatisfied: 421, satisfaction_rate: 50.9, tasks_resolved: 0, task_notes: "" },
-  { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 2, task_notes: "优化商家转人工流程，改进智能推荐匹配" },
   { date: "2026-03-25", total: 842, dissatisfied: 407, satisfaction_rate: 51.7, tasks_resolved: 0, task_notes: "" },
-  { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53.0, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53.0, tasks_resolved: 1, task_notes: "修复商家端转人工按钮异常" },
   { date: "2026-03-27", total: 774, dissatisfied: 386, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
   { date: "2026-03-28", total: 787, dissatisfied: 377, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" },
 ]
@@ -110,42 +110,17 @@ export function seedProductionData() {
     JSON.stringify([sampleSessionId]), 1, 'admin-001'
   )
 
-  // 3. Analysis config
-  db.prepare(`INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)`).run(
-    'mock-config-001', '不满意会话洞察', 'mock-scenario-002',
-    JSON.stringify(['dim-dissatisfaction', 'dim-transfer-reason', 'dim-topic']), 'admin-001'
+  // 3. DingTalk webhook config
+  db.prepare(`INSERT INTO dingtalk_configs (id, webhook_url, secret, enabled, created_by) VALUES (?, ?, ?, ?, ?)`).run(
+    '4ee075b5-d70e-4c62-a0b7-e969f1f88d4d',
+    'https://oapi.dingtalk.com/robot/send?access_token=fa45ef0d6d2cdd39a90940e152316cbdbd9f5a2c18d492fa53844ca04aab7ff6',
+    'SEC386395a935269e7343a98af9dca765b3c1ebdeef8ba7bf5eb7bf3e2297a4771d',
+    1, 'admin-001'
   )
 
-  // 4. Completed analysis run
-  const summaryJson = JSON.stringify([
-    { dimension_id: 'dim-dissatisfaction', category: 'AI回答无用/错误', cnt: 10 },
-    { dimension_id: 'dim-dissatisfaction', category: '未回答我的问题', cnt: 5 },
-    { dimension_id: 'dim-dissatisfaction', category: '回答复杂难懂', cnt: 1 },
-    { dimension_id: 'dim-dissatisfaction', category: '文字太多', cnt: 2 },
-    { dimension_id: 'dim-dissatisfaction', category: '界面难用', cnt: 2 },
-  ])
-  db.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, completed_at, summary_json, triggered_by)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-    'mock-run-001', 'mock-config-001', 'completed', 20, 20,
-    '2026-03-29 09:36:16', '2026-03-29 09:37:54', summaryJson, 'admin-001'
-  )
-
-  // 5. Tasks with various statuses
-  const tasks = [
-    { id: 'mock-task-001', dimId: 'dim-dissatisfaction', title: '[不满意原因分析] AI回答无用/错误 (10条)', desc: '在"不满意原因分析"维度下，共有10条会话被分类为"AI回答无用/错误"。需要检查相关会话并制定改进方案。', priority: 'medium', status: 'resolved', resolution: '已优化AI客服回答准确性，更新了知识库中相关问题的回答', resolvedAt: '2026-03-29 09:52:18' },
-    { id: 'mock-task-002', dimId: 'dim-dissatisfaction', title: '[不满意原因分析] 未回答我的问题 (5条)', desc: '在"不满意原因分析"维度下，共有5条会话被分类为"未回答我的问题"。需要检查相关会话并制定改进方案。', priority: 'low', status: 'open', resolution: '', resolvedAt: null },
-    { id: 'mock-task-003', dimId: 'dim-dissatisfaction', title: '[不满意原因分析] 界面难用 (2条)', desc: '在"不满意原因分析"维度下，共有2条会话被分类为"界面难用"。需要检查相关会话并制定改进方案。', priority: 'low', status: 'open', resolution: '', resolvedAt: null },
-    { id: 'mock-task-004', dimId: 'dim-dissatisfaction', title: '[不满意原因分析] 文字太多 (2条)', desc: '在"不满意原因分析"维度下，共有2条会话被分类为"文字太多"。需要改进AI回复长度。', priority: 'medium', status: 'claimed', resolution: '', resolvedAt: null },
-  ]
-  const taskStmt = db.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, resolution_text, resolved_at, related_session_ids)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-  for (const t of tasks) {
-    taskStmt.run(t.id, 'mock-run-001', t.dimId, t.title, t.desc, t.priority, t.status, t.resolution, t.resolvedAt, JSON.stringify([sampleSessionId]))
-  }
-
-  // 6. One data source request
+  // 4. One data source request
   db.prepare(`INSERT INTO data_source_requests (id, description, status, created_by) VALUES (?, ?, ?, ?)`).run(
-    'mock-req-001', '希望增加「会话时长」字段，记录每通会话从开始到结束的总时长', 'pending', 'Admin'
+    'mock-req-001', '希望增加「会话时长」字段，记录每通会话从开始到结束的总时长', 'pending', 'Matt'
   )
 
   console.log('[Seed] Production mock data seeded successfully')

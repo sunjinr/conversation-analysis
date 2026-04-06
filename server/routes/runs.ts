@@ -2,8 +2,15 @@ import { Router } from 'express'
 import db from '../db.js'
 import { v4 as uuid } from 'uuid'
 import { authMiddleware, AuthRequest } from '../middleware/auth.js'
-import { analyzeSession, generateTasksForRun } from '../services/analyzer.js'
+import { generateTasksForRun } from '../services/analyzer.js'
+import { runSkillAnalysis } from '../services/skillEngine.js'
 import { sendDingTalkNotification } from '../services/dingtalk.js'
+import path from 'path'
+import fs from 'fs'
+import { exec } from 'child_process'
+import { promisify } from 'util'
+
+const execAsync = promisify(exec)
 
 const router = Router()
 
@@ -14,12 +21,12 @@ router.get('/', (req, res) => {
 
 // POST /api/runs - create and start a run
 router.post('/', authMiddleware, async (req: AuthRequest, res) => {
-  const { name, scenario_id, dimension_ids } = req.body
+  const { name, scenario_id, dimension_ids, user_question, date_from, date_to } = req.body
   const configId = uuid()
   db.prepare('INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)')
     .run(configId, name || 'Analysis', scenario_id || null, JSON.stringify(dimension_ids || []), req.user!.id)
 
-  // Get session IDs from scenario
+  // Get session IDs from scenario (not used for Python pipeline, but kept for compatibility)
   let sessionIds: string[] = []
   if (scenario_id) {
     const scenario = db.prepare('SELECT matched_session_ids FROM scenarios WHERE id = ?').get(scenario_id) as any
@@ -29,15 +36,64 @@ router.post('/', authMiddleware, async (req: AuthRequest, res) => {
     sessionIds = (db.prepare('SELECT id FROM sessions').all() as any[]).map(r => r.id)
   }
 
+  // Python 管道从 Excel 读取数据，数据池数量由 Python 分析结果决定
+  const TOTAL_DATA_POOL = sessionIds.length
+
   const runId = uuid()
-  db.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, triggered_by)
-    VALUES (?, ?, 'running', ?, 0, datetime('now'), ?)`).run(runId, configId, sessionIds.length, req.user!.id)
+  const runName = name || `洞察 ${new Date().toLocaleDateString('zh-CN')}`
+  db.prepare(`INSERT INTO analysis_runs (id, config_id, name, user_question, status, total_sessions, processed_sessions, started_at, triggered_by)
+    VALUES (?, ?, ?, ?, 'running', ?, 0, datetime('now'), ?)`).run(runId, configId, runName, user_question || '', TOTAL_DATA_POOL, req.user!.id)
 
   // Store session list in config for batch processing
   db.prepare('UPDATE analysis_configs SET dimension_ids = ? WHERE id = ?')
     .run(JSON.stringify({ dimension_ids: dimension_ids || [], session_ids: sessionIds }), configId)
 
-  res.json({ id: runId, total_sessions: sessionIds.length })
+  // Auto-start processing in background using Python skill pipeline
+  const autoProcess = async () => {
+    try {
+      // 构建用户问题：如果用户提供了自由场景问题，直接使用；否则使用默认描述
+      const userQuestion = user_question || `分析这些会话数据，按照选定的维度进行分类统计`
+
+      // 获取选中的维度定义，构建 custom_dimensions
+      const dims = (dimension_ids && dimension_ids.length > 0)
+        ? dimension_ids.map((did: string) => db.prepare('SELECT * FROM dimensions WHERE id = ?').get(did)).filter(Boolean) as any[]
+        : db.prepare('SELECT * FROM dimensions WHERE enabled = 1 ORDER BY sort_order').all() as any[]
+
+      const customDimensions: Record<string, { definition: string; suggestion: string }> = {}
+      for (const dim of dims) {
+        const categories = JSON.parse(dim.categories_json || '[]') as Array<{ name: string; description: string }>
+        customDimensions[dim.name] = {
+          definition: dim.definition || '',
+          suggestion: categories.map(c => `${c.name}: ${c.description}`).join('; '),
+        }
+      }
+
+      // 调用 Python skill 分析
+      const result = await runSkillAnalysis({
+        userQuestion,
+        customDimensions,
+        dateFrom: date_from || undefined,
+        dateTo: date_to || undefined,
+      })
+
+      // 更新运行状态，使用 Python 实际处理的会话数
+      const totalFromPython = result.summary.totalSessions || sessionIds.length
+      db.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), total_sessions = ?, processed_sessions = ?, summary_json = ?, excel_report_path = ? WHERE id = ?")
+        .run(totalFromPython, result.summary.analyzed || totalFromPython, JSON.stringify(result.summary), result.reportPath, runId)
+
+      // 生成任务
+      await generateTasksForRun(runId)
+
+      // 钉钉通知
+      sendDingTalkNotification(runId).catch(e => console.error('DingTalk notification failed:', e))
+    } catch (error: any) {
+      console.error('Auto process failed:', error)
+      db.prepare("UPDATE analysis_runs SET status = 'failed', completed_at = datetime('now') WHERE id = ?").run(runId)
+    }
+  }
+  autoProcess().catch(e => console.error('Auto process failed:', e))
+
+  res.json({ id: runId, total_sessions: TOTAL_DATA_POOL })
 })
 
 // GET /api/runs/:id
@@ -47,81 +103,82 @@ router.get('/:id', (req, res) => {
   res.json(run)
 })
 
-// POST /api/runs/:id/process - process next batch
+// DELETE /api/runs/:id
+router.delete('/:id', authMiddleware, (req: AuthRequest, res) => {
+  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
+  if (!run) return res.status(404).json({ error: 'Not found' })
+  if (run.status === 'running') return res.status(400).json({ error: 'Cannot delete a running task' })
+
+  // Delete related data
+  db.prepare('DELETE FROM analysis_results WHERE run_id = ?').run(req.params.id)
+  db.prepare('DELETE FROM classification_feedback WHERE run_id = ?').run(req.params.id)
+  db.prepare('DELETE FROM tasks WHERE run_id = ?').run(req.params.id)
+  db.prepare('DELETE FROM analysis_runs WHERE id = ?').run(req.params.id)
+
+  // Delete Excel file if exists
+  if (run.excel_report_path && fs.existsSync(run.excel_report_path)) {
+    try { fs.unlinkSync(run.excel_report_path) } catch {}
+  }
+
+  res.json({ ok: true })
+})
+
+// POST /api/runs/:id/process - process using Python skill pipeline
 router.post('/:id/process', authMiddleware, async (req: AuthRequest, res) => {
-  const batchSize = parseInt(req.body.batch_size as string) || 5
   const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
   if (!run) return res.status(404).json({ error: 'Run not found' })
   if (run.status === 'completed') return res.json({ done: true, processed: run.total_sessions, total: run.total_sessions })
-
-  const config = db.prepare('SELECT * FROM analysis_configs WHERE id = ?').get(run.config_id) as any
-  if (!config) return res.status(404).json({ error: 'Config not found' })
-
-  const configData = JSON.parse(config.dimension_ids)
-  const dimensionIds: string[] = configData.dimension_ids || []
-  const allSessionIds: string[] = configData.session_ids || []
-
-  // Get already processed session IDs for this run
-  const processed = db.prepare('SELECT DISTINCT session_id FROM analysis_results WHERE run_id = ?').all(run.id) as any[]
-  const processedSet = new Set(processed.map((r: any) => r.session_id))
-  const remaining = allSessionIds.filter(id => !processedSet.has(id))
-
-  if (remaining.length === 0) {
-    // Complete the run
-    db.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), processed_sessions = ? WHERE id = ?")
-      .run(run.total_sessions, run.id)
-
-    // Aggregate summary
-    const stats = db.prepare(`SELECT dimension_id, category, COUNT(*) as cnt FROM analysis_results WHERE run_id = ? GROUP BY dimension_id, category`).all(run.id)
-    db.prepare('UPDATE analysis_runs SET summary_json = ? WHERE id = ?').run(JSON.stringify(stats), run.id)
-
-    generateTasksForRun(run.id)
-
-    // 自动发送钉钉通知（异步，不阻塞响应）
-    const baseUrl = (req.headers.origin as string) || 'http://localhost:5173'
-    sendDingTalkNotification(run.id, baseUrl).catch(e => {
-      console.error('Auto DingTalk notification failed:', e)
-    })
-
-    return res.json({ done: true, processed: run.total_sessions, total: run.total_sessions })
+  if (run.status === 'running' || run.status === 'pending') {
+    return res.json({ done: false, processed: run.processed_sessions || 0, total: run.total_sessions, message: 'Processing in background' })
   }
 
-  const batch = remaining.slice(0, batchSize)
-  const dimensions = dimensionIds.length > 0
-    ? dimensionIds.map(id => db.prepare('SELECT * FROM dimensions WHERE id = ?').get(id)).filter(Boolean) as any[]
-    : db.prepare('SELECT * FROM dimensions WHERE enabled = 1 ORDER BY sort_order').all() as any[]
+  // Start background processing
+  const autoProcess = async () => {
+    try {
+      const config = db.prepare('SELECT * FROM analysis_configs WHERE id = ?').get(run.config_id) as any
+      if (!config) throw new Error('Config not found')
 
-  let processedCount = 0
-  for (const sessionId of batch) {
-    for (const dim of dimensions) {
-      // Get feedback for this dimension
-      const feedbacks = db.prepare(`
-        SELECT cf.original_category, cf.corrected_category, cf.feedback_note
-        FROM classification_feedback cf
-        JOIN analysis_results ar ON ar.id = cf.result_id
-        WHERE ar.dimension_id = ?
-        ORDER BY cf.created_at DESC LIMIT 10
-      `).all(dim.id) as any[]
+      const configData = JSON.parse(config.dimension_ids)
+      const dimensionIds: string[] = configData.dimension_ids || []
 
-      const fbList = feedbacks.map((f: any) => ({
-        original: f.original_category,
-        corrected: f.corrected_category,
-        note: f.feedback_note,
-      }))
+      const dims = dimensionIds.length > 0
+        ? dimensionIds.map((did: string) => db.prepare('SELECT * FROM dimensions WHERE id = ?').get(did)).filter(Boolean) as any[]
+        : db.prepare('SELECT * FROM dimensions WHERE enabled = 1 ORDER BY sort_order').all() as any[]
 
-      try {
-        await analyzeSession(sessionId, dim, run.id, fbList)
-      } catch (e: any) {
-        console.error(`Analysis failed for session ${sessionId}, dim ${dim.id}:`, e.message)
+      const customDimensions: Record<string, { definition: string; suggestion: string }> = {}
+      for (const dim of dims) {
+        const categories = JSON.parse(dim.categories_json || '[]') as Array<{ name: string; description: string }>
+        customDimensions[dim.name] = {
+          definition: dim.definition || '',
+          suggestion: categories.map(c => `${c.name}: ${c.description}`).join('; '),
+        }
       }
+
+      const userQuestion = run.user_question || `分析这些会话数据，按照选定的维度进行分类统计`
+
+      // 更新状态为 running
+      db.prepare("UPDATE analysis_runs SET status = 'running' WHERE id = ?").run(run.id)
+
+      const result = await runSkillAnalysis({
+        userQuestion,
+        customDimensions,
+      })
+
+      db.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), processed_sessions = ?, summary_json = ? WHERE id = ?")
+        .run(result.summary.analyzed || result.summary.totalSessions, JSON.stringify(result.summary), run.id)
+
+      await generateTasksForRun(run.id)
+
+      const baseUrl = (req.headers.origin as string) || 'http://localhost:5173'
+      sendDingTalkNotification(run.id, baseUrl).catch(e => console.error('DingTalk notification failed:', e))
+    } catch (error: any) {
+      console.error('Process failed:', error)
+      db.prepare("UPDATE analysis_runs SET status = 'failed', completed_at = datetime('now') WHERE id = ?").run(run.id)
     }
-    processedCount++
   }
+  autoProcess().catch(e => console.error('Auto process failed:', e))
 
-  const newProcessed = processedSet.size + processedCount
-  db.prepare('UPDATE analysis_runs SET processed_sessions = ? WHERE id = ?').run(newProcessed, run.id)
-
-  res.json({ done: false, processed: newProcessed, total: run.total_sessions })
+  res.json({ done: false, processed: run.processed_sessions || 0, total: run.total_sessions, message: 'Started background processing' })
 })
 
 // GET /api/runs/:id/report
@@ -179,6 +236,217 @@ router.get('/:id/results', (req, res) => {
   const total = db.prepare(`SELECT COUNT(*) as cnt FROM analysis_results WHERE run_id = ?`).get(req.params.id) as any
 
   res.json({ data: rows, total: total.cnt })
+})
+
+// GET /api/runs/:id/excel-report - read Excel report content as JSON
+router.get('/:id/excel-report', authMiddleware, async (req: AuthRequest, res) => {
+  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
+  if (!run) return res.status(404).json({ error: 'Run not found' })
+  if (!run.excel_report_path || !fs.existsSync(run.excel_report_path)) {
+    return res.status(404).json({ error: 'Excel report not found' })
+  }
+
+  try {
+    const excelPath = run.excel_report_path.replace(/'/g, "'\\''")
+    const pythonScript = `import json, sys; sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis'); from openpyxl import load_workbook; wb = load_workbook('${excelPath}'); result = {}; [result.__setitem__(sn, [list(r) for r in wb[sn].iter_rows(values_only=True)]) for sn in wb.sheetnames]; print(json.dumps(result, ensure_ascii=False))`
+    
+    const { stdout } = await execAsync(`python3 -c "${pythonScript}"`)
+    const excelData = JSON.parse(stdout)
+    res.json({ success: true, sheets: excelData })
+  } catch (error: any) {
+    console.error('Failed to read Excel report:', error)
+    res.status(500).json({ error: 'Failed to read Excel report', message: error.message })
+  }
+})
+
+// GET /api/runs/:id/view-excel - convert Excel to HTML for iframe viewing
+router.get('/:id/view-excel', async (req, res) => {
+  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
+  if (!run || !run.excel_report_path || !fs.existsSync(run.excel_report_path)) {
+    return res.status(404).send('Excel report not found')
+  }
+
+  try {
+    const excelPath = run.excel_report_path
+    const tempScriptPath = path.join('/tmp', `view_excel_${Date.now()}.py`)
+    
+    // Clean Python script using raw strings to avoid escaping issues
+    const pythonScript = `import sys
+sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis')
+from openpyxl import load_workbook
+import json
+
+excel_path = json.loads(sys.argv[1])
+wb = load_workbook(excel_path)
+
+html = []
+html.append('<html><head><meta charset="utf-8"><style>')
+html.append('body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; margin: 0; padding: 16px; background: #f0f2f5; }')
+html.append('.sheet-container { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }')
+html.append('.sheet-tabs { display: flex; background: #f5f5f5; border-bottom: 1px solid #e0e0e0; padding: 0 8px; }')
+html.append('.sheet-tab { padding: 10px 20px; font-size: 13px; font-weight: 500; color: #666; cursor: pointer; border-bottom: 2px solid transparent; }')
+html.append('.sheet-tab:hover { color: #1F4E79; }')
+html.append('.sheet-tab.active { background: white; color: #1F4E79; border-bottom: 2px solid #1F4E79; font-weight: 600; }')
+html.append('.sheet-content { display: none; padding: 20px; overflow-y: auto; max-height: calc(100vh - 180px); }')
+html.append('.sheet-content.active { display: block; }')
+html.append('table { border-collapse: collapse; font-size: 12px; }')
+html.append('td { border: 1px solid #d9d9d9; padding: 6px 10px; }')
+html.append('.header-cell { background: #1F4E79; color: white; font-weight: 600; text-align: center; }')
+html.append('.num-cell { text-align: right; }')
+html.append('.highlight-cell { background: #FFF2CC; }')
+html.append('.label-cell { font-weight: bold; color: #1F4E79; }')
+html.append('.spacer-row td { border: none; height: 6px; padding: 0; }')
+html.append('.fb-cell { border: 1px solid #d9d9d9; padding: 4px 8px; text-align: center; white-space: nowrap; }')
+html.append('.fb-btn { background: #ff6b35; color: white; border: none; border-radius: 4px; padding: 3px 10px; font-size: 11px; cursor: pointer; }')
+html.append('.fb-btn:hover { background: #e55a2b; }')
+html.append('</style></head><body>')
+html.append('<div class="sheet-container">')
+html.append('<div class="sheet-tabs">')
+for name in wb.sheetnames:
+    html.append(f'<div class="sheet-tab" data-sheet="{name}">{name}</div>')
+html.append('</div>')
+
+for name in wb.sheetnames:
+    ws = wb[name]
+    html.append(f'<div class="sheet-content" data-sheet="{name}">')
+    html.append('<table>')
+    
+    # Build merged cells lookup: (row, col) -> {rowspan, colspan, is_master}
+    merged = {}
+    for mc in ws.merged_cells.ranges:
+        for r in range(mc.min_row, mc.max_row + 1):
+            for c in range(mc.min_col, mc.max_col + 1):
+                if r == mc.min_row and c == mc.min_col:
+                    merged[(r, c)] = {'rowspan': mc.max_row - mc.min_row + 1, 'colspan': mc.max_col - mc.min_col + 1, 'master': True}
+                else:
+                    merged[(r, c)] = {'master': False}
+    
+    for row_idx in range(1, ws.max_row + 1):
+        row = ws[row_idx]
+        vals = [cell.value for cell in row]
+        
+        if all(v is None or v == '' for v in vals):
+            html.append('<tr class="spacer-row"><td colspan="20"></td></tr>')
+            continue
+        
+        # Detect if this is a header row
+        is_header = False
+        for cell in row:
+            if cell.fill and cell.fill.fgColor:
+                fcc = str(cell.fill.fgColor).upper().replace('FF', '')
+                if fcc == '1F4E79':
+                    is_header = True
+                    break
+        
+        html.append('<tr>')
+        row_vals = []
+        for col_idx, cell in enumerate(row, start=1):
+            key = (row_idx, col_idx)
+            if key in merged:
+                info = merged[key]
+                if not info.get('master', True):
+                    continue
+                rs = info.get('rowspan', 1)
+                cs = info.get('colspan', 1)
+            else:
+                rs, cs = 1, 1
+            
+            val = cell.value
+            cls = ''
+            
+            # Detect cell styles
+            fc = ''
+            if cell.fill and cell.fill.fgColor:
+                fc = str(cell.fill.fgColor).upper().replace('FF', '')
+            
+            if fc == '1F4E79':
+                cls = 'header-cell'
+            elif fc in ('FFF2CC', 'FFFFF2CC'):
+                cls = 'highlight-cell'
+            elif isinstance(val, (int, float)):
+                cls = 'num-cell'
+            
+            # Section label: bold blue text, short
+            if val and isinstance(val, str) and len(val) < 30 and cell.font and cell.font.bold:
+                ftc = ''
+                if cell.font.color:
+                    ftc = str(cell.font.color).upper().replace('FF', '')
+                if ftc == '1F4E79':
+                    cls = 'label-cell'
+            
+            ra = f' rowspan="{rs}"' if rs > 1 else ''
+            ca = f' colspan="{cs}"' if cs > 1 else ''
+            dv = val if val is not None else ''
+            html.append(f'<td{ra}{ca} class="{cls}">{dv}</td>')
+            row_vals.append(str(dv))
+        
+        # Add feedback column only for "分析明细" sheet
+        is_detail_sheet = name == '\u5206\u6790\u660e\u7ec6'
+        if is_detail_sheet:
+            if is_header:
+                html.append('<td class="header-cell fb-cell">\\u64cd\\u4f5c</td>')
+            else:
+                safe_vals = json.dumps(row_vals, ensure_ascii=False).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                html.append(f'<td class="fb-cell"><button class="fb-btn" data-sheet="{name}" data-row="{row_idx}" data-vals=\\'{safe_vals}\\'>\\u53cd\\u9988</button></td>')
+        else:
+            html.append('<td></td>')
+        
+        html.append('</tr>')
+    
+    html.append('</table></div>')
+
+html.append('</div>')
+html.append('<script>')
+html.append('document.querySelectorAll(".sheet-tab").forEach(function(tab) {')
+html.append('  tab.onclick = function() {')
+html.append('    var s = tab.dataset.sheet;')
+html.append('    document.querySelectorAll(".sheet-tab").forEach(t => t.classList.remove("active"));')
+html.append('    document.querySelectorAll(".sheet-content").forEach(c => c.classList.remove("active"));')
+html.append('    document.querySelector(\\'.sheet-tab[data-sheet="\\' + s + \\'"]\\').classList.add("active");')
+html.append('    document.querySelector(\\'.sheet-content[data-sheet="\\' + s + \\'"]\\').classList.add("active");')
+html.append('  };')
+html.append('});')
+html.append('var ft = document.querySelector(".sheet-tab");')
+html.append('var fc = document.querySelector(".sheet-content");')
+html.append('if (ft) ft.classList.add("active");')
+html.append('if (fc) fc.classList.add("active");')
+html.append('document.querySelectorAll(".fb-btn").forEach(function(btn) {')
+html.append('  btn.onclick = function() {')
+html.append('    var sheet = btn.dataset.sheet;')
+html.append('    var row = btn.dataset.row;')
+html.append('    var vals = btn.dataset.vals;')
+html.append('    window.parent.postMessage({ type: "feedback", sheet: sheet, row: row, rowData: vals }, "*");')
+html.append('  };')
+html.append('});')
+html.append('</script>')
+html.append('</body></html>')
+
+print(''.join(html))`
+    
+    fs.writeFileSync(tempScriptPath, pythonScript, 'utf-8')
+    
+    const { stdout } = await execAsync(`python3 "${tempScriptPath}" '${JSON.stringify(excelPath)}'`)
+    try { fs.unlinkSync(tempScriptPath) } catch {}
+    
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    res.send(stdout)
+  } catch (error: any) {
+    console.error('Failed to convert Excel to HTML:', error)
+    res.status(500).send(`<html><body style="padding:40px;text-align:center;color:#888;font-family:sans-serif;"><h2>报告渲染失败</h2><p>${error.message}</p></body></html>`)
+  }
+})
+
+// GET /api/runs/:id/download-excel - download Excel file
+router.get('/:id/download-excel', (req, res) => {
+  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
+  if (!run || !run.excel_report_path || !fs.existsSync(run.excel_report_path)) {
+    return res.status(404).send('Excel report not found')
+  }
+
+  const fileName = `${run.name || '分析报告'}.xlsx`
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`)
+  res.sendFile(run.excel_report_path)
 })
 
 export default router

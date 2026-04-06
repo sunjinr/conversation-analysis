@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { LayoutDashboard, Target, Layers, Search, CheckSquare, Settings, Database, LogOut, Lightbulb, ChevronDown } from 'lucide-react'
+import { LayoutDashboard, Layers, Search, Settings, Database, LogOut, Lightbulb, ChevronDown } from 'lucide-react'
 
 const insightChildren = [
-  { to: '/analysis/scenarios', icon: Target, label: '自由圈场景' },
   { to: '/analysis/dimensions', icon: Layers, label: '洞察维度' },
   { to: '/analysis/runs', icon: Search, label: '洞察' },
 ]
@@ -14,7 +13,6 @@ const topLinks = [
 ]
 
 const bottomLinks = [
-  { to: '/analysis/tasks', icon: CheckSquare, label: '任务' },
   { to: '/analysis/sessions', icon: Database, label: '数据' },
   { to: '/analysis/settings', icon: Settings, label: '设置' },
 ]
@@ -37,9 +35,12 @@ export default function Sidebar() {
       <div className="px-5 py-5 border-b border-sidebar-border">
         <div className="flex items-center gap-2.5">
           <img src="/skisight-logo.png" alt="SkiSight" className="w-8 h-8 rounded-lg" />
-          <h1 className="text-[17px] font-bold tracking-tight" style={{ fontFamily: "'SF Pro Display', 'PingFang SC', system-ui, sans-serif" }}>SkiSight<span className="font-normal text-[15px] text-gray-500">洞察平台</span></h1>
+          <h1 className="text-[17px] font-bold tracking-tight" style={{ fontFamily: "'Tiempos Text', 'Iowan Old Style', 'Sitka Text', Cambria, Georgia, serif" }}>
+          SkiSight
+          <span className="font-normal text-[17px] text-gray-500">洞察平台</span>
+        </h1>
         </div>
-        <p className="text-[10px] text-[#AEAEB2] mt-2 leading-relaxed">Powered by SKILLS & CLAW</p>
+        <p className="text-[10px] text-[#AEAEB2] mt-2 leading-relaxed">Powered by SKILLS & SANDBOX</p>
         <p className="text-[10px] text-[#AEAEB2] leading-relaxed">Created by Matt</p>
       </div>
 

@@ -14,6 +14,9 @@ import teamRouter from './routes/team.js'
 import settingsRouter from './routes/settings.js'
 import dashboardRouter from './routes/dashboard.js'
 import notifyRouter from './routes/notify.js'
+import metricsRouter from './routes/metrics.js'
+import skillRouter from './routes/skill.js'
+import feedbackRouter from './routes/feedback.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -32,6 +35,9 @@ app.use('/api/team', teamRouter)
 app.use('/api/settings', settingsRouter)
 app.use('/api/dashboard', dashboardRouter)
 app.use('/api/notify', notifyRouter)
+app.use('/api/metrics', metricsRouter)
+app.use('/api/skill', skillRouter)
+app.use('/api/feedback', feedbackRouter)
 
 // Production: serve Vite build output
 const distPath = path.join(__dirname, '..', 'dist')

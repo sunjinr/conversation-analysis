@@ -109,8 +109,8 @@ var require_package = __commonJS({
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module) {
-    var fs4 = __require("fs");
-    var path4 = __require("path");
+    var fs6 = __require("fs");
+    var path8 = __require("path");
     var os = __require("os");
     var crypto3 = __require("crypto");
     var packageJson = require_package();
@@ -248,7 +248,7 @@ var require_main = __commonJS({
       if (options && options.path && options.path.length > 0) {
         if (Array.isArray(options.path)) {
           for (const filepath of options.path) {
-            if (fs4.existsSync(filepath)) {
+            if (fs6.existsSync(filepath)) {
               possibleVaultPath = filepath.endsWith(".vault") ? filepath : `${filepath}.vault`;
             }
           }
@@ -256,15 +256,15 @@ var require_main = __commonJS({
           possibleVaultPath = options.path.endsWith(".vault") ? options.path : `${options.path}.vault`;
         }
       } else {
-        possibleVaultPath = path4.resolve(process.cwd(), ".env.vault");
+        possibleVaultPath = path8.resolve(process.cwd(), ".env.vault");
       }
-      if (fs4.existsSync(possibleVaultPath)) {
+      if (fs6.existsSync(possibleVaultPath)) {
         return possibleVaultPath;
       }
       return null;
     }
     function _resolveHome(envPath) {
-      return envPath[0] === "~" ? path4.join(os.homedir(), envPath.slice(1)) : envPath;
+      return envPath[0] === "~" ? path8.join(os.homedir(), envPath.slice(1)) : envPath;
     }
     function _configVault(options) {
       const debug2 = parseBoolean(process.env.DOTENV_CONFIG_DEBUG || options && options.debug);
@@ -281,7 +281,7 @@ var require_main = __commonJS({
       return { parsed };
     }
     function configDotenv(options) {
-      const dotenvPath = path4.resolve(process.cwd(), ".env");
+      const dotenvPath = path8.resolve(process.cwd(), ".env");
       let encoding = "utf8";
       let processEnv = process.env;
       if (options && options.processEnv != null) {
@@ -309,13 +309,13 @@ var require_main = __commonJS({
       }
       let lastError;
       const parsedAll = {};
-      for (const path5 of optionPaths) {
+      for (const path9 of optionPaths) {
         try {
-          const parsed = DotenvModule.parse(fs4.readFileSync(path5, { encoding }));
+          const parsed = DotenvModule.parse(fs6.readFileSync(path9, { encoding }));
           DotenvModule.populate(parsedAll, parsed, options);
         } catch (e2) {
           if (debug2) {
-            _debug(`Failed to load ${path5} ${e2.message}`);
+            _debug(`Failed to load ${path9} ${e2.message}`);
           }
           lastError = e2;
         }
@@ -328,7 +328,7 @@ var require_main = __commonJS({
         const shortPaths = [];
         for (const filePath of optionPaths) {
           try {
-            const relative = path4.relative(process.cwd(), filePath);
+            const relative = path8.relative(process.cwd(), filePath);
             shortPaths.push(relative);
           } catch (e2) {
             if (debug2) {
@@ -1738,8 +1738,8 @@ var require_node = __commonJS({
           }
           break;
         case "FILE":
-          var fs4 = __require("fs");
-          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
+          var fs6 = __require("fs");
+          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -14526,11 +14526,11 @@ var require_mime_types = __commonJS({
       }
       return exts[0];
     }
-    function lookup(path4) {
-      if (!path4 || typeof path4 !== "string") {
+    function lookup(path8) {
+      if (!path8 || typeof path8 !== "string") {
         return false;
       }
-      var extension2 = extname("x." + path4).toLowerCase().substr(1);
+      var extension2 = extname("x." + path8).toLowerCase().substr(1);
       if (!extension2) {
         return false;
       }
@@ -18085,8 +18085,8 @@ var require_node2 = __commonJS({
           }
           break;
         case "FILE":
-          var fs4 = __require("fs");
-          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
+          var fs6 = __require("fs");
+          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -18804,8 +18804,8 @@ var require_node3 = __commonJS({
           }
           break;
         case "FILE":
-          var fs4 = __require("fs");
-          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
+          var fs6 = __require("fs");
+          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -18893,7 +18893,7 @@ var require_path_to_regexp = __commonJS({
   "node_modules/path-to-regexp/index.js"(exports, module) {
     module.exports = pathToRegexp;
     var MATCHING_GROUP_REGEXP = /\\.|\((?:\?<(.*?)>)?(?!\?)/g;
-    function pathToRegexp(path4, keys, options) {
+    function pathToRegexp(path8, keys, options) {
       options = options || {};
       keys = keys || [];
       var strict = options.strict;
@@ -18907,8 +18907,8 @@ var require_path_to_regexp = __commonJS({
       var pos = 0;
       var backtrack = "";
       var m2;
-      if (path4 instanceof RegExp) {
-        while (m2 = MATCHING_GROUP_REGEXP.exec(path4.source)) {
+      if (path8 instanceof RegExp) {
+        while (m2 = MATCHING_GROUP_REGEXP.exec(path8.source)) {
           if (m2[0][0] === "\\") continue;
           keys.push({
             name: m2[1] || name++,
@@ -18916,18 +18916,18 @@ var require_path_to_regexp = __commonJS({
             offset: m2.index
           });
         }
-        return path4;
+        return path8;
       }
-      if (Array.isArray(path4)) {
-        path4 = path4.map(function(value) {
+      if (Array.isArray(path8)) {
+        path8 = path8.map(function(value) {
           return pathToRegexp(value, keys, options).source;
         });
-        return new RegExp(path4.join("|"), flags);
+        return new RegExp(path8.join("|"), flags);
       }
-      if (typeof path4 !== "string") {
+      if (typeof path8 !== "string") {
         throw new TypeError("path must be a string, array of strings, or regular expression");
       }
-      path4 = path4.replace(
+      path8 = path8.replace(
         /\\.|(\/)?(\.)?:(\w+)(\(.*?\))?(\*)?(\?)?|[.*]|\/\(/g,
         function(match, slash, format, key, capture, star, optional, offset) {
           if (match[0] === "\\") {
@@ -18944,7 +18944,7 @@ var require_path_to_regexp = __commonJS({
           if (slash || format) {
             backtrack = "";
           } else {
-            backtrack += path4.slice(pos, offset);
+            backtrack += path8.slice(pos, offset);
           }
           pos = offset + match.length;
           if (match === "*") {
@@ -18974,7 +18974,7 @@ var require_path_to_regexp = __commonJS({
           return result;
         }
       );
-      while (m2 = MATCHING_GROUP_REGEXP.exec(path4)) {
+      while (m2 = MATCHING_GROUP_REGEXP.exec(path8)) {
         if (m2[0][0] === "\\") continue;
         if (keysOffset + i2 === keys.length || keys[keysOffset + i2].offset > m2.index) {
           keys.splice(keysOffset + i2, 0, {
@@ -18986,13 +18986,13 @@ var require_path_to_regexp = __commonJS({
         }
         i2++;
       }
-      path4 += strict ? "" : path4[path4.length - 1] === "/" ? "?" : "/?";
+      path8 += strict ? "" : path8[path8.length - 1] === "/" ? "?" : "/?";
       if (end) {
-        path4 += "$";
-      } else if (path4[path4.length - 1] !== "/") {
-        path4 += lookahead ? "(?=/|$)" : "(?:/|$)";
+        path8 += "$";
+      } else if (path8[path8.length - 1] !== "/") {
+        path8 += lookahead ? "(?=/|$)" : "(?:/|$)";
       }
-      return new RegExp("^" + path4, flags);
+      return new RegExp("^" + path8, flags);
     }
   }
 });
@@ -19005,19 +19005,19 @@ var require_layer = __commonJS({
     var debug2 = require_src3()("express:router:layer");
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     module.exports = Layer;
-    function Layer(path4, options, fn) {
+    function Layer(path8, options, fn) {
       if (!(this instanceof Layer)) {
-        return new Layer(path4, options, fn);
+        return new Layer(path8, options, fn);
       }
-      debug2("new %o", path4);
+      debug2("new %o", path8);
       var opts = options || {};
       this.handle = fn;
       this.name = fn.name || "<anonymous>";
       this.params = void 0;
       this.path = void 0;
-      this.regexp = pathRegexp(path4, this.keys = [], opts);
-      this.regexp.fast_star = path4 === "*";
-      this.regexp.fast_slash = path4 === "/" && opts.end === false;
+      this.regexp = pathRegexp(path8, this.keys = [], opts);
+      this.regexp.fast_star = path8 === "*";
+      this.regexp.fast_slash = path8 === "/" && opts.end === false;
     }
     Layer.prototype.handle_error = function handle_error(error, req, res, next) {
       var fn = this.handle;
@@ -19041,20 +19041,20 @@ var require_layer = __commonJS({
         next(err);
       }
     };
-    Layer.prototype.match = function match(path4) {
+    Layer.prototype.match = function match(path8) {
       var match2;
-      if (path4 != null) {
+      if (path8 != null) {
         if (this.regexp.fast_slash) {
           this.params = {};
           this.path = "";
           return true;
         }
         if (this.regexp.fast_star) {
-          this.params = { "0": decode_param(path4) };
-          this.path = path4;
+          this.params = { "0": decode_param(path8) };
+          this.path = path8;
           return true;
         }
-        match2 = this.regexp.exec(path4);
+        match2 = this.regexp.exec(path8);
       }
       if (!match2) {
         this.params = void 0;
@@ -19147,10 +19147,10 @@ var require_route = __commonJS({
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     module.exports = Route;
-    function Route(path4) {
-      this.path = path4;
+    function Route(path8) {
+      this.path = path8;
       this.stack = [];
-      debug2("new %o", path4);
+      debug2("new %o", path8);
       this.methods = {};
     }
     Route.prototype._handles_method = function _handles_method(method) {
@@ -19280,17 +19280,17 @@ var require_router = __commonJS({
     var toString = Object.prototype.toString;
     var proto = module.exports = function(options) {
       var opts = options || {};
-      function router11(req, res, next) {
-        router11.handle(req, res, next);
+      function router14(req, res, next) {
+        router14.handle(req, res, next);
       }
-      setPrototypeOf(router11, proto);
-      router11.params = {};
-      router11._params = [];
-      router11.caseSensitive = opts.caseSensitive;
-      router11.mergeParams = opts.mergeParams;
-      router11.strict = opts.strict;
-      router11.stack = [];
-      return router11;
+      setPrototypeOf(router14, proto);
+      router14.params = {};
+      router14._params = [];
+      router14.caseSensitive = opts.caseSensitive;
+      router14.mergeParams = opts.mergeParams;
+      router14.strict = opts.strict;
+      router14.stack = [];
+      return router14;
     };
     proto.param = function param(name, fn) {
       if (typeof name === "function") {
@@ -19362,8 +19362,8 @@ var require_router = __commonJS({
         if (++sync > 100) {
           return setImmediate(next, err);
         }
-        var path4 = getPathname(req);
-        if (path4 == null) {
+        var path8 = getPathname(req);
+        if (path8 == null) {
           return done(layerError);
         }
         var layer;
@@ -19371,7 +19371,7 @@ var require_router = __commonJS({
         var route;
         while (match !== true && idx < stack.length) {
           layer = stack[idx++];
-          match = matchLayer(layer, path4);
+          match = matchLayer(layer, path8);
           route = layer.route;
           if (typeof match !== "boolean") {
             layerError = layerError || match;
@@ -19409,18 +19409,18 @@ var require_router = __commonJS({
           } else if (route) {
             layer.handle_request(req, res, next);
           } else {
-            trim_prefix(layer, layerError, layerPath, path4);
+            trim_prefix(layer, layerError, layerPath, path8);
           }
           sync = 0;
         });
       }
-      function trim_prefix(layer, layerError, layerPath, path4) {
+      function trim_prefix(layer, layerError, layerPath, path8) {
         if (layerPath.length !== 0) {
-          if (layerPath !== path4.slice(0, layerPath.length)) {
+          if (layerPath !== path8.slice(0, layerPath.length)) {
             next(layerError);
             return;
           }
-          var c2 = path4[layerPath.length];
+          var c2 = path8[layerPath.length];
           if (c2 && c2 !== "/" && c2 !== ".") return next(layerError);
           debug2("trim prefix (%s) from url %s", layerPath, req.url);
           removed = layerPath;
@@ -19498,7 +19498,7 @@ var require_router = __commonJS({
     };
     proto.use = function use(fn) {
       var offset = 0;
-      var path4 = "/";
+      var path8 = "/";
       if (typeof fn !== "function") {
         var arg = fn;
         while (Array.isArray(arg) && arg.length !== 0) {
@@ -19506,7 +19506,7 @@ var require_router = __commonJS({
         }
         if (typeof arg !== "function") {
           offset = 1;
-          path4 = fn;
+          path8 = fn;
         }
       }
       var callbacks = flatten(slice.call(arguments, offset));
@@ -19518,8 +19518,8 @@ var require_router = __commonJS({
         if (typeof fn !== "function") {
           throw new TypeError("Router.use() requires a middleware function but got a " + gettype(fn));
         }
-        debug2("use %o %s", path4, fn.name || "<anonymous>");
-        var layer = new Layer(path4, {
+        debug2("use %o %s", path8, fn.name || "<anonymous>");
+        var layer = new Layer(path8, {
           sensitive: this.caseSensitive,
           strict: false,
           end: false
@@ -19529,9 +19529,9 @@ var require_router = __commonJS({
       }
       return this;
     };
-    proto.route = function route(path4) {
-      var route2 = new Route(path4);
-      var layer = new Layer(path4, {
+    proto.route = function route(path8) {
+      var route2 = new Route(path8);
+      var layer = new Layer(path8, {
         sensitive: this.caseSensitive,
         strict: this.strict,
         end: true
@@ -19541,8 +19541,8 @@ var require_router = __commonJS({
       return route2;
     };
     methods.concat("all").forEach(function(method) {
-      proto[method] = function(path4) {
-        var route = this.route(path4);
+      proto[method] = function(path8) {
+        var route = this.route(path8);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
       };
@@ -19578,9 +19578,9 @@ var require_router = __commonJS({
       }
       return toString.call(obj).replace(objectRegExp, "$1");
     }
-    function matchLayer(layer, path4) {
+    function matchLayer(layer, path8) {
       try {
-        return layer.match(path4);
+        return layer.match(path8);
       } catch (err) {
         return err;
       }
@@ -19698,13 +19698,13 @@ var require_view = __commonJS({
   "node_modules/express/lib/view.js"(exports, module) {
     "use strict";
     var debug2 = require_src3()("express:view");
-    var path4 = __require("path");
-    var fs4 = __require("fs");
-    var dirname = path4.dirname;
-    var basename2 = path4.basename;
-    var extname = path4.extname;
-    var join = path4.join;
-    var resolve = path4.resolve;
+    var path8 = __require("path");
+    var fs6 = __require("fs");
+    var dirname = path8.dirname;
+    var basename2 = path8.basename;
+    var extname = path8.extname;
+    var join = path8.join;
+    var resolve = path8.resolve;
     module.exports = View;
     function View(name, options) {
       var opts = options || {};
@@ -19733,17 +19733,17 @@ var require_view = __commonJS({
       this.path = this.lookup(fileName);
     }
     View.prototype.lookup = function lookup(name) {
-      var path5;
+      var path9;
       var roots = [].concat(this.root);
       debug2('lookup "%s"', name);
-      for (var i2 = 0; i2 < roots.length && !path5; i2++) {
+      for (var i2 = 0; i2 < roots.length && !path9; i2++) {
         var root = roots[i2];
         var loc = resolve(root, name);
         var dir = dirname(loc);
         var file = basename2(loc);
-        path5 = this.resolve(dir, file);
+        path9 = this.resolve(dir, file);
       }
-      return path5;
+      return path9;
     };
     View.prototype.render = function render(options, callback) {
       debug2('render "%s"', this.path);
@@ -19751,21 +19751,21 @@ var require_view = __commonJS({
     };
     View.prototype.resolve = function resolve2(dir, file) {
       var ext = this.ext;
-      var path5 = join(dir, file);
-      var stat = tryStat(path5);
+      var path9 = join(dir, file);
+      var stat = tryStat(path9);
       if (stat && stat.isFile()) {
-        return path5;
+        return path9;
       }
-      path5 = join(dir, basename2(file, ext), "index" + ext);
-      stat = tryStat(path5);
+      path9 = join(dir, basename2(file, ext), "index" + ext);
+      stat = tryStat(path9);
       if (stat && stat.isFile()) {
-        return path5;
+        return path9;
       }
     };
-    function tryStat(path5) {
-      debug2('stat "%s"', path5);
+    function tryStat(path9) {
+      debug2('stat "%s"', path9);
       try {
-        return fs4.statSync(path5);
+        return fs6.statSync(path9);
       } catch (e2) {
         return void 0;
       }
@@ -20370,8 +20370,8 @@ var require_node4 = __commonJS({
           }
           break;
         case "FILE":
-          var fs4 = __require("fs");
-          stream2 = new fs4.SyncWriteStream(fd2, { autoClose: false });
+          var fs6 = __require("fs");
+          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -20543,8 +20543,8 @@ var require_types = __commonJS({
 // node_modules/mime/mime.js
 var require_mime = __commonJS({
   "node_modules/mime/mime.js"(exports, module) {
-    var path4 = __require("path");
-    var fs4 = __require("fs");
+    var path8 = __require("path");
+    var fs6 = __require("fs");
     function Mime() {
       this.types = /* @__PURE__ */ Object.create(null);
       this.extensions = /* @__PURE__ */ Object.create(null);
@@ -20565,7 +20565,7 @@ var require_mime = __commonJS({
     };
     Mime.prototype.load = function(file) {
       this._loading = file;
-      var map = {}, content = fs4.readFileSync(file, "ascii"), lines = content.split(/[\r\n]+/);
+      var map = {}, content = fs6.readFileSync(file, "ascii"), lines = content.split(/[\r\n]+/);
       lines.forEach(function(line) {
         var fields = line.replace(/\s*#.*|^\s*|\s*$/g, "").split(/\s+/);
         map[fields.shift()] = fields;
@@ -20573,8 +20573,8 @@ var require_mime = __commonJS({
       this.define(map);
       this._loading = null;
     };
-    Mime.prototype.lookup = function(path5, fallback) {
-      var ext = path5.replace(/^.*[\.\/\\]/, "").toLowerCase();
+    Mime.prototype.lookup = function(path9, fallback) {
+      var ext = path9.replace(/^.*[\.\/\\]/, "").toLowerCase();
       return this.types[ext] || fallback || this.default_type;
     };
     Mime.prototype.extension = function(mimeType) {
@@ -20803,33 +20803,33 @@ var require_send = __commonJS({
     var escapeHtml = require_escape_html();
     var etag = require_etag();
     var fresh = require_fresh();
-    var fs4 = __require("fs");
+    var fs6 = __require("fs");
     var mime = require_mime();
     var ms = require_ms5();
     var onFinished = require_on_finished();
     var parseRange = require_range_parser();
-    var path4 = __require("path");
+    var path8 = __require("path");
     var statuses = require_statuses();
     var Stream2 = __require("stream");
     var util = __require("util");
-    var extname = path4.extname;
-    var join = path4.join;
-    var normalize = path4.normalize;
-    var resolve = path4.resolve;
-    var sep = path4.sep;
+    var extname = path8.extname;
+    var join = path8.join;
+    var normalize = path8.normalize;
+    var resolve = path8.resolve;
+    var sep = path8.sep;
     var BYTES_RANGE_REGEXP = /^ *bytes=/;
     var MAX_MAXAGE = 60 * 60 * 24 * 365 * 1e3;
     var UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
     module.exports = send;
     module.exports.mime = mime;
-    function send(req, path5, options) {
-      return new SendStream(req, path5, options);
+    function send(req, path9, options) {
+      return new SendStream(req, path9, options);
     }
-    function SendStream(req, path5, options) {
+    function SendStream(req, path9, options) {
       Stream2.call(this);
       var opts = options || {};
       this.options = opts;
-      this.path = path5;
+      this.path = path9;
       this.req = req;
       this._acceptRanges = opts.acceptRanges !== void 0 ? Boolean(opts.acceptRanges) : true;
       this._cacheControl = opts.cacheControl !== void 0 ? Boolean(opts.cacheControl) : true;
@@ -20875,8 +20875,8 @@ var require_send = __commonJS({
       this._index = index2;
       return this;
     }, "send.index: pass index as option");
-    SendStream.prototype.root = function root(path5) {
-      this._root = resolve(String(path5));
+    SendStream.prototype.root = function root(path9) {
+      this._root = resolve(String(path9));
       debug2("root %s", this._root);
       return this;
     };
@@ -20989,10 +20989,10 @@ var require_send = __commonJS({
       var lastModified = this.res.getHeader("Last-Modified");
       return parseHttpDate(lastModified) <= parseHttpDate(ifRange);
     };
-    SendStream.prototype.redirect = function redirect(path5) {
+    SendStream.prototype.redirect = function redirect(path9) {
       var res = this.res;
       if (hasListeners(this, "directory")) {
-        this.emit("directory", res, path5);
+        this.emit("directory", res, path9);
         return;
       }
       if (this.hasTrailingSlash()) {
@@ -21012,42 +21012,42 @@ var require_send = __commonJS({
     SendStream.prototype.pipe = function pipe(res) {
       var root = this._root;
       this.res = res;
-      var path5 = decode(this.path);
-      if (path5 === -1) {
+      var path9 = decode(this.path);
+      if (path9 === -1) {
         this.error(400);
         return res;
       }
-      if (~path5.indexOf("\0")) {
+      if (~path9.indexOf("\0")) {
         this.error(400);
         return res;
       }
       var parts;
       if (root !== null) {
-        if (path5) {
-          path5 = normalize("." + sep + path5);
+        if (path9) {
+          path9 = normalize("." + sep + path9);
         }
-        if (UP_PATH_REGEXP.test(path5)) {
-          debug2('malicious path "%s"', path5);
+        if (UP_PATH_REGEXP.test(path9)) {
+          debug2('malicious path "%s"', path9);
           this.error(403);
           return res;
         }
-        parts = path5.split(sep);
-        path5 = normalize(join(root, path5));
+        parts = path9.split(sep);
+        path9 = normalize(join(root, path9));
       } else {
-        if (UP_PATH_REGEXP.test(path5)) {
-          debug2('malicious path "%s"', path5);
+        if (UP_PATH_REGEXP.test(path9)) {
+          debug2('malicious path "%s"', path9);
           this.error(403);
           return res;
         }
-        parts = normalize(path5).split(sep);
-        path5 = resolve(path5);
+        parts = normalize(path9).split(sep);
+        path9 = resolve(path9);
       }
       if (containsDotFile(parts)) {
         var access = this._dotfiles;
         if (access === void 0) {
           access = parts[parts.length - 1][0] === "." ? this._hidden ? "allow" : "ignore" : "allow";
         }
-        debug2('%s dotfile "%s"', access, path5);
+        debug2('%s dotfile "%s"', access, path9);
         switch (access) {
           case "allow":
             break;
@@ -21061,13 +21061,13 @@ var require_send = __commonJS({
         }
       }
       if (this._index.length && this.hasTrailingSlash()) {
-        this.sendIndex(path5);
+        this.sendIndex(path9);
         return res;
       }
-      this.sendFile(path5);
+      this.sendFile(path9);
       return res;
     };
-    SendStream.prototype.send = function send2(path5, stat) {
+    SendStream.prototype.send = function send2(path9, stat) {
       var len = stat.size;
       var options = this.options;
       var opts = {};
@@ -21079,9 +21079,9 @@ var require_send = __commonJS({
         this.headersAlreadySent();
         return;
       }
-      debug2('pipe "%s"', path5);
-      this.setHeader(path5, stat);
-      this.type(path5);
+      debug2('pipe "%s"', path9);
+      this.setHeader(path9, stat);
+      this.type(path9);
       if (this.isConditionalGET()) {
         if (this.isPreconditionFailure()) {
           this.error(412);
@@ -21130,28 +21130,28 @@ var require_send = __commonJS({
         res.end();
         return;
       }
-      this.stream(path5, opts);
+      this.stream(path9, opts);
     };
-    SendStream.prototype.sendFile = function sendFile(path5) {
+    SendStream.prototype.sendFile = function sendFile(path9) {
       var i2 = 0;
       var self2 = this;
-      debug2('stat "%s"', path5);
-      fs4.stat(path5, function onstat(err, stat) {
-        if (err && err.code === "ENOENT" && !extname(path5) && path5[path5.length - 1] !== sep) {
+      debug2('stat "%s"', path9);
+      fs6.stat(path9, function onstat(err, stat) {
+        if (err && err.code === "ENOENT" && !extname(path9) && path9[path9.length - 1] !== sep) {
           return next(err);
         }
         if (err) return self2.onStatError(err);
-        if (stat.isDirectory()) return self2.redirect(path5);
-        self2.emit("file", path5, stat);
-        self2.send(path5, stat);
+        if (stat.isDirectory()) return self2.redirect(path9);
+        self2.emit("file", path9, stat);
+        self2.send(path9, stat);
       });
       function next(err) {
         if (self2._extensions.length <= i2) {
           return err ? self2.onStatError(err) : self2.error(404);
         }
-        var p2 = path5 + "." + self2._extensions[i2++];
+        var p2 = path9 + "." + self2._extensions[i2++];
         debug2('stat "%s"', p2);
-        fs4.stat(p2, function(err2, stat) {
+        fs6.stat(p2, function(err2, stat) {
           if (err2) return next(err2);
           if (stat.isDirectory()) return next();
           self2.emit("file", p2, stat);
@@ -21159,7 +21159,7 @@ var require_send = __commonJS({
         });
       }
     };
-    SendStream.prototype.sendIndex = function sendIndex(path5) {
+    SendStream.prototype.sendIndex = function sendIndex(path9) {
       var i2 = -1;
       var self2 = this;
       function next(err) {
@@ -21167,9 +21167,9 @@ var require_send = __commonJS({
           if (err) return self2.onStatError(err);
           return self2.error(404);
         }
-        var p2 = join(path5, self2._index[i2]);
+        var p2 = join(path9, self2._index[i2]);
         debug2('stat "%s"', p2);
-        fs4.stat(p2, function(err2, stat) {
+        fs6.stat(p2, function(err2, stat) {
           if (err2) return next(err2);
           if (stat.isDirectory()) return next();
           self2.emit("file", p2, stat);
@@ -21178,10 +21178,10 @@ var require_send = __commonJS({
       }
       next();
     };
-    SendStream.prototype.stream = function stream(path5, options) {
+    SendStream.prototype.stream = function stream(path9, options) {
       var self2 = this;
       var res = this.res;
-      var stream2 = fs4.createReadStream(path5, options);
+      var stream2 = fs6.createReadStream(path9, options);
       this.emit("stream", stream2);
       stream2.pipe(res);
       function cleanup() {
@@ -21196,10 +21196,10 @@ var require_send = __commonJS({
         self2.emit("end");
       });
     };
-    SendStream.prototype.type = function type(path5) {
+    SendStream.prototype.type = function type(path9) {
       var res = this.res;
       if (res.getHeader("Content-Type")) return;
-      var type2 = mime.lookup(path5);
+      var type2 = mime.lookup(path9);
       if (!type2) {
         debug2("no content-type");
         return;
@@ -21208,9 +21208,9 @@ var require_send = __commonJS({
       debug2("content-type %s", type2);
       res.setHeader("Content-Type", type2 + (charset ? "; charset=" + charset : ""));
     };
-    SendStream.prototype.setHeader = function setHeader(path5, stat) {
+    SendStream.prototype.setHeader = function setHeader(path9, stat) {
       var res = this.res;
-      this.emit("headers", res, path5, stat);
+      this.emit("headers", res, path9, stat);
       if (this._acceptRanges && !res.getHeader("Accept-Ranges")) {
         debug2("accept ranges");
         res.setHeader("Accept-Ranges", "bytes");
@@ -21269,9 +21269,9 @@ var require_send = __commonJS({
       }
       return err instanceof Error ? createError(status, err, { expose: false }) : createError(status, err);
     }
-    function decode(path5) {
+    function decode(path9) {
       try {
-        return decodeURIComponent(path5);
+        return decodeURIComponent(path9);
       } catch (err) {
         return -1;
       }
@@ -22180,10 +22180,10 @@ var require_utils2 = __commonJS({
     var querystring = __require("querystring");
     exports.etag = createETagGenerator({ weak: false });
     exports.wetag = createETagGenerator({ weak: true });
-    exports.isAbsolute = function(path4) {
-      if ("/" === path4[0]) return true;
-      if (":" === path4[1] && ("\\" === path4[2] || "/" === path4[2])) return true;
-      if ("\\\\" === path4.substring(0, 2)) return true;
+    exports.isAbsolute = function(path8) {
+      if ("/" === path8[0]) return true;
+      if (":" === path8[1] && ("\\" === path8[2] || "/" === path8[2])) return true;
+      if ("\\\\" === path8.substring(0, 2)) return true;
     };
     exports.flatten = deprecate2.function(
       flatten,
@@ -22306,7 +22306,7 @@ var require_application = __commonJS({
   "node_modules/express/lib/application.js"(exports, module) {
     "use strict";
     var finalhandler = require_finalhandler();
-    var Router11 = require_router();
+    var Router14 = require_router();
     var methods = require_methods();
     var middleware = require_init();
     var query = require_query();
@@ -22371,7 +22371,7 @@ var require_application = __commonJS({
     };
     app2.lazyrouter = function lazyrouter() {
       if (!this._router) {
-        this._router = new Router11({
+        this._router = new Router14({
           caseSensitive: this.enabled("case sensitive routing"),
           strict: this.enabled("strict routing")
         });
@@ -22380,21 +22380,21 @@ var require_application = __commonJS({
       }
     };
     app2.handle = function handle(req, res, callback) {
-      var router11 = this._router;
+      var router14 = this._router;
       var done = callback || finalhandler(req, res, {
         env: this.get("env"),
         onerror: logerror.bind(this)
       });
-      if (!router11) {
+      if (!router14) {
         debug2("no routes defined on app");
         done();
         return;
       }
-      router11.handle(req, res, done);
+      router14.handle(req, res, done);
     };
     app2.use = function use(fn) {
       var offset = 0;
-      var path4 = "/";
+      var path8 = "/";
       if (typeof fn !== "function") {
         var arg = fn;
         while (Array.isArray(arg) && arg.length !== 0) {
@@ -22402,7 +22402,7 @@ var require_application = __commonJS({
         }
         if (typeof arg !== "function") {
           offset = 1;
-          path4 = fn;
+          path8 = fn;
         }
       }
       var fns = flatten(slice.call(arguments, offset));
@@ -22410,15 +22410,15 @@ var require_application = __commonJS({
         throw new TypeError("app.use() requires a middleware function");
       }
       this.lazyrouter();
-      var router11 = this._router;
+      var router14 = this._router;
       fns.forEach(function(fn2) {
         if (!fn2 || !fn2.handle || !fn2.set) {
-          return router11.use(path4, fn2);
+          return router14.use(path8, fn2);
         }
-        debug2(".use app under %s", path4);
-        fn2.mountpath = path4;
+        debug2(".use app under %s", path8);
+        fn2.mountpath = path8;
         fn2.parent = this;
-        router11.use(path4, function mounted_app(req, res, next) {
+        router14.use(path8, function mounted_app(req, res, next) {
           var orig = req.app;
           fn2.handle(req, res, function(err) {
             setPrototypeOf(req, orig.request);
@@ -22430,9 +22430,9 @@ var require_application = __commonJS({
       }, this);
       return this;
     };
-    app2.route = function route(path4) {
+    app2.route = function route(path8) {
       this.lazyrouter();
-      return this._router.route(path4);
+      return this._router.route(path8);
     };
     app2.engine = function engine(ext, fn) {
       if (typeof fn !== "function") {
@@ -22483,7 +22483,7 @@ var require_application = __commonJS({
       }
       return this;
     };
-    app2.path = function path4() {
+    app2.path = function path8() {
       return this.parent ? this.parent.path() + this.mountpath : "";
     };
     app2.enabled = function enabled(setting) {
@@ -22499,19 +22499,19 @@ var require_application = __commonJS({
       return this.set(setting, false);
     };
     methods.forEach(function(method) {
-      app2[method] = function(path4) {
+      app2[method] = function(path8) {
         if (method === "get" && arguments.length === 1) {
-          return this.set(path4);
+          return this.set(path8);
         }
         this.lazyrouter();
-        var route = this._router.route(path4);
+        var route = this._router.route(path8);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
       };
     });
-    app2.all = function all(path4) {
+    app2.all = function all(path8) {
       this.lazyrouter();
-      var route = this._router.route(path4);
+      var route = this._router.route(path8);
       var args = slice.call(arguments, 1);
       for (var i2 = 0; i2 < methods.length; i2++) {
         route[methods[i2]].apply(route, args);
@@ -23270,7 +23270,7 @@ var require_request = __commonJS({
       var subdomains2 = !isIP(hostname) ? hostname.split(".").reverse() : [hostname];
       return subdomains2.slice(offset);
     });
-    defineGetter(req, "path", function path4() {
+    defineGetter(req, "path", function path8() {
       return parse(this).pathname;
     });
     defineGetter(req, "hostname", function hostname() {
@@ -23592,7 +23592,7 @@ var require_response = __commonJS({
     var http = __require("http");
     var isAbsolute = require_utils2().isAbsolute;
     var onFinished = require_on_finished();
-    var path4 = __require("path");
+    var path8 = __require("path");
     var statuses = require_statuses();
     var merge = require_utils_merge();
     var sign = require_cookie_signature().sign;
@@ -23601,9 +23601,9 @@ var require_response = __commonJS({
     var setCharset = require_utils2().setCharset;
     var cookie = require_cookie();
     var send = require_send();
-    var extname = path4.extname;
+    var extname = path8.extname;
     var mime = send.mime;
-    var resolve = path4.resolve;
+    var resolve = path8.resolve;
     var vary = require_vary();
     var res = Object.create(http.ServerResponse.prototype);
     module.exports = res;
@@ -23780,26 +23780,26 @@ var require_response = __commonJS({
       this.type("txt");
       return this.send(body);
     };
-    res.sendFile = function sendFile(path5, options, callback) {
+    res.sendFile = function sendFile(path9, options, callback) {
       var done = callback;
       var req = this.req;
       var res2 = this;
       var next = req.next;
       var opts = options || {};
-      if (!path5) {
+      if (!path9) {
         throw new TypeError("path argument is required to res.sendFile");
       }
-      if (typeof path5 !== "string") {
+      if (typeof path9 !== "string") {
         throw new TypeError("path must be a string to res.sendFile");
       }
       if (typeof options === "function") {
         done = options;
         opts = {};
       }
-      if (!opts.root && !isAbsolute(path5)) {
+      if (!opts.root && !isAbsolute(path9)) {
         throw new TypeError("path must be absolute or specify root to res.sendFile");
       }
-      var pathname = encodeURI(path5);
+      var pathname = encodeURI(path9);
       var file = send(req, pathname, opts);
       sendfile(res2, file, opts, function(err) {
         if (done) return done(err);
@@ -23809,7 +23809,7 @@ var require_response = __commonJS({
         }
       });
     };
-    res.sendfile = function(path5, options, callback) {
+    res.sendfile = function(path9, options, callback) {
       var done = callback;
       var req = this.req;
       var res2 = this;
@@ -23819,7 +23819,7 @@ var require_response = __commonJS({
         done = options;
         opts = {};
       }
-      var file = send(req, path5, opts);
+      var file = send(req, path9, opts);
       sendfile(res2, file, opts, function(err) {
         if (done) return done(err);
         if (err && err.code === "EISDIR") return next();
@@ -23832,7 +23832,7 @@ var require_response = __commonJS({
       res.sendfile,
       "res.sendfile: Use res.sendFile instead"
     );
-    res.download = function download(path5, filename, options, callback) {
+    res.download = function download(path9, filename, options, callback) {
       var done = callback;
       var name = filename;
       var opts = options || null;
@@ -23849,7 +23849,7 @@ var require_response = __commonJS({
         opts = filename;
       }
       var headers = {
-        "Content-Disposition": contentDisposition(name || path5)
+        "Content-Disposition": contentDisposition(name || path9)
       };
       if (opts && opts.headers) {
         var keys = Object.keys(opts.headers);
@@ -23862,7 +23862,7 @@ var require_response = __commonJS({
       }
       opts = Object.create(opts);
       opts.headers = headers;
-      var fullPath = !opts.root ? resolve(path5) : path5;
+      var fullPath = !opts.root ? resolve(path9) : path9;
       return this.sendFile(fullPath, opts, done);
     };
     res.contentType = res.type = function contentType(type) {
@@ -24163,11 +24163,11 @@ var require_serve_static = __commonJS({
         }
         var forwardError = !fallthrough;
         var originalUrl = parseUrl.original(req);
-        var path4 = parseUrl(req).pathname;
-        if (path4 === "/" && originalUrl.pathname.substr(-1) !== "/") {
-          path4 = "";
+        var path8 = parseUrl(req).pathname;
+        if (path8 === "/" && originalUrl.pathname.substr(-1) !== "/") {
+          path8 = "";
         }
-        var stream = send(req, path4, opts);
+        var stream = send(req, path8, opts);
         stream.on("directory", onDirectory);
         if (setHeaders) {
           stream.on("headers", setHeaders);
@@ -24235,7 +24235,7 @@ var require_express = __commonJS({
     var mixin = require_merge_descriptors();
     var proto = require_application();
     var Route = require_route();
-    var Router11 = require_router();
+    var Router14 = require_router();
     var req = require_request();
     var res = require_response();
     exports = module.exports = createApplication;
@@ -24258,7 +24258,7 @@ var require_express = __commonJS({
     exports.request = req;
     exports.response = res;
     exports.Route = Route;
-    exports.Router = Router11;
+    exports.Router = Router14;
     exports.json = bodyParser.json;
     exports.query = require_query();
     exports.raw = bodyParser.raw;
@@ -25113,15 +25113,15 @@ var require_sql_wasm = __commonJS({
         "undefined" != typeof __filename ? ya = __filename : ba && (ya = self.location.href);
         var za = "", Aa, Ba;
         if (ca) {
-          var fs4 = __require("node:fs");
+          var fs6 = __require("node:fs");
           za = __dirname + "/";
           Ba = (a2) => {
             a2 = Ca(a2) ? new URL(a2) : a2;
-            return fs4.readFileSync(a2);
+            return fs6.readFileSync(a2);
           };
           Aa = async (a2) => {
             a2 = Ca(a2) ? new URL(a2) : a2;
-            return fs4.readFileSync(a2, void 0);
+            return fs6.readFileSync(a2, void 0);
           };
           1 < process.argv.length && (wa = process.argv[1].replace(/\\/g, "/"));
           process.argv.slice(2);
@@ -25403,7 +25403,7 @@ var require_sql_wasm = __commonJS({
               if (ca) {
                 var b2 = Buffer.alloc(256), c2 = 0, d2 = process.stdin.fd;
                 try {
-                  c2 = fs4.readSync(d2, b2, 0, 256);
+                  c2 = fs6.readSync(d2, b2, 0, 256);
                 } catch (e2) {
                   if (e2.toString().includes("EOF")) c2 = 0;
                   else throw e2;
@@ -27456,14 +27456,14 @@ var require_url_state_machine = __commonJS({
       return url.replace(/\u0009|\u000A|\u000D/g, "");
     }
     function shortenPath(url) {
-      const path4 = url.path;
-      if (path4.length === 0) {
+      const path8 = url.path;
+      if (path8.length === 0) {
         return;
       }
-      if (url.scheme === "file" && path4.length === 1 && isNormalizedWindowsDriveLetter(path4[0])) {
+      if (url.scheme === "file" && path8.length === 1 && isNormalizedWindowsDriveLetter(path8[0])) {
         return;
       }
-      path4.pop();
+      path8.pop();
     }
     function includesCredentials(url) {
       return url.username !== "" || url.password !== "";
@@ -32928,14 +32928,14 @@ __export(fileFromPath_exports, {
 });
 import { statSync, createReadStream, promises as fs2 } from "fs";
 import { basename } from "path";
-function createFileFromPath(path4, { mtimeMs, size }, filenameOrOptions, options = {}) {
+function createFileFromPath(path8, { mtimeMs, size }, filenameOrOptions, options = {}) {
   let filename;
   if (isPlainObject_default2(filenameOrOptions)) {
     [options, filename] = [filenameOrOptions, void 0];
   } else {
     filename = filenameOrOptions;
   }
-  const file = new FileFromPath({ path: path4, size, lastModified: mtimeMs });
+  const file = new FileFromPath({ path: path8, size, lastModified: mtimeMs });
   if (!filename) {
     filename = file.name;
   }
@@ -32944,13 +32944,13 @@ function createFileFromPath(path4, { mtimeMs, size }, filenameOrOptions, options
     lastModified: file.lastModified
   });
 }
-function fileFromPathSync(path4, filenameOrOptions, options = {}) {
-  const stats = statSync(path4);
-  return createFileFromPath(path4, stats, filenameOrOptions, options);
+function fileFromPathSync(path8, filenameOrOptions, options = {}) {
+  const stats = statSync(path8);
+  return createFileFromPath(path8, stats, filenameOrOptions, options);
 }
-async function fileFromPath2(path4, filenameOrOptions, options) {
-  const stats = await fs2.stat(path4);
-  return createFileFromPath(path4, stats, filenameOrOptions, options);
+async function fileFromPath2(path8, filenameOrOptions, options) {
+  const stats = await fs2.stat(path8);
+  return createFileFromPath(path8, stats, filenameOrOptions, options);
 }
 var import_node_domexception, __classPrivateFieldSet4, __classPrivateFieldGet5, _FileFromPath_path, _FileFromPath_start, MESSAGE, FileFromPath;
 var init_fileFromPath = __esm({
@@ -33020,9 +33020,9 @@ var init_fileFromPath = __esm({
 })();
 
 // server/index.ts
-var import_express11 = __toESM(require_express2(), 1);
+var import_express14 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
-import path3 from "path";
+import path7 from "path";
 import { fileURLToPath as fileURLToPath3 } from "url";
 
 // server/db.ts
@@ -33084,9 +33084,9 @@ var satisfactionSeedData = [
   { date: "2026-03-21", total: 745, dissatisfied: 354, satisfaction_rate: 52.5, tasks_resolved: 0, task_notes: "" },
   { date: "2026-03-22", total: 690, dissatisfied: 311, satisfaction_rate: 54.9, tasks_resolved: 0, task_notes: "" },
   { date: "2026-03-23", total: 858, dissatisfied: 421, satisfaction_rate: 50.9, tasks_resolved: 0, task_notes: "" },
-  { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-24", total: 994, dissatisfied: 473, satisfaction_rate: 52.4, tasks_resolved: 2, task_notes: "\u4F18\u5316\u5546\u5BB6\u8F6C\u4EBA\u5DE5\u6D41\u7A0B\uFF0C\u6539\u8FDB\u667A\u80FD\u63A8\u8350\u5339\u914D" },
   { date: "2026-03-25", total: 842, dissatisfied: 407, satisfaction_rate: 51.7, tasks_resolved: 0, task_notes: "" },
-  { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53, tasks_resolved: 0, task_notes: "" },
+  { date: "2026-03-26", total: 844, dissatisfied: 397, satisfaction_rate: 53, tasks_resolved: 1, task_notes: "\u4FEE\u590D\u5546\u5BB6\u7AEF\u8F6C\u4EBA\u5DE5\u6309\u94AE\u5F02\u5E38" },
   { date: "2026-03-27", total: 774, dissatisfied: 386, satisfaction_rate: 50.1, tasks_resolved: 0, task_notes: "" },
   { date: "2026-03-28", total: 787, dissatisfied: 377, satisfaction_rate: 52.1, tasks_resolved: 0, task_notes: "" }
 ];
@@ -33140,48 +33140,18 @@ function seedProductionData() {
     1,
     "admin-001"
   );
-  db_default.prepare(`INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)`).run(
-    "mock-config-001",
-    "\u4E0D\u6EE1\u610F\u4F1A\u8BDD\u6D1E\u5BDF",
-    "mock-scenario-002",
-    JSON.stringify(["dim-dissatisfaction", "dim-transfer-reason", "dim-topic"]),
+  db_default.prepare(`INSERT INTO dingtalk_configs (id, webhook_url, secret, enabled, created_by) VALUES (?, ?, ?, ?, ?)`).run(
+    "4ee075b5-d70e-4c62-a0b7-e969f1f88d4d",
+    "https://oapi.dingtalk.com/robot/send?access_token=fa45ef0d6d2cdd39a90940e152316cbdbd9f5a2c18d492fa53844ca04aab7ff6",
+    "SEC386395a935269e7343a98af9dca765b3c1ebdeef8ba7bf5eb7bf3e2297a4771d",
+    1,
     "admin-001"
   );
-  const summaryJson = JSON.stringify([
-    { dimension_id: "dim-dissatisfaction", category: "AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF", cnt: 10 },
-    { dimension_id: "dim-dissatisfaction", category: "\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898", cnt: 5 },
-    { dimension_id: "dim-dissatisfaction", category: "\u56DE\u7B54\u590D\u6742\u96BE\u61C2", cnt: 1 },
-    { dimension_id: "dim-dissatisfaction", category: "\u6587\u5B57\u592A\u591A", cnt: 2 },
-    { dimension_id: "dim-dissatisfaction", category: "\u754C\u9762\u96BE\u7528", cnt: 2 }
-  ]);
-  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, completed_at, summary_json, triggered_by)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-    "mock-run-001",
-    "mock-config-001",
-    "completed",
-    20,
-    20,
-    "2026-03-29 09:36:16",
-    "2026-03-29 09:37:54",
-    summaryJson,
-    "admin-001"
-  );
-  const tasks = [
-    { id: "mock-task-001", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF (10\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u670910\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"AI\u56DE\u7B54\u65E0\u7528/\u9519\u8BEF"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "medium", status: "resolved", resolution: "\u5DF2\u4F18\u5316AI\u5BA2\u670D\u56DE\u7B54\u51C6\u786E\u6027\uFF0C\u66F4\u65B0\u4E86\u77E5\u8BC6\u5E93\u4E2D\u76F8\u5173\u95EE\u9898\u7684\u56DE\u7B54", resolvedAt: "2026-03-29 09:52:18" },
-    { id: "mock-task-002", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898 (5\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67095\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u672A\u56DE\u7B54\u6211\u7684\u95EE\u9898"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
-    { id: "mock-task-003", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u754C\u9762\u96BE\u7528 (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u754C\u9762\u96BE\u7528"\u3002\u9700\u8981\u68C0\u67E5\u76F8\u5173\u4F1A\u8BDD\u5E76\u5236\u5B9A\u6539\u8FDB\u65B9\u6848\u3002', priority: "low", status: "open", resolution: "", resolvedAt: null },
-    { id: "mock-task-004", dimId: "dim-dissatisfaction", title: "[\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790] \u6587\u5B57\u592A\u591A (2\u6761)", desc: '\u5728"\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790"\u7EF4\u5EA6\u4E0B\uFF0C\u5171\u67092\u6761\u4F1A\u8BDD\u88AB\u5206\u7C7B\u4E3A"\u6587\u5B57\u592A\u591A"\u3002\u9700\u8981\u6539\u8FDBAI\u56DE\u590D\u957F\u5EA6\u3002', priority: "medium", status: "claimed", resolution: "", resolvedAt: null }
-  ];
-  const taskStmt = db_default.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, resolution_text, resolved_at, related_session_ids)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-  for (const t2 of tasks) {
-    taskStmt.run(t2.id, "mock-run-001", t2.dimId, t2.title, t2.desc, t2.priority, t2.status, t2.resolution, t2.resolvedAt, JSON.stringify([sampleSessionId]));
-  }
   db_default.prepare(`INSERT INTO data_source_requests (id, description, status, created_by) VALUES (?, ?, ?, ?)`).run(
     "mock-req-001",
     "\u5E0C\u671B\u589E\u52A0\u300C\u4F1A\u8BDD\u65F6\u957F\u300D\u5B57\u6BB5\uFF0C\u8BB0\u5F55\u6BCF\u901A\u4F1A\u8BDD\u4ECE\u5F00\u59CB\u5230\u7ED3\u675F\u7684\u603B\u65F6\u957F",
     "pending",
-    "Admin"
+    "Matt"
   );
   console.log("[Seed] Production mock data seeded successfully");
 }
@@ -33307,8 +33277,18 @@ async function initDB() {
   db.exec(`CREATE TABLE IF NOT EXISTS scenarios (
       id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL,
       date_from TEXT, date_to TEXT, matched_session_ids TEXT DEFAULT '[]',
-      matched_count INTEGER DEFAULT 0, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
+      matched_count INTEGER DEFAULT 0, match_status TEXT DEFAULT 'pending',
+      error_message TEXT DEFAULT '', created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
   )`);
+  try {
+    db.exec(`ALTER TABLE scenarios ADD COLUMN match_status TEXT DEFAULT 'pending'`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE scenarios ADD COLUMN error_message TEXT DEFAULT ''`);
+  } catch {
+  }
+  db.exec(`UPDATE scenarios SET match_status = 'completed' WHERE matched_count > 0 AND (match_status IS NULL OR match_status = 'pending')`);
   db.exec(`CREATE TABLE IF NOT EXISTS dimensions (
       id TEXT PRIMARY KEY, name TEXT NOT NULL, definition TEXT NOT NULL,
       categories_json TEXT DEFAULT '[]', auto_discover INTEGER DEFAULT 0,
@@ -33321,7 +33301,8 @@ async function initDB() {
       is_active INTEGER DEFAULT 1, created_by TEXT, created_at TEXT DEFAULT (datetime('now'))
   )`);
   db.exec(`CREATE TABLE IF NOT EXISTS analysis_runs (
-      id TEXT PRIMARY KEY, config_id TEXT, status TEXT DEFAULT 'pending',
+      id TEXT PRIMARY KEY, config_id TEXT, name TEXT DEFAULT '', user_question TEXT DEFAULT '',
+      status TEXT DEFAULT 'pending',
       total_sessions INTEGER DEFAULT 0, processed_sessions INTEGER DEFAULT 0,
       started_at TEXT, completed_at TEXT, error_message TEXT DEFAULT '',
       summary_json TEXT DEFAULT '{}', triggered_by TEXT, created_at TEXT DEFAULT (datetime('now'))
@@ -33367,16 +33348,81 @@ async function initDB() {
       response TEXT DEFAULT '', created_by TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')),
       updated_at TEXT DEFAULT (datetime('now'))
   )`);
+  try {
+    db.exec(`ALTER TABLE analysis_runs ADD COLUMN name TEXT DEFAULT ''`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE analysis_runs ADD COLUMN user_question TEXT DEFAULT ''`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE classification_feedback ADD COLUMN run_id TEXT NOT NULL DEFAULT ''`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE classification_feedback ADD COLUMN session_id TEXT NOT NULL DEFAULT ''`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE classification_feedback ADD COLUMN dimension_id TEXT NOT NULL DEFAULT ''`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE classification_feedback ADD COLUMN detail_row_json TEXT DEFAULT '{}'`);
+  } catch {
+  }
+  try {
+    db.exec(`ALTER TABLE classification_feedback ADD COLUMN status TEXT DEFAULT 'pending'`);
+  } catch {
+  }
+  try {
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_feedback_run ON classification_feedback(run_id)`);
+  } catch {
+  }
+  try {
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_feedback_status ON classification_feedback(status)`);
+  } catch {
+  }
+  try {
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_feedback_created ON classification_feedback(created_at DESC)`);
+  } catch {
+  }
+  const genericExists = db.prepare("SELECT id FROM dimensions WHERE id = 'dim-generic'").get();
+  if (!genericExists) {
+    const genericCategories = [
+      { name: "\u534F\u540C\u6548\u7387\u4F4E\u4E0B", description: "\u6D89\u53CA\u591A\u4E2A\u90E8\u95E8\u6216\u5546\u5BB6\u65F6\uFF0C\u54CD\u5E94\u6162\uFF0C\u4E92\u76F8\u63A8\u8BFF" },
+      { name: "\u4EA4\u4E92\u8BBE\u8BA1\u53CD\u4EBA\u7C7B", description: "\u8868\u5355\u3001\u6309\u94AE\u8BBE\u8BA1\u4E0D\u5408\u7406\uFF0C\u8BA9\u7528\u6237\u64CD\u4F5C\u5F88\u8D39\u52B2" },
+      { name: "\u8BDD\u672F\u6A21\u677F\u5316\u4E0E\u65E0\u6548\u56DE\u590D", description: "\u56DE\u590D\u5168\u662F\u6807\u51C6\u5957\u8BDD\uFF0C\u6CA1\u6709\u9488\u5BF9\u6027\uFF0C\u6216\u5168\u662F\u5B89\u629A\u4F46\u6CA1\u6709\u5B9E\u9645\u89E3\u51B3\u65B9\u6848" },
+      { name: "\u89E3\u91CA\u4E0D\u6E05\u4E0E\u4FE1\u606F\u5197\u4F59", description: "\u89E3\u91CA\u5F97\u4E91\u91CC\u96FE\u91CC\u7528\u6237\u542C\u4E0D\u61C2\uFF0C\u6216\u8005\u5E9F\u8BDD\u592A\u591A\u91CD\u70B9\u4E0D\u7A81\u51FA" },
+      { name: "\u524D\u540E\u77DB\u76FE\u4E0E\u53E3\u5F84\u4E0D\u4E00", description: "\u4E0D\u540C\u7684\u5BA2\u670D\u6216\u673A\u5668\u4EBA\u548C\u4EBA\u5DE5\u7ED9\u7684\u7B54\u6848\u4E0D\u4E00\u6837" },
+      { name: "\u610F\u56FE\u8BC6\u522B\u5931\u8D25", description: "\u672A\u80FD\u8BC6\u522B\u51FA\u7528\u6237\u7684\u771F\u5B9E\u9700\u6C42" },
+      { name: "\u590D\u6742/\u6A21\u7CCA\u610F\u56FE\u65E0\u6CD5\u5904\u7406", description: "\u9047\u5230\u590D\u6742\u95EE\u9898\u5F3A\u884C\u7B80\u5316\u4E3A\u901A\u7528\u7B54\u6848" },
+      { name: "\u60C5\u7EEA\u4E0E\u98CE\u9669\u8BC6\u522B\u7F3A\u5931", description: "\u65E0\u6CD5\u8BC6\u522B\u7528\u6237\u6124\u6012\u3001\u7126\u8651\u6216\u9AD8\u98CE\u9669\u4E8B\u4EF6" },
+      { name: "\u80FD\u529B\u5C40\u9650\uFF08\u53EA\u80FD\u67E5\u4E0D\u80FD\u529E\uFF09", description: "\u673A\u5668\u4EBA\u53EA\u80FD\u67E5\u8BE2\uFF0C\u6D89\u53CA\u4FEE\u6539\u64CD\u4F5C\u5FC5\u987B\u8F6C\u4EBA\u5DE5" },
+      { name: "\u627F\u8BFA\u672A\u5151\u73B0\u4E0E\u53CD\u590D\u65E0\u8FDB\u5C55", description: "\u627F\u8BFA\u89E3\u51B3\u7ED3\u679C\u6CA1\u89E3\u51B3\u6216\u6C38\u8FDC\u5728\u5904\u7406\u4E2D" },
+      { name: "\u7F3A\u4E4F\u8865\u6551\u4E0E\u8865\u507F", description: "\u5E73\u53F0\u8FC7\u9519\u5BFC\u81F4\u7528\u6237\u53D7\u635F\u5374\u65E0\u8865\u507F\u63AA\u65BD" },
+      { name: "\u8F6C\u4EBA\u5DE5\u969C\u788D", description: "\u7528\u6237\u60F3\u8F6C\u4EBA\u5DE5\u4F46\u7CFB\u7EDF\u4E0D\u7ED9\u5165\u53E3" },
+      { name: "\u8F6C\u63A5\u540E\u7684\u4FE1\u606F\u4E22\u5931", description: "\u8F6C\u4EBA\u5DE5\u540E\u4EBA\u5DE5\u4E0D\u77E5\u9053\u524D\u9762\u53D1\u751F\u4E86\u4EC0\u4E48" }
+    ];
+    db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, '', 10, 1, 'admin-001')").run(
+      "dim-generic",
+      "\u901A\u7528\u7EF4\u5EA6",
+      "\u901A\u7528\u7684\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790\u7EF4\u5EA6\uFF0C\u9002\u7528\u4E8E\u4EFB\u610F\u4E1A\u52A1\u573A\u666F\u3002\u4ECE 13 \u4E2A\u7EF4\u5EA6\u8BC6\u522B\u4E0D\u6EE1\u6839\u56E0\uFF1A\u534F\u540C\u6548\u7387\u4F4E\u4E0B\u3001\u4EA4\u4E92\u8BBE\u8BA1\u53CD\u4EBA\u7C7B\u3001\u8BDD\u672F\u6A21\u677F\u5316\u4E0E\u65E0\u6548\u56DE\u590D\u3001\u89E3\u91CA\u4E0D\u6E05\u4E0E\u4FE1\u606F\u5197\u4F59\u3001\u524D\u540E\u77DB\u76FE\u4E0E\u53E3\u5F84\u4E0D\u4E00\u3001\u610F\u56FE\u8BC6\u522B\u5931\u8D25\u3001\u590D\u6742/\u6A21\u7CCA\u610F\u56FE\u65E0\u6CD5\u5904\u7406\u3001\u60C5\u7EEA\u4E0E\u98CE\u9669\u8BC6\u522B\u7F3A\u5931\u3001\u80FD\u529B\u5C40\u9650\u3001\u627F\u8BFA\u672A\u5151\u73B0\u3001\u7F3A\u4E4F\u8865\u6551\u4E0E\u8865\u507F\u3001\u8F6C\u4EBA\u5DE5\u969C\u788D\u3001\u8F6C\u63A5\u540E\u7684\u4FE1\u606F\u4E22\u5931\u3002",
+      JSON.stringify(genericCategories)
+    );
+  }
   const adminExists = db.prepare("SELECT id FROM users WHERE id = ?").get("admin-001");
   if (!adminExists) {
     db.prepare("INSERT INTO users (id, name, email, role, token) VALUES (?, ?, ?, ?, ?)").run(
       "admin-001",
-      "Admin",
-      "admin@example.com",
+      "Matt",
+      "matt@example.com",
       "admin",
       "admin123"
     );
   }
+  db.prepare("UPDATE users SET name = 'Matt' WHERE id = 'admin-001'").run();
   const dimCount = db.prepare("SELECT COUNT(*) as cnt FROM dimensions").get();
   if (dimCount.cnt === 0) {
     const dims = [
@@ -33426,14 +33472,38 @@ async function initDB() {
           { name: "\u5176\u4ED6", description: "\u65E0\u6CD5\u5F52\u7C7B" }
         ],
         sort_order: 2
+      },
+      {
+        id: "dim-generic",
+        name: "\u901A\u7528\u7EF4\u5EA6",
+        definition: "\u901A\u7528\u7684\u4E0D\u6EE1\u610F\u539F\u56E0\u5206\u6790\u7EF4\u5EA6\uFF0C\u9002\u7528\u4E8E\u4EFB\u610F\u4E1A\u52A1\u573A\u666F\u3002\u4ECE\u4EE5\u4E0B 13 \u4E2A\u7EF4\u5EA6\u8BC6\u522B\u4E0D\u6EE1\u6839\u56E0\uFF1A\u534F\u540C\u6548\u7387\u4F4E\u4E0B\u3001\u4EA4\u4E92\u8BBE\u8BA1\u53CD\u4EBA\u7C7B\u3001\u8BDD\u672F\u6A21\u677F\u5316\u4E0E\u65E0\u6548\u56DE\u590D\u3001\u89E3\u91CA\u4E0D\u6E05\u4E0E\u4FE1\u606F\u5197\u4F59\u3001\u524D\u540E\u77DB\u76FE\u4E0E\u53E3\u5F84\u4E0D\u4E00\u3001\u610F\u56FE\u8BC6\u522B\u5931\u8D25\u3001\u590D\u6742/\u6A21\u7CCA\u610F\u56FE\u65E0\u6CD5\u5904\u7406\u3001\u60C5\u7EEA\u4E0E\u98CE\u9669\u8BC6\u522B\u7F3A\u5931\u3001\u80FD\u529B\u5C40\u9650\u3001\u627F\u8BFA\u672A\u5151\u73B0\u3001\u7F3A\u4E4F\u8865\u6551\u4E0E\u8865\u507F\u3001\u8F6C\u4EBA\u5DE5\u969C\u788D\u3001\u8F6C\u63A5\u540E\u7684\u4FE1\u606F\u4E22\u5931\u3002",
+        categories: [
+          { name: "\u534F\u540C\u6548\u7387\u4F4E\u4E0B", description: "\u6D89\u53CA\u591A\u4E2A\u90E8\u95E8\u6216\u5546\u5BB6\u65F6\uFF0C\u54CD\u5E94\u6162\uFF0C\u4E92\u76F8\u63A8\u8BFF" },
+          { name: "\u4EA4\u4E92\u8BBE\u8BA1\u53CD\u4EBA\u7C7B", description: "\u8868\u5355\u3001\u6309\u94AE\u8BBE\u8BA1\u4E0D\u5408\u7406\uFF0C\u8BA9\u7528\u6237\u64CD\u4F5C\u5F88\u8D39\u52B2" },
+          { name: "\u8BDD\u672F\u6A21\u677F\u5316\u4E0E\u65E0\u6548\u56DE\u590D", description: "\u56DE\u590D\u5168\u662F\u6807\u51C6\u5957\u8BDD\uFF0C\u6CA1\u6709\u9488\u5BF9\u6027\uFF0C\u6216\u5168\u662F\u5B89\u629A\u4F46\u6CA1\u6709\u5B9E\u9645\u89E3\u51B3\u65B9\u6848" },
+          { name: "\u89E3\u91CA\u4E0D\u6E05\u4E0E\u4FE1\u606F\u5197\u4F59", description: "\u89E3\u91CA\u5F97\u4E91\u91CC\u96FE\u91CC\u7528\u6237\u542C\u4E0D\u61C2\uFF0C\u6216\u8005\u5E9F\u8BDD\u592A\u591A\u91CD\u70B9\u4E0D\u7A81\u51FA" },
+          { name: "\u524D\u540E\u77DB\u76FE\u4E0E\u53E3\u5F84\u4E0D\u4E00", description: "\u4E0D\u540C\u7684\u5BA2\u670D\u6216\u673A\u5668\u4EBA\u548C\u4EBA\u5DE5\u7ED9\u7684\u7B54\u6848\u4E0D\u4E00\u6837" },
+          { name: "\u610F\u56FE\u8BC6\u522B\u5931\u8D25", description: "\u672A\u80FD\u8BC6\u522B\u51FA\u7528\u6237\u7684\u771F\u5B9E\u9700\u6C42\uFF0C\u5305\u62EC\u591A\u610F\u56FE\u53EA\u8BC6\u522B\u4E00\u4E2A\u6216\u5C0F\u8BED\u79CD\u65B9\u8A00\u5BFC\u81F4\u8BEF\u5224" },
+          { name: "\u590D\u6742/\u6A21\u7CCA\u610F\u56FE\u65E0\u6CD5\u5904\u7406", description: "\u9047\u5230\u7A0D\u5FAE\u590D\u6742\u7684\u95EE\u9898\uFF0C\u7CFB\u7EDF\u65E0\u6CD5\u8FDB\u884C\u591A\u7EBF\u7A0B\u5224\u65AD\uFF0C\u5F3A\u884C\u7B80\u5316\u4E3A\u901A\u7528\u7B54\u6848" },
+          { name: "\u60C5\u7EEA\u4E0E\u98CE\u9669\u8BC6\u522B\u7F3A\u5931", description: "\u65E0\u6CD5\u8BC6\u522B\u7528\u6237\u662F\u5426\u6124\u6012\u3001\u7126\u8651\uFF0C\u6216\u662F\u5426\u6D89\u53CA\u9AD8\u98CE\u9669\u4E8B\u4EF6" },
+          { name: "\u80FD\u529B\u5C40\u9650\uFF08\u53EA\u80FD\u67E5\u4E0D\u80FD\u529E\uFF09", description: "\u673A\u5668\u4EBA\u53EA\u80FD\u505A\u7B80\u5355\u7684\u67E5\u8BE2\u548C\u5F15\u5BFC\uFF0C\u4E00\u65E6\u6D89\u53CA\u4FEE\u6539\u3001\u64CD\u4F5C\u5C31\u5FC5\u987B\u8F6C\u4EBA\u5DE5" },
+          { name: "\u627F\u8BFA\u672A\u5151\u73B0\u4E0E\u53CD\u590D\u65E0\u8FDB\u5C55", description: "\u627F\u8BFA\u4E86\u80FD\u89E3\u51B3\u7ED3\u679C\u6CA1\u89E3\u51B3\uFF0C\u6216\u8005\u4E00\u76F4\u8BF4\u5728\u5904\u7406\u4F46\u6C38\u8FDC\u6CA1\u7ED3\u679C" },
+          { name: "\u7F3A\u4E4F\u8865\u6551\u4E0E\u8865\u507F", description: "\u56E0\u5E73\u53F0\u6216\u670D\u52A1\u65B9\u8FC7\u9519\u5BFC\u81F4\u7528\u6237\u53D7\u635F\uFF0C\u5374\u6CA1\u6709\u63D0\u4F9B\u4EFB\u4F55\u8865\u507F\u6216\u8865\u6551\u63AA\u65BD" },
+          { name: "\u8F6C\u4EBA\u5DE5\u969C\u788D", description: "\u7528\u6237\u660E\u786E\u60F3\u8F6C\u4EBA\u5DE5\u4F46\u7CFB\u7EDF\u4E0D\u7ED9\u5165\u53E3\uFF0C\u6216\u5165\u53E3\u85CF\u5F97\u5F88\u6DF1" },
+          { name: "\u8F6C\u63A5\u540E\u7684\u4FE1\u606F\u4E22\u5931", description: "\u4ECE\u673A\u5668\u4EBA\u8F6C\u5230\u4EBA\u5DE5\u540E\uFF0C\u4EBA\u5DE5\u5BA2\u670D\u4E0D\u77E5\u9053\u524D\u9762\u53D1\u751F\u4E86\u4EC0\u4E48" }
+        ],
+        auto_discover: true,
+        sort_order: 10
       }
     ];
     for (const d2 of dims) {
-      db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, 1, '', ?, 1, 'admin-001')").run(
+      const autoDiscover = d2.auto_discover !== void 0 ? d2.auto_discover : 1;
+      db.prepare("INSERT INTO dimensions (id, name, definition, categories_json, auto_discover, sub_skill_ref, sort_order, enabled, created_by) VALUES (?, ?, ?, ?, ?, '', ?, 1, 'admin-001')").run(
         d2.id,
         d2.name,
         d2.definition,
         JSON.stringify(d2.categories),
+        autoDiscover,
         d2.sort_order
       );
     }
@@ -34270,13 +34340,13 @@ var MultipartBody = class {
 // node_modules/openai/_shims/node-runtime.mjs
 import { ReadableStream as ReadableStream3 } from "node:stream/web";
 var fileFromPathWarned = false;
-async function fileFromPath3(path4, ...args) {
+async function fileFromPath3(path8, ...args) {
   const { fileFromPath: _fileFromPath } = await Promise.resolve().then(() => (init_fileFromPath(), fileFromPath_exports));
   if (!fileFromPathWarned) {
-    console.warn(`fileFromPath is deprecated; use fs.createReadStream(${JSON.stringify(path4)}) instead`);
+    console.warn(`fileFromPath is deprecated; use fs.createReadStream(${JSON.stringify(path8)}) instead`);
     fileFromPathWarned = true;
   }
-  return await _fileFromPath(path4, ...args);
+  return await _fileFromPath(path8, ...args);
 }
 var defaultHttpAgent = new import_agentkeepalive.default({ keepAlive: true, timeout: 5 * 60 * 1e3 });
 var defaultHttpsAgent = new import_agentkeepalive.default.HttpsAgent({ keepAlive: true, timeout: 5 * 60 * 1e3 });
@@ -35060,29 +35130,29 @@ var APIClient = class {
   defaultIdempotencyKey() {
     return `stainless-node-retry-${uuid4()}`;
   }
-  get(path4, opts) {
-    return this.methodRequest("get", path4, opts);
+  get(path8, opts) {
+    return this.methodRequest("get", path8, opts);
   }
-  post(path4, opts) {
-    return this.methodRequest("post", path4, opts);
+  post(path8, opts) {
+    return this.methodRequest("post", path8, opts);
   }
-  patch(path4, opts) {
-    return this.methodRequest("patch", path4, opts);
+  patch(path8, opts) {
+    return this.methodRequest("patch", path8, opts);
   }
-  put(path4, opts) {
-    return this.methodRequest("put", path4, opts);
+  put(path8, opts) {
+    return this.methodRequest("put", path8, opts);
   }
-  delete(path4, opts) {
-    return this.methodRequest("delete", path4, opts);
+  delete(path8, opts) {
+    return this.methodRequest("delete", path8, opts);
   }
-  methodRequest(method, path4, opts) {
+  methodRequest(method, path8, opts) {
     return this.request(Promise.resolve(opts).then(async (opts2) => {
       const body = opts2 && isBlobLike(opts2?.body) ? new DataView(await opts2.body.arrayBuffer()) : opts2?.body instanceof DataView ? opts2.body : opts2?.body instanceof ArrayBuffer ? new DataView(opts2.body) : opts2 && ArrayBuffer.isView(opts2?.body) ? new DataView(opts2.body.buffer) : opts2?.body;
-      return { method, path: path4, ...opts2, body };
+      return { method, path: path8, ...opts2, body };
     }));
   }
-  getAPIList(path4, Page2, opts) {
-    return this.requestAPIList(Page2, { method: "get", path: path4, ...opts });
+  getAPIList(path8, Page2, opts) {
+    return this.requestAPIList(Page2, { method: "get", path: path8, ...opts });
   }
   calculateContentLength(body) {
     if (typeof body === "string") {
@@ -35101,10 +35171,10 @@ var APIClient = class {
   }
   buildRequest(inputOptions, { retryCount = 0 } = {}) {
     const options = { ...inputOptions };
-    const { method, path: path4, query, headers = {} } = options;
+    const { method, path: path8, query, headers = {} } = options;
     const body = ArrayBuffer.isView(options.body) || options.__binaryRequest && typeof options.body === "string" ? options.body : isMultipartBody(options.body) ? options.body.body : options.body ? JSON.stringify(options.body, null, 2) : null;
     const contentLength = this.calculateContentLength(body);
-    const url = this.buildURL(path4, query);
+    const url = this.buildURL(path8, query);
     if ("timeout" in options)
       validatePositiveInteger("timeout", options.timeout);
     options.timeout = options.timeout ?? this.timeout;
@@ -35220,8 +35290,8 @@ var APIClient = class {
     const request = this.makeRequest(options, null);
     return new PagePromise(this, request, Page2);
   }
-  buildURL(path4, query) {
-    const url = isAbsoluteURL(path4) ? new URL(path4) : new URL(this.baseURL + (this.baseURL.endsWith("/") && path4.startsWith("/") ? path4.slice(1) : path4));
+  buildURL(path8, query) {
+    const url = isAbsoluteURL(path8) ? new URL(path8) : new URL(this.baseURL + (this.baseURL.endsWith("/") && path8.startsWith("/") ? path8.slice(1) : path8));
     const defaultQuery = this.defaultQuery();
     if (!isEmptyObj(defaultQuery)) {
       query = { ...defaultQuery, ...query };
@@ -40144,11 +40214,25 @@ async function chatComplete(systemPrompt, userPrompt) {
 function isEmbeddingAvailable() {
   return !!embeddingClient;
 }
+var BGE_QUERY_PREFIX = {
+  "BAAI/bge-large-zh-v1.5": "\u4E3A\u8FD9\u4E2A\u53E5\u5B50\u751F\u6210\u8868\u793A\u4EE5\u7528\u4E8E\u68C0\u7D22\u4E2D\u6587\u76F8\u5173\u53E5\u5B50\uFF1A",
+  "BAAI/bge-m3": "Represent this sentence for searching relevant passages: "
+};
 async function getEmbedding(text) {
   if (!embeddingClient) throw new Error("Embedding API not configured");
   const res = await embeddingClient.embeddings.create({
     model: EMBEDDING_MODEL,
     input: text.slice(0, 8e3)
+  });
+  return res.data[0].embedding;
+}
+async function getQueryEmbedding(text) {
+  if (!embeddingClient) throw new Error("Embedding API not configured");
+  const prefix = BGE_QUERY_PREFIX[EMBEDDING_MODEL] || "";
+  const input = prefix ? `${prefix}${text}` : text;
+  const res = await embeddingClient.embeddings.create({
+    model: EMBEDDING_MODEL,
+    input: input.slice(0, 8e3)
   });
   return res.data[0].embedding;
 }
@@ -40411,8 +40495,185 @@ var sessions_default = router2;
 
 // server/routes/scenarios.ts
 var import_express3 = __toESM(require_express2(), 1);
+
+// server/services/scenario-matcher.ts
+var ALLOWED_FIELDS = /* @__PURE__ */ new Set(["session_date", "dissatisfaction_info", "bot_conversation", "human_conversation", "user_id", "sequence_num"]);
+var ALLOWED_OPERATORS = /* @__PURE__ */ new Set(["=", "!=", ">", "<", ">=", "<=", "LIKE", "IS NOT NULL", "IS NULL", "NOT LIKE"]);
+async function parseScenarioDescription(description) {
+  const prompt = `\u4F60\u662F\u4E00\u4E2A\u6570\u636E\u5206\u6790\u4E13\u5BB6\u3002\u7528\u6237\u63CF\u8FF0\u4E86\u4E00\u4E2A\u60F3\u8981\u5206\u6790\u7684\u5BA2\u670D\u4F1A\u8BDD\u573A\u666F\u3002
+\u8BF7\u5C06\u63CF\u8FF0\u62C6\u89E3\u4E3A\u4E24\u90E8\u5206\uFF1A
+
+1. semantic_query: \u9700\u8981\u8BED\u4E49\u5339\u914D\u7684\u90E8\u5206\uFF08\u5173\u4E8E\u5BF9\u8BDD\u5185\u5BB9\u3001\u4E70\u5BB6\u8BC9\u6C42\u3001\u5BA2\u670D\u8868\u73B0\u7B49\uFF09
+2. sql_conditions: \u53EF\u4EE5\u8F6C\u6362\u4E3ASQL\u6761\u4EF6\u7684\u7ED3\u6784\u5316\u90E8\u5206
+
+\u53EF\u7528\u5B57\u6BB5\uFF1A
+- session_date (TEXT, \u683C\u5F0F 'YYYY-MM-DD'): \u4F1A\u8BDD\u65E5\u671F
+- dissatisfaction_info (TEXT): \u4E0D\u6EE1\u610F\u4FE1\u606F\uFF0C\u975E\u7A7A\u5B57\u7B26\u4E32\u8868\u793A\u4E70\u5BB6\u8868\u8FBE\u4E86\u4E0D\u6EE1
+- bot_conversation (TEXT): AI\u5BA2\u670D\u5BF9\u8BDD\u5185\u5BB9
+- human_conversation (TEXT): \u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD\u5185\u5BB9
+
+\u53EF\u7528\u64CD\u4F5C\u7B26\uFF1A=, !=, >, <, >=, <=, LIKE, IS NOT NULL, IS NULL, NOT LIKE
+
+\u8FD4\u56DEJSON\uFF08\u4E0D\u8981\u8F93\u51FA\u5176\u4ED6\u5185\u5BB9\uFF09\uFF1A
+{
+  "semantic_query": "\u9700\u8981\u8BED\u4E49\u5339\u914D\u7684\u81EA\u7136\u8BED\u8A00\u63CF\u8FF0",
+  "sql_conditions": [
+    { "field": "\u5B57\u6BB5\u540D", "operator": "\u64CD\u4F5C\u7B26", "value": "\u503C" }
+  ]
+}
+
+\u89C4\u5219\uFF1A
+- semantic_query \u662F\u5FC5\u987B\u7684\uFF0C\u81F3\u5C11\u5305\u542B\u573A\u666F\u7684\u6838\u5FC3\u8BED\u4E49\u63CF\u8FF0
+- \u5982\u679C\u63CF\u8FF0\u4E2D\u6CA1\u6709\u53EF\u63D0\u53D6\u7684\u7ED3\u6784\u5316\u6761\u4EF6\uFF0Csql_conditions \u8FD4\u56DE\u7A7A\u6570\u7EC4
+- IS NOT NULL / IS NULL \u64CD\u4F5C\u7B26\u4E0D\u9700\u8981 value
+- LIKE \u64CD\u4F5C\u7B26\u7684 value \u7528 % \u505A\u901A\u914D\u7B26
+- \u65E5\u671F\u6761\u4EF6\u7528 session_date \u5B57\u6BB5
+- "\u6709\u4E0D\u6EE1\u610F" \u2192 dissatisfaction_info IS NOT NULL \u4E14 dissatisfaction_info != ''
+- "\u6709\u4EBA\u5DE5\u5BF9\u8BDD" \u2192 human_conversation IS NOT NULL \u4E14 human_conversation != ''`;
+  try {
+    const raw = await chatComplete(prompt, description);
+    const jsonStr = raw.replace(/```json\s*/g, "").replace(/```\s*/g, "").replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+    const parsed = JSON.parse(jsonStr);
+    return {
+      semanticQuery: parsed.semantic_query || description,
+      conditions: Array.isArray(parsed.sql_conditions) ? parsed.sql_conditions : []
+    };
+  } catch {
+    return { semanticQuery: description, conditions: [] };
+  }
+}
+function buildSQLWhere(conditions) {
+  let where = "";
+  const params = [];
+  for (const cond of conditions) {
+    if (!ALLOWED_FIELDS.has(cond.field)) continue;
+    if (!ALLOWED_OPERATORS.has(cond.operator.toUpperCase())) continue;
+    const op = cond.operator.toUpperCase();
+    if (op === "IS NOT NULL" || op === "IS NULL") {
+      where += ` AND s.${cond.field} ${op}`;
+    } else {
+      where += ` AND s.${cond.field} ${op} ?`;
+      params.push(cond.value || "");
+    }
+  }
+  return { where, params };
+}
+async function semanticMatchSummaries(query, rows) {
+  const hasEmbeddings = isEmbeddingAvailable() && rows.some((r2) => r2.embedding);
+  if (hasEmbeddings) {
+    const queryVec = await getQueryEmbedding(query);
+    const scored = rows.filter((r2) => r2.embedding).map((row) => ({
+      sessionId: row.session_id,
+      similarity: cosineSimilarity(queryVec, JSON.parse(row.embedding)),
+      summary: (row.summary_text || "").slice(0, 40)
+    })).sort((a2, b2) => b2.similarity - a2.similarity);
+    const scores = scored.map((r2) => r2.similarity.toFixed(3));
+    console.log(`[Matcher] All scores: [${scores.join(", ")}]`);
+    const sims = scored.map((r2) => r2.similarity);
+    const mean = sims.reduce((a2, b2) => a2 + b2, 0) / sims.length;
+    const std = Math.sqrt(sims.reduce((a2, b2) => a2 + (b2 - mean) ** 2, 0) / sims.length);
+    const dynamicThreshold = Math.max(mean + 1 * std, 0.5);
+    const matched = scored.filter((r2) => r2.similarity >= dynamicThreshold);
+    console.log(`[Matcher] mean=${mean.toFixed(3)}, std=${std.toFixed(3)}, threshold=${dynamicThreshold.toFixed(3)}, matched=${matched.length}/${scored.length}`);
+    return matched.map((r2) => r2.sessionId);
+  }
+  let expandedTerms = [];
+  try {
+    const raw = await chatComplete(
+      `\u4F60\u662F\u641C\u7D22\u5173\u952E\u8BCD\u6269\u5C55\u4E13\u5BB6\u3002\u5C06\u7528\u6237\u641C\u7D22\u610F\u56FE\u6269\u5C55\u4E3A\u77ED\u5173\u952E\u8BCDJSON\u6570\u7EC4\u3002
+\u8981\u6C42\uFF1A
+- \u6BCF\u4E2A\u5173\u952E\u8BCD2-4\u4E2A\u4E2D\u6587\u5B57\u7B26\u6216\u4E00\u4E2A\u82F1\u6587\u5355\u8BCD
+- \u4E0D\u8981\u957F\u77ED\u8BED\uFF0C\u53EA\u8981\u539F\u5B50\u7EA7\u522B\u7684\u77ED\u8BCD
+- \u4E0D\u8981\u901A\u7528\u8BCD\u5982"\u4E70\u5BB6""\u5BA2\u670D""\u5BF9\u8BDD""\u95EE\u9898""\u670D\u52A1"\uFF0C\u8981\u6709\u533A\u5206\u5EA6\u7684\u8BCD
+- \u8986\u76D6\u4E2D\u82F1\u6587\u540C\u4E49\u8BCD
+- 10-20\u4E2A\u5173\u952E\u8BCD
+\u53EA\u8FD4\u56DEJSON\u6570\u7EC4\uFF0C\u4E0D\u8981\u5176\u4ED6\u6587\u5B57\u3002`,
+      query
+    );
+    const jsonStr = raw.replace(/```json\s*/g, "").replace(/```\s*/g, "").replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+    const parsed = JSON.parse(jsonStr);
+    if (Array.isArray(parsed)) expandedTerms = parsed.map((t2) => t2.toLowerCase());
+    console.log(`[Matcher] Expanded terms for "${query}":`, expandedTerms);
+  } catch (e2) {
+    console.warn(`[Matcher] Keyword expansion failed:`, e2.message);
+  }
+  const commonWords = /* @__PURE__ */ new Set(["\u4E70\u5BB6", "\u5BA2\u670D", "\u5BF9\u8BDD", "\u95EE\u9898", "\u670D\u52A1", "\u4F1A\u8BDD", "\u7528\u6237", "\u4EBA\u5DE5", "\u667A\u80FD", "\u5206\u6790", "\u5E73\u53F0", "\u5168\u91CF", "\u5E2E\u6211", "\u6D89\u53CA", "\u76F8\u5173", "\u5404\u79CD", "\u4EC0\u4E48", "\u6240\u6709", "\u573A\u666F", "\u8FC7\u7A0B"]);
+  if (expandedTerms.length === 0) {
+    const fallbackTerms = query.split(/[\s,，、。；;：:!！?？]+/).filter((t2) => t2.length >= 2 && t2.length <= 4 && !commonWords.has(t2)).map((t2) => t2.toLowerCase());
+    expandedTerms = [...new Set(fallbackTerms)];
+  }
+  console.log(`[Matcher] Terms: ${expandedTerms.length} | Rows: ${rows.length}`);
+  const MIN_MATCHES = 2;
+  return rows.map((row) => {
+    const text = (row.summary_text || "").toLowerCase();
+    let matchCount = 0;
+    for (const term of expandedTerms) {
+      if (term && text.includes(term)) matchCount++;
+    }
+    return { sessionId: row.session_id, matchCount, similarity: Math.min(Math.round(matchCount * 0.12 * 100) / 100, 1) };
+  }).filter((r2) => r2.matchCount >= MIN_MATCHES).sort((a2, b2) => b2.matchCount - a2.matchCount).map((r2) => r2.sessionId);
+}
+async function matchScenario(scenarioId) {
+  const scenario = db_default.prepare("SELECT * FROM scenarios WHERE id = ?").get(scenarioId);
+  if (!scenario) throw new Error("Scenario not found");
+  db_default.prepare("UPDATE scenarios SET match_status = 'matching', error_message = '' WHERE id = ?").run(scenarioId);
+  try {
+    const { semanticQuery, conditions } = await parseScenarioDescription(scenario.description);
+    const { where: sqlWhere, params: sqlParams } = buildSQLWhere(conditions);
+    console.log(`[Matcher] Scenario "${scenario.name}": semanticQuery="${semanticQuery}", sqlConditions=${JSON.stringify(conditions)}, sqlWhere="${sqlWhere}"`);
+    let sql = `
+      SELECT ss.session_id, ss.summary_text, ss.embedding
+      FROM session_summaries ss
+      JOIN sessions s ON s.id = ss.session_id
+      WHERE 1=1
+    `;
+    const params = [];
+    if (scenario.date_from) {
+      sql += " AND s.session_date >= ?";
+      params.push(scenario.date_from);
+    }
+    if (scenario.date_to) {
+      sql += " AND s.session_date <= ?";
+      params.push(scenario.date_to);
+    }
+    if (sqlWhere) {
+      sql += sqlWhere;
+      params.push(...sqlParams);
+    }
+    let rows = db_default.prepare(sql).all(...params);
+    console.log(`[Matcher] SQL query returned ${rows.length} rows (with SQL conditions)`);
+    if (rows.length === 0 && sqlWhere) {
+      console.log(`[Matcher] Retrying without SQL conditions...`);
+      let baseSql = `
+        SELECT ss.session_id, ss.summary_text, ss.embedding
+        FROM session_summaries ss
+        JOIN sessions s ON s.id = ss.session_id
+        WHERE 1=1
+      `;
+      const baseParams = [];
+      if (scenario.date_from) {
+        baseSql += " AND s.session_date >= ?";
+        baseParams.push(scenario.date_from);
+      }
+      if (scenario.date_to) {
+        baseSql += " AND s.session_date <= ?";
+        baseParams.push(scenario.date_to);
+      }
+      rows = db_default.prepare(baseSql).all(...baseParams);
+      console.log(`[Matcher] Without SQL conditions: ${rows.length} rows`);
+    }
+    const matchedSessionIds = await semanticMatchSummaries(semanticQuery, rows);
+    db_default.prepare("UPDATE scenarios SET matched_session_ids = ?, matched_count = ?, match_status = 'completed' WHERE id = ?").run(JSON.stringify(matchedSessionIds), matchedSessionIds.length, scenarioId);
+    return { matchedCount: matchedSessionIds.length };
+  } catch (err) {
+    db_default.prepare("UPDATE scenarios SET match_status = 'failed', error_message = ? WHERE id = ?").run(err.message || "Unknown error", scenarioId);
+    throw err;
+  }
+}
+
+// server/routes/scenarios.ts
 var router3 = (0, import_express3.Router)();
-router3.get("/", (req, res) => {
+router3.get("/", (_req, res) => {
   const rows = db_default.prepare("SELECT * FROM scenarios ORDER BY created_at DESC").all();
   res.json(rows);
 });
@@ -40420,8 +40681,11 @@ router3.post("/", authMiddleware, (req, res) => {
   const { name, description, date_from, date_to } = req.body;
   if (!name || !description) return res.status(400).json({ error: "name and description required" });
   const id = v4_default();
-  db_default.prepare("INSERT INTO scenarios (id, name, description, date_from, date_to, created_by) VALUES (?, ?, ?, ?, ?, ?)").run(id, name, description, date_from || null, date_to || null, req.user?.id);
-  res.json({ id, name, description });
+  db_default.prepare("INSERT INTO scenarios (id, name, description, date_from, date_to, match_status, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)").run(id, name, description, date_from || null, date_to || null, "pending", req.user?.id);
+  matchScenario(id).catch((err) => {
+    console.error(`[Scenario] Auto-match failed for ${id}:`, err.message);
+  });
+  res.json({ id, name, description, match_status: "pending" });
 });
 router3.get("/:id", (req, res) => {
   const row = db_default.prepare("SELECT * FROM scenarios WHERE id = ?").get(req.params.id);
@@ -40430,24 +40694,94 @@ router3.get("/:id", (req, res) => {
 });
 router3.put("/:id", authMiddleware, (req, res) => {
   const { name, description, date_from, date_to } = req.body;
-  db_default.prepare("UPDATE scenarios SET name = COALESCE(?, name), description = COALESCE(?, description), date_from = ?, date_to = ?, updated_at = datetime('now') WHERE id = ?").run(name, description, date_from || null, date_to || null, req.params.id);
-  res.json({ ok: true });
+  db_default.prepare("UPDATE scenarios SET name = COALESCE(?, name), description = COALESCE(?, description), date_from = ?, date_to = ?, match_status = 'pending', matched_count = 0, matched_session_ids = '[]' WHERE id = ?").run(name, description, date_from || null, date_to || null, req.params.id);
+  matchScenario(req.params.id).catch((err) => {
+    console.error(`[Scenario] Re-match failed for ${req.params.id}:`, err.message);
+  });
+  res.json({ ok: true, match_status: "pending" });
 });
 router3.delete("/:id", authMiddleware, (req, res) => {
   db_default.prepare("DELETE FROM scenarios WHERE id = ?").run(req.params.id);
   res.json({ ok: true });
 });
-router3.post("/:id/preview", authMiddleware, async (req, res) => {
+router3.post("/:id/rematch", authMiddleware, async (req, res) => {
   const scenario = db_default.prepare("SELECT * FROM scenarios WHERE id = ?").get(req.params.id);
   if (!scenario) return res.status(404).json({ error: "Not found" });
+  matchScenario(scenario.id).catch((err) => {
+    console.error(`[Scenario] Rematch failed for ${scenario.id}:`, err.message);
+  });
+  res.json({ ok: true, match_status: "matching" });
+});
+router3.get("/:id/matched-sessions", (req, res) => {
+  const scenario = db_default.prepare("SELECT * FROM scenarios WHERE id = ?").get(req.params.id);
+  if (!scenario) return res.status(404).json({ error: "Not found" });
+  let sessionIds = [];
   try {
-    const results = await semanticSearch(scenario.description, scenario.date_from, scenario.date_to, 0.25, 500);
-    const sessionIds = results.map((r2) => r2.sessionId);
-    db_default.prepare("UPDATE scenarios SET matched_session_ids = ?, matched_count = ? WHERE id = ?").run(JSON.stringify(sessionIds), sessionIds.length, scenario.id);
-    res.json({ matched_count: sessionIds.length, results: results.slice(0, 20) });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    sessionIds = JSON.parse(scenario.matched_session_ids || "[]");
+  } catch {
   }
+  if (sessionIds.length === 0) {
+    return res.json({ total: 0, sample: null, sessions: [] });
+  }
+  const limit2 = Math.min(parseInt(req.query.limit) || 20, 200);
+  const offset = parseInt(req.query.offset) || 0;
+  const placeholders = sessionIds.map(() => "?").join(",");
+  const sample = db_default.prepare(`
+    SELECT s.*, ss.summary_text, ss.key_topics
+    FROM sessions s
+    LEFT JOIN session_summaries ss ON ss.session_id = s.id
+    WHERE s.id IN (${placeholders})
+    ORDER BY s.sequence_num ASC LIMIT 1
+  `).get(...sessionIds);
+  const paginatedIds = sessionIds.slice(offset, offset + limit2);
+  const sessions = paginatedIds.length > 0 ? db_default.prepare(`
+        SELECT s.id, s.sequence_num, s.session_id, s.session_date, s.dissatisfaction_info,
+               ss.summary_text, ss.key_topics
+        FROM sessions s
+        LEFT JOIN session_summaries ss ON ss.session_id = s.id
+        WHERE s.id IN (${paginatedIds.map(() => "?").join(",")})
+        ORDER BY s.sequence_num ASC
+      `).all(...paginatedIds) : [];
+  res.json({ total: sessionIds.length, sample, sessions });
+});
+router3.get("/:id/export", (req, res) => {
+  const scenario = db_default.prepare("SELECT * FROM scenarios WHERE id = ?").get(req.params.id);
+  if (!scenario) return res.status(404).json({ error: "Not found" });
+  let sessionIds = [];
+  try {
+    sessionIds = JSON.parse(scenario.matched_session_ids || "[]");
+  } catch {
+  }
+  if (sessionIds.length === 0) {
+    return res.status(400).json({ error: "No matched sessions" });
+  }
+  const placeholders = sessionIds.map(() => "?").join(",");
+  const rows = db_default.prepare(`
+    SELECT s.sequence_num, s.session_id, s.user_id, s.ocs_session_id,
+           s.bot_conversation, s.human_conversation, s.dissatisfaction_info,
+           s.session_date, ss.summary_text, ss.key_topics
+    FROM sessions s
+    LEFT JOIN session_summaries ss ON ss.session_id = s.id
+    WHERE s.id IN (${placeholders})
+    ORDER BY s.sequence_num ASC
+  `).all(...sessionIds);
+  const headers = ["\u5E8F\u53F7", "\u4F1A\u8BDDID", "\u7528\u6237ID", "OCS\u4F1A\u8BDDID", "AI\u5BA2\u670D\u5BF9\u8BDD", "\u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD", "\u4E0D\u6EE1\u610F\u4FE1\u606F", "\u4F1A\u8BDD\u65E5\u671F", "\u6458\u8981", "\u5173\u952E\u8BCD"];
+  const fields = ["sequence_num", "session_id", "user_id", "ocs_session_id", "bot_conversation", "human_conversation", "dissatisfaction_info", "session_date", "summary_text", "key_topics"];
+  const csvRows = [headers.join(",")];
+  for (const row of rows) {
+    const vals = fields.map((f2) => {
+      const v2 = row[f2];
+      if (v2 == null) return "";
+      const str2 = String(v2).replace(/"/g, '""');
+      return `"${str2}"`;
+    });
+    csvRows.push(vals.join(","));
+  }
+  const csv = "\uFEFF" + csvRows.join("\n");
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  const safeName = encodeURIComponent(scenario.name);
+  res.setHeader("Content-Disposition", `attachment; filename="scenario-${safeName}.csv"; filename*=UTF-8''scenario-${safeName}.csv`);
+  res.send(csv);
 });
 var scenarios_default = router3;
 
@@ -40495,82 +40829,7 @@ var dimensions_default = router4;
 var import_express5 = __toESM(require_express2(), 1);
 
 // server/services/analyzer.ts
-async function analyzeSession(sessionId, dimension, runId, feedbackList = []) {
-  const session = db_default.prepare("SELECT * FROM sessions WHERE id = ?").get(sessionId);
-  if (!session) throw new Error("Session not found");
-  const categories = JSON.parse(dimension.categories_json);
-  const catList = categories.map((c2, i2) => `${i2 + 1}. ${c2.name}: ${c2.description}`).join("\n");
-  let systemPrompt = `\u4F60\u662F\u4E00\u4E2A\u5BA2\u670D\u5BF9\u8BDD\u5206\u6790\u4E13\u5BB6\u3002\u4F60\u9700\u8981\u6839\u636E\u4EE5\u4E0B\u5206\u6790\u7EF4\u5EA6\u5BF9\u4F1A\u8BDD\u8FDB\u884C\u5206\u7C7B\u3002
-
-## \u5206\u6790\u7EF4\u5EA6: ${dimension.name}
-## \u5B9A\u4E49: ${dimension.definition}
-
-## \u53EF\u9009\u7C7B\u522B:
-${catList}
-`;
-  if (dimension.auto_discover) {
-    systemPrompt += `
-\u5982\u679C\u73B0\u6709\u7C7B\u522B\u90FD\u4E0D\u5408\u9002\uFF0C\u4F60\u53EF\u4EE5\u5EFA\u8BAE\u4E00\u4E2A\u65B0\u7C7B\u522B\uFF08\u5728category\u4E2D\u8FD4\u56DE\u65B0\u7C7B\u522B\u540D\u79F0\uFF0C\u5E76\u8BBEis_auto_discovered\u4E3Atrue\uFF09\u3002
-`;
-  }
-  if (feedbackList.length > 0) {
-    systemPrompt += `
-## \u5386\u53F2\u7EA0\u6B63\u53C2\u8003\uFF08\u4E4B\u524D\u7684\u5206\u7C7B\u88AB\u7528\u6237\u4FEE\u6B63\u8FC7\uFF09:
-`;
-    for (const fb of feedbackList.slice(0, 10)) {
-      systemPrompt += `- \u539F\u5206\u7C7B"${fb.original}"\u88AB\u4FEE\u6B63\u4E3A"${fb.corrected}"${fb.note ? ` (\u539F\u56E0: ${fb.note})` : ""}
-`;
-    }
-  }
-  systemPrompt += `
-\u8BF7\u4E25\u683C\u8FD4\u56DEJSON\u683C\u5F0F\uFF08\u4E0D\u8981\u5305\u542B\u5176\u4ED6\u6587\u5B57\uFF09:
-{"category": "\u7C7B\u522B\u540D\u79F0", "confidence": 0.0\u52301.0, "reasoning": "\u5206\u7C7B\u7406\u7531\uFF08\u7B80\u6D01\uFF09", "is_auto_discovered": false}`;
-  let userContent = "";
-  if (session.bot_conversation) {
-    userContent += `=== AI\u5BA2\u670D\u5BF9\u8BDD ===
-${session.bot_conversation.slice(0, 4e3)}
-
-`;
-  }
-  if (session.human_conversation) {
-    userContent += `=== \u4EBA\u5DE5\u5BA2\u670D\u5BF9\u8BDD ===
-${session.human_conversation.slice(0, 4e3)}
-
-`;
-  }
-  if (session.dissatisfaction_info) {
-    userContent += `=== \u4E0D\u6EE1\u610F\u4FE1\u606F ===
-${session.dissatisfaction_info}
-`;
-  }
-  const raw = await chatComplete(systemPrompt, userContent);
-  let parsed;
-  try {
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { category: "\u5176\u4ED6", confidence: 0, reasoning: raw };
-  } catch {
-    parsed = { category: "\u5176\u4ED6", confidence: 0, reasoning: raw, is_auto_discovered: false };
-  }
-  const result = {
-    category: parsed.category || "\u5176\u4ED6",
-    confidence: parsed.confidence || 0,
-    reasoning: parsed.reasoning || "",
-    isAutoDiscovered: !!parsed.is_auto_discovered
-  };
-  db_default.prepare(`INSERT INTO analysis_results (id, run_id, session_id, dimension_id, category, confidence, reasoning, is_auto_discovered)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run(
-    v4_default(),
-    runId,
-    sessionId,
-    dimension.id,
-    result.category,
-    result.confidence,
-    result.reasoning,
-    result.isAutoDiscovered ? 1 : 0
-  );
-  return result;
-}
-function generateTasksForRun(runId) {
+async function generateTasksForRun(runId) {
   const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(runId);
   if (!run) return;
   const dimensions = db_default.prepare("SELECT DISTINCT dimension_id FROM analysis_results WHERE run_id = ?").all(runId);
@@ -40588,16 +40847,26 @@ function generateTasksForRun(runId) {
       const priority = cat.cnt >= 50 ? "urgent" : cat.cnt >= 20 ? "high" : cat.cnt >= 10 ? "medium" : "low";
       let assigneeId = null;
       const members = db_default.prepare("SELECT * FROM team_members").all();
-      if (members.length > 0) {
-        const catLower = (cat.category + " " + dim.name).toLowerCase();
-        for (const m2 of members) {
-          const roleWords = m2.role_description.toLowerCase().split(/\s+/);
-          if (roleWords.some((w2) => catLower.includes(w2) && w2.length > 2)) {
-            assigneeId = m2.id;
-            break;
+      if (members.length > 0 && isEmbeddingAvailable()) {
+        try {
+          const taskTitle = `[${dim.name}] ${cat.category}`;
+          const taskVec = await getEmbedding(taskTitle);
+          let bestScore = -1;
+          let bestMember = null;
+          for (const m2 of members) {
+            const roleVec = await getEmbedding(m2.role_description);
+            const score = cosineSimilarity(taskVec, roleVec);
+            if (score > bestScore) {
+              bestScore = score;
+              bestMember = m2;
+            }
           }
+          if (bestMember) {
+            assigneeId = bestMember.id;
+          }
+        } catch (e2) {
+          console.error("Embedding matching failed:", e2);
         }
-        if (!assigneeId) assigneeId = members[0].id;
       }
       db_default.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, assignee_id, related_session_ids)
         VALUES (?, ?, ?, ?, ?, ?, 'open', ?, ?)`).run(
@@ -40614,6 +40883,147 @@ function generateTasksForRun(runId) {
   }
 }
 
+// server/services/skillEngine.ts
+import { exec } from "child_process";
+import { promisify } from "util";
+import path2 from "path";
+import fs3 from "fs";
+var execAsync = promisify(exec);
+var SKILL_PATH = "/Users/huahong/Downloads/skisight_analysis";
+var OUTPUT_DIR = path2.join(process.cwd(), "data", "reports");
+async function runSkillAnalysis(request) {
+  if (!fs3.existsSync(OUTPUT_DIR)) {
+    fs3.mkdirSync(OUTPUT_DIR, { recursive: true });
+  }
+  const timestamp = (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-").slice(0, 19);
+  const sanitizedTopic = (request.topicLabel || "analysis").replace(/[\/\\]/g, "_");
+  const outputPath = path2.join(OUTPUT_DIR, `${sanitizedTopic}_${timestamp}.xlsx`);
+  const { scriptPath, configPath } = buildPythonScript(request, outputPath);
+  try {
+    const { stdout, stderr } = await execAsync(`python3 "${scriptPath}"`, {
+      cwd: SKILL_PATH,
+      timeout: 6e5
+      // 10 分钟超时
+    });
+    if (stderr) {
+      console.error("[Skill] stderr:", stderr);
+    }
+    console.log("[Skill] stdout:", stdout);
+    if (!fs3.existsSync(outputPath)) {
+      throw new Error("\u62A5\u544A\u6587\u4EF6\u672A\u751F\u6210");
+    }
+    const summary = parsePythonOutput(stdout, request.topicLabel || "\u5BA2\u670D\u5BF9\u8BDD");
+    try {
+      fs3.unlinkSync(scriptPath);
+    } catch {
+    }
+    try {
+      fs3.unlinkSync(configPath);
+    } catch {
+    }
+    return {
+      success: true,
+      reportPath: outputPath,
+      reportUrl: `/api/skill/reports/${path2.basename(outputPath)}`,
+      summary
+    };
+  } catch (error) {
+    try {
+      fs3.unlinkSync(scriptPath);
+    } catch {
+    }
+    try {
+      fs3.unlinkSync(configPath);
+    } catch {
+    }
+    throw error;
+  }
+}
+function buildPythonScript(request, outputPath) {
+  const { userQuestion, topicKeywords, topicLabel, customDimensions, dateFrom, dateTo } = request;
+  const keywordsArg = topicKeywords ? JSON.stringify(topicKeywords) : "None";
+  const labelArg = topicLabel ? `'${topicLabel}'` : "None";
+  const dimensionsArg = customDimensions ? JSON.stringify(customDimensions) : "None";
+  const configPath = path2.join(OUTPUT_DIR, `config_${Date.now()}.json`);
+  fs3.writeFileSync(configPath, JSON.stringify({
+    user_question: userQuestion,
+    output_path: outputPath,
+    date_from: dateFrom || null,
+    date_to: dateTo || null
+  }), "utf-8");
+  const scriptPath = path2.join(OUTPUT_DIR, `temp_${Date.now()}.py`);
+  const pythonScript = `#!/usr/bin/env python3
+import sys
+import json
+sys.path.insert(0, '${SKILL_PATH}')
+from skisight_analysis import run_full_analysis
+
+# \u8BFB\u53D6\u914D\u7F6E\u6587\u4EF6
+with open('${configPath}', 'r', encoding='utf-8') as f:
+    config = json.load(f)
+
+# \u8C03\u7528\u5B8C\u6574\u7684\u5206\u6790\u6D41\u7A0B
+result = run_full_analysis(
+    user_question=config['user_question'],
+    topic_keywords=${keywordsArg},
+    topic_label=${labelArg},
+    custom_dimensions=${dimensionsArg},
+    output_path=config['output_path'],
+    date_from=config.get('date_from'),
+    date_to=config.get('date_to'),
+)
+
+print(f"DONE: {result}")
+`;
+  fs3.writeFileSync(scriptPath, pythonScript, "utf-8");
+  return { scriptPath, configPath };
+}
+function parsePythonOutput(stdout, fallbackTopic) {
+  const lines = stdout.split("\n");
+  let loaded = 0;
+  let keywordFiltered = 0;
+  let llmRefined = 0;
+  let analyzed = 0;
+  let topicLabel = fallbackTopic;
+  let overviewLines = [];
+  for (const line of lines) {
+    if (line.includes("\u52A0\u8F7D") && line.includes("\u6761\u4F1A\u8BDD")) {
+      const match = line.match(/(\d+)\s*条/);
+      if (match) loaded = parseInt(match[1]);
+    }
+    if (line.includes("\u5173\u952E\u8BCD\u5339\u914D") && line.includes("\u6761\u4F1A\u8BDD")) {
+      const match = line.match(/(\d+)\s*条/);
+      if (match) keywordFiltered = parseInt(match[1]);
+    }
+    if (line.includes("\u7CBE\u7B5B\u5B8C\u6210")) {
+      const match = line.match(/(\d+)(?:\/(\d+))?\s*条/);
+      if (match) llmRefined = parseInt(match[1]);
+    }
+    if (line.includes("\u5206\u7C7B\u5B8C\u6210")) {
+      const match = line.match(/(\d+)(?:\/(\d+))?\s*条/);
+      if (match) analyzed = parseInt(match[1]);
+    }
+    if (line.includes("\u4E3B\u9898:")) {
+      const match = line.match(/主题:\s*(.+)/);
+      if (match) topicLabel = match[1].trim();
+    }
+    if (line.includes("OVERVIEW:")) {
+      overviewLines.push(line.replace("OVERVIEW:", "").trim());
+    }
+  }
+  return {
+    topicLabel,
+    totalSessions: loaded,
+    keywordFiltered,
+    llmRefined,
+    analyzed,
+    topDimensions: [],
+    keyFindings: [],
+    questionAnswers: [],
+    overview: overviewLines.join("\n") || void 0
+  };
+}
+
 // server/services/dingtalk.ts
 import crypto2 from "crypto";
 async function sendDingTalkNotification(runId, baseUrl = "http://localhost:5173") {
@@ -40621,17 +41031,33 @@ async function sendDingTalkNotification(runId, baseUrl = "http://localhost:5173"
   if (!config) return { ok: false, error: "DingTalk not configured" };
   const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(runId);
   if (!run) return { ok: false, error: "Run not found" };
-  const urgentTasks = db_default.prepare(`
-    SELECT title, priority FROM tasks WHERE run_id = ? AND priority IN ('urgent', 'high')
-    ORDER BY CASE priority WHEN 'urgent' THEN 0 ELSE 1 END LIMIT 5
-  `).all(runId);
-  const markdown = `## \u4F1A\u8BDD\u5206\u6790\u62A5\u544A\u5B8C\u6210
-**\u5206\u6790\u65F6\u95F4**: ${run.completed_at || run.started_at}
-**\u4F1A\u8BDD\u6570\u91CF**: ${run.total_sessions} \u6761
+  let summary = {};
+  try {
+    summary = JSON.parse(run.summary_json || "{}");
+  } catch {
+  }
+  const statsLines = [];
+  if (summary.topicLabel) {
+    statsLines.push(`**\u5206\u6790\u4E3B\u9898**\uFF1A${summary.topicLabel}`);
+  }
+  if (summary.totalSessions) {
+    statsLines.push(`**\u6570\u636E\u603B\u91CF**\uFF1A${summary.totalSessions} \u6761\u4F1A\u8BDD`);
+  }
+  if (summary.keywordFiltered) {
+    statsLines.push(`**\u5173\u952E\u8BCD\u5339\u914D**\uFF1A${summary.keywordFiltered} \u6761`);
+  }
+  if (summary.analyzed) {
+    statsLines.push(`**\u6700\u7EC8\u5206\u6790**\uFF1A${summary.analyzed} \u6761`);
+  }
+  let overviewText = "";
+  if (summary.overview) {
+    overviewText = summary.overview.length > 200 ? summary.overview.substring(0, 200) + "..." : summary.overview;
+  }
+  const markdown = `## ${run.name || "\u6D1E\u5BDF\u5B8C\u6210"}
 
-### \u7D27\u6025\u53D1\u73B0
-${urgentTasks.length > 0 ? urgentTasks.map((t2) => `- **[${t2.priority}]** ${t2.title}`).join("\n") : "\u65E0\u7D27\u6025\u4EFB\u52A1"}
-
+${statsLines.length > 0 ? statsLines.join("\n\n") + "\n" : ""}
+${overviewText ? `> ${overviewText}
+` : ""}
 [\u67E5\u770B\u8BE6\u7EC6\u62A5\u544A](${baseUrl}/#/analysis/runs/${run.id})`;
   let url = config.webhook_url;
   if (config.secret) {
@@ -40646,7 +41072,7 @@ ${config.secret}`).digest("base64");
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         msgtype: "markdown",
-        markdown: { title: "\u4F1A\u8BDD\u5206\u6790\u62A5\u544A", text: markdown }
+        markdown: { title: run.name || "\u6D1E\u5BDF\u5B8C\u6210", text: markdown }
       })
     });
     const result = await resp.json();
@@ -40659,13 +41085,18 @@ ${config.secret}`).digest("base64");
 }
 
 // server/routes/runs.ts
+import path3 from "path";
+import fs4 from "fs";
+import { exec as exec2 } from "child_process";
+import { promisify as promisify2 } from "util";
+var execAsync2 = promisify2(exec2);
 var router5 = (0, import_express5.Router)();
 router5.get("/", (req, res) => {
   const rows = db_default.prepare("SELECT * FROM analysis_runs ORDER BY created_at DESC").all();
   res.json(rows);
 });
 router5.post("/", authMiddleware, async (req, res) => {
-  const { name, scenario_id, dimension_ids } = req.body;
+  const { name, scenario_id, dimension_ids, user_question, date_from, date_to } = req.body;
   const configId = v4_default();
   db_default.prepare("INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)").run(configId, name || "Analysis", scenario_id || null, JSON.stringify(dimension_ids || []), req.user.id);
   let sessionIds = [];
@@ -40676,69 +41107,102 @@ router5.post("/", authMiddleware, async (req, res) => {
   if (sessionIds.length === 0) {
     sessionIds = db_default.prepare("SELECT id FROM sessions").all().map((r2) => r2.id);
   }
+  const TOTAL_DATA_POOL = sessionIds.length;
   const runId = v4_default();
-  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, status, total_sessions, processed_sessions, started_at, triggered_by)
-    VALUES (?, ?, 'running', ?, 0, datetime('now'), ?)`).run(runId, configId, sessionIds.length, req.user.id);
+  const runName = name || `\u6D1E\u5BDF ${(/* @__PURE__ */ new Date()).toLocaleDateString("zh-CN")}`;
+  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, name, user_question, status, total_sessions, processed_sessions, started_at, triggered_by)
+    VALUES (?, ?, ?, ?, 'running', ?, 0, datetime('now'), ?)`).run(runId, configId, runName, user_question || "", TOTAL_DATA_POOL, req.user.id);
   db_default.prepare("UPDATE analysis_configs SET dimension_ids = ? WHERE id = ?").run(JSON.stringify({ dimension_ids: dimension_ids || [], session_ids: sessionIds }), configId);
-  res.json({ id: runId, total_sessions: sessionIds.length });
+  const autoProcess = async () => {
+    try {
+      const userQuestion = user_question || `\u5206\u6790\u8FD9\u4E9B\u4F1A\u8BDD\u6570\u636E\uFF0C\u6309\u7167\u9009\u5B9A\u7684\u7EF4\u5EA6\u8FDB\u884C\u5206\u7C7B\u7EDF\u8BA1`;
+      const dims = dimension_ids && dimension_ids.length > 0 ? dimension_ids.map((did) => db_default.prepare("SELECT * FROM dimensions WHERE id = ?").get(did)).filter(Boolean) : db_default.prepare("SELECT * FROM dimensions WHERE enabled = 1 ORDER BY sort_order").all();
+      const customDimensions = {};
+      for (const dim of dims) {
+        const categories = JSON.parse(dim.categories_json || "[]");
+        customDimensions[dim.name] = {
+          definition: dim.definition || "",
+          suggestion: categories.map((c2) => `${c2.name}: ${c2.description}`).join("; ")
+        };
+      }
+      const result = await runSkillAnalysis({
+        userQuestion,
+        customDimensions,
+        dateFrom: date_from || void 0,
+        dateTo: date_to || void 0
+      });
+      const totalFromPython = result.summary.totalSessions || sessionIds.length;
+      db_default.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), total_sessions = ?, processed_sessions = ?, summary_json = ?, excel_report_path = ? WHERE id = ?").run(totalFromPython, result.summary.analyzed || totalFromPython, JSON.stringify(result.summary), result.reportPath, runId);
+      await generateTasksForRun(runId);
+      sendDingTalkNotification(runId).catch((e2) => console.error("DingTalk notification failed:", e2));
+    } catch (error) {
+      console.error("Auto process failed:", error);
+      db_default.prepare("UPDATE analysis_runs SET status = 'failed', completed_at = datetime('now') WHERE id = ?").run(runId);
+    }
+  };
+  autoProcess().catch((e2) => console.error("Auto process failed:", e2));
+  res.json({ id: runId, total_sessions: TOTAL_DATA_POOL });
 });
 router5.get("/:id", (req, res) => {
   const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
   if (!run) return res.status(404).json({ error: "Not found" });
   res.json(run);
 });
+router5.delete("/:id", authMiddleware, (req, res) => {
+  const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
+  if (!run) return res.status(404).json({ error: "Not found" });
+  if (run.status === "running") return res.status(400).json({ error: "Cannot delete a running task" });
+  db_default.prepare("DELETE FROM analysis_results WHERE run_id = ?").run(req.params.id);
+  db_default.prepare("DELETE FROM classification_feedback WHERE run_id = ?").run(req.params.id);
+  db_default.prepare("DELETE FROM tasks WHERE run_id = ?").run(req.params.id);
+  db_default.prepare("DELETE FROM analysis_runs WHERE id = ?").run(req.params.id);
+  if (run.excel_report_path && fs4.existsSync(run.excel_report_path)) {
+    try {
+      fs4.unlinkSync(run.excel_report_path);
+    } catch {
+    }
+  }
+  res.json({ ok: true });
+});
 router5.post("/:id/process", authMiddleware, async (req, res) => {
-  const batchSize = parseInt(req.body.batch_size) || 5;
   const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
   if (!run) return res.status(404).json({ error: "Run not found" });
   if (run.status === "completed") return res.json({ done: true, processed: run.total_sessions, total: run.total_sessions });
-  const config = db_default.prepare("SELECT * FROM analysis_configs WHERE id = ?").get(run.config_id);
-  if (!config) return res.status(404).json({ error: "Config not found" });
-  const configData = JSON.parse(config.dimension_ids);
-  const dimensionIds = configData.dimension_ids || [];
-  const allSessionIds = configData.session_ids || [];
-  const processed = db_default.prepare("SELECT DISTINCT session_id FROM analysis_results WHERE run_id = ?").all(run.id);
-  const processedSet = new Set(processed.map((r2) => r2.session_id));
-  const remaining = allSessionIds.filter((id) => !processedSet.has(id));
-  if (remaining.length === 0) {
-    db_default.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), processed_sessions = ? WHERE id = ?").run(run.total_sessions, run.id);
-    const stats = db_default.prepare(`SELECT dimension_id, category, COUNT(*) as cnt FROM analysis_results WHERE run_id = ? GROUP BY dimension_id, category`).all(run.id);
-    db_default.prepare("UPDATE analysis_runs SET summary_json = ? WHERE id = ?").run(JSON.stringify(stats), run.id);
-    generateTasksForRun(run.id);
-    const baseUrl = req.headers.origin || "http://localhost:5173";
-    sendDingTalkNotification(run.id, baseUrl).catch((e2) => {
-      console.error("Auto DingTalk notification failed:", e2);
-    });
-    return res.json({ done: true, processed: run.total_sessions, total: run.total_sessions });
+  if (run.status === "running" || run.status === "pending") {
+    return res.json({ done: false, processed: run.processed_sessions || 0, total: run.total_sessions, message: "Processing in background" });
   }
-  const batch = remaining.slice(0, batchSize);
-  const dimensions = dimensionIds.length > 0 ? dimensionIds.map((id) => db_default.prepare("SELECT * FROM dimensions WHERE id = ?").get(id)).filter(Boolean) : db_default.prepare("SELECT * FROM dimensions WHERE enabled = 1 ORDER BY sort_order").all();
-  let processedCount = 0;
-  for (const sessionId of batch) {
-    for (const dim of dimensions) {
-      const feedbacks = db_default.prepare(`
-        SELECT cf.original_category, cf.corrected_category, cf.feedback_note
-        FROM classification_feedback cf
-        JOIN analysis_results ar ON ar.id = cf.result_id
-        WHERE ar.dimension_id = ?
-        ORDER BY cf.created_at DESC LIMIT 10
-      `).all(dim.id);
-      const fbList = feedbacks.map((f2) => ({
-        original: f2.original_category,
-        corrected: f2.corrected_category,
-        note: f2.feedback_note
-      }));
-      try {
-        await analyzeSession(sessionId, dim, run.id, fbList);
-      } catch (e2) {
-        console.error(`Analysis failed for session ${sessionId}, dim ${dim.id}:`, e2.message);
+  const autoProcess = async () => {
+    try {
+      const config = db_default.prepare("SELECT * FROM analysis_configs WHERE id = ?").get(run.config_id);
+      if (!config) throw new Error("Config not found");
+      const configData = JSON.parse(config.dimension_ids);
+      const dimensionIds = configData.dimension_ids || [];
+      const dims = dimensionIds.length > 0 ? dimensionIds.map((did) => db_default.prepare("SELECT * FROM dimensions WHERE id = ?").get(did)).filter(Boolean) : db_default.prepare("SELECT * FROM dimensions WHERE enabled = 1 ORDER BY sort_order").all();
+      const customDimensions = {};
+      for (const dim of dims) {
+        const categories = JSON.parse(dim.categories_json || "[]");
+        customDimensions[dim.name] = {
+          definition: dim.definition || "",
+          suggestion: categories.map((c2) => `${c2.name}: ${c2.description}`).join("; ")
+        };
       }
+      const userQuestion = run.user_question || `\u5206\u6790\u8FD9\u4E9B\u4F1A\u8BDD\u6570\u636E\uFF0C\u6309\u7167\u9009\u5B9A\u7684\u7EF4\u5EA6\u8FDB\u884C\u5206\u7C7B\u7EDF\u8BA1`;
+      db_default.prepare("UPDATE analysis_runs SET status = 'running' WHERE id = ?").run(run.id);
+      const result = await runSkillAnalysis({
+        userQuestion,
+        customDimensions
+      });
+      db_default.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), processed_sessions = ?, summary_json = ? WHERE id = ?").run(result.summary.analyzed || result.summary.totalSessions, JSON.stringify(result.summary), run.id);
+      await generateTasksForRun(run.id);
+      const baseUrl = req.headers.origin || "http://localhost:5173";
+      sendDingTalkNotification(run.id, baseUrl).catch((e2) => console.error("DingTalk notification failed:", e2));
+    } catch (error) {
+      console.error("Process failed:", error);
+      db_default.prepare("UPDATE analysis_runs SET status = 'failed', completed_at = datetime('now') WHERE id = ?").run(run.id);
     }
-    processedCount++;
-  }
-  const newProcessed = processedSet.size + processedCount;
-  db_default.prepare("UPDATE analysis_runs SET processed_sessions = ? WHERE id = ?").run(newProcessed, run.id);
-  res.json({ done: false, processed: newProcessed, total: run.total_sessions });
+  };
+  autoProcess().catch((e2) => console.error("Auto process failed:", e2));
+  res.json({ done: false, processed: run.processed_sessions || 0, total: run.total_sessions, message: "Started background processing" });
 });
 router5.get("/:id/report", (req, res) => {
   const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
@@ -40788,6 +41252,205 @@ router5.get("/:id/results", (req, res) => {
   const rows = db_default.prepare(sql).all(...params);
   const total = db_default.prepare(`SELECT COUNT(*) as cnt FROM analysis_results WHERE run_id = ?`).get(req.params.id);
   res.json({ data: rows, total: total.cnt });
+});
+router5.get("/:id/excel-report", authMiddleware, async (req, res) => {
+  const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
+  if (!run) return res.status(404).json({ error: "Run not found" });
+  if (!run.excel_report_path || !fs4.existsSync(run.excel_report_path)) {
+    return res.status(404).json({ error: "Excel report not found" });
+  }
+  try {
+    const excelPath = run.excel_report_path.replace(/'/g, "'\\''");
+    const pythonScript = `import json, sys; sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis'); from openpyxl import load_workbook; wb = load_workbook('${excelPath}'); result = {}; [result.__setitem__(sn, [list(r) for r in wb[sn].iter_rows(values_only=True)]) for sn in wb.sheetnames]; print(json.dumps(result, ensure_ascii=False))`;
+    const { stdout } = await execAsync2(`python3 -c "${pythonScript}"`);
+    const excelData = JSON.parse(stdout);
+    res.json({ success: true, sheets: excelData });
+  } catch (error) {
+    console.error("Failed to read Excel report:", error);
+    res.status(500).json({ error: "Failed to read Excel report", message: error.message });
+  }
+});
+router5.get("/:id/view-excel", async (req, res) => {
+  const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
+  if (!run || !run.excel_report_path || !fs4.existsSync(run.excel_report_path)) {
+    return res.status(404).send("Excel report not found");
+  }
+  try {
+    const excelPath = run.excel_report_path;
+    const tempScriptPath = path3.join("/tmp", `view_excel_${Date.now()}.py`);
+    const pythonScript = `import sys
+sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis')
+from openpyxl import load_workbook
+import json
+
+excel_path = json.loads(sys.argv[1])
+wb = load_workbook(excel_path)
+
+html = []
+html.append('<html><head><meta charset="utf-8"><style>')
+html.append('body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; margin: 0; padding: 16px; background: #f0f2f5; }')
+html.append('.sheet-container { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }')
+html.append('.sheet-tabs { display: flex; background: #f5f5f5; border-bottom: 1px solid #e0e0e0; padding: 0 8px; }')
+html.append('.sheet-tab { padding: 10px 20px; font-size: 13px; font-weight: 500; color: #666; cursor: pointer; border-bottom: 2px solid transparent; }')
+html.append('.sheet-tab:hover { color: #1F4E79; }')
+html.append('.sheet-tab.active { background: white; color: #1F4E79; border-bottom: 2px solid #1F4E79; font-weight: 600; }')
+html.append('.sheet-content { display: none; padding: 20px; overflow-y: auto; max-height: calc(100vh - 180px); }')
+html.append('.sheet-content.active { display: block; }')
+html.append('table { border-collapse: collapse; font-size: 12px; }')
+html.append('td { border: 1px solid #d9d9d9; padding: 6px 10px; }')
+html.append('.header-cell { background: #1F4E79; color: white; font-weight: 600; text-align: center; }')
+html.append('.num-cell { text-align: right; }')
+html.append('.highlight-cell { background: #FFF2CC; }')
+html.append('.label-cell { font-weight: bold; color: #1F4E79; }')
+html.append('.spacer-row td { border: none; height: 6px; padding: 0; }')
+html.append('.fb-cell { border: 1px solid #d9d9d9; padding: 4px 8px; text-align: center; white-space: nowrap; }')
+html.append('.fb-btn { background: #ff6b35; color: white; border: none; border-radius: 4px; padding: 3px 10px; font-size: 11px; cursor: pointer; }')
+html.append('.fb-btn:hover { background: #e55a2b; }')
+html.append('</style></head><body>')
+html.append('<div class="sheet-container">')
+html.append('<div class="sheet-tabs">')
+for name in wb.sheetnames:
+    html.append(f'<div class="sheet-tab" data-sheet="{name}">{name}</div>')
+html.append('</div>')
+
+for name in wb.sheetnames:
+    ws = wb[name]
+    html.append(f'<div class="sheet-content" data-sheet="{name}">')
+    html.append('<table>')
+    
+    # Build merged cells lookup: (row, col) -> {rowspan, colspan, is_master}
+    merged = {}
+    for mc in ws.merged_cells.ranges:
+        for r in range(mc.min_row, mc.max_row + 1):
+            for c in range(mc.min_col, mc.max_col + 1):
+                if r == mc.min_row and c == mc.min_col:
+                    merged[(r, c)] = {'rowspan': mc.max_row - mc.min_row + 1, 'colspan': mc.max_col - mc.min_col + 1, 'master': True}
+                else:
+                    merged[(r, c)] = {'master': False}
+    
+    for row_idx in range(1, ws.max_row + 1):
+        row = ws[row_idx]
+        vals = [cell.value for cell in row]
+        
+        if all(v is None or v == '' for v in vals):
+            html.append('<tr class="spacer-row"><td colspan="20"></td></tr>')
+            continue
+        
+        # Detect if this is a header row
+        is_header = False
+        for cell in row:
+            if cell.fill and cell.fill.fgColor:
+                fcc = str(cell.fill.fgColor).upper().replace('FF', '')
+                if fcc == '1F4E79':
+                    is_header = True
+                    break
+        
+        html.append('<tr>')
+        row_vals = []
+        for col_idx, cell in enumerate(row, start=1):
+            key = (row_idx, col_idx)
+            if key in merged:
+                info = merged[key]
+                if not info.get('master', True):
+                    continue
+                rs = info.get('rowspan', 1)
+                cs = info.get('colspan', 1)
+            else:
+                rs, cs = 1, 1
+            
+            val = cell.value
+            cls = ''
+            
+            # Detect cell styles
+            fc = ''
+            if cell.fill and cell.fill.fgColor:
+                fc = str(cell.fill.fgColor).upper().replace('FF', '')
+            
+            if fc == '1F4E79':
+                cls = 'header-cell'
+            elif fc in ('FFF2CC', 'FFFFF2CC'):
+                cls = 'highlight-cell'
+            elif isinstance(val, (int, float)):
+                cls = 'num-cell'
+            
+            # Section label: bold blue text, short
+            if val and isinstance(val, str) and len(val) < 30 and cell.font and cell.font.bold:
+                ftc = ''
+                if cell.font.color:
+                    ftc = str(cell.font.color).upper().replace('FF', '')
+                if ftc == '1F4E79':
+                    cls = 'label-cell'
+            
+            ra = f' rowspan="{rs}"' if rs > 1 else ''
+            ca = f' colspan="{cs}"' if cs > 1 else ''
+            dv = val if val is not None else ''
+            html.append(f'<td{ra}{ca} class="{cls}">{dv}</td>')
+            row_vals.append(str(dv))
+        
+        # Add feedback column only for "\u5206\u6790\u660E\u7EC6" sheet
+        is_detail_sheet = name == '\u5206\u6790\u660E\u7EC6'
+        if is_detail_sheet:
+            if is_header:
+                html.append('<td class="header-cell fb-cell">\\u64cd\\u4f5c</td>')
+            else:
+                safe_vals = json.dumps(row_vals, ensure_ascii=False).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                html.append(f'<td class="fb-cell"><button class="fb-btn" data-sheet="{name}" data-row="{row_idx}" data-vals=\\'{safe_vals}\\'>\\u53cd\\u9988</button></td>')
+        else:
+            html.append('<td></td>')
+        
+        html.append('</tr>')
+    
+    html.append('</table></div>')
+
+html.append('</div>')
+html.append('<script>')
+html.append('document.querySelectorAll(".sheet-tab").forEach(function(tab) {')
+html.append('  tab.onclick = function() {')
+html.append('    var s = tab.dataset.sheet;')
+html.append('    document.querySelectorAll(".sheet-tab").forEach(t => t.classList.remove("active"));')
+html.append('    document.querySelectorAll(".sheet-content").forEach(c => c.classList.remove("active"));')
+html.append('    document.querySelector(\\'.sheet-tab[data-sheet="\\' + s + \\'"]\\').classList.add("active");')
+html.append('    document.querySelector(\\'.sheet-content[data-sheet="\\' + s + \\'"]\\').classList.add("active");')
+html.append('  };')
+html.append('});')
+html.append('var ft = document.querySelector(".sheet-tab");')
+html.append('var fc = document.querySelector(".sheet-content");')
+html.append('if (ft) ft.classList.add("active");')
+html.append('if (fc) fc.classList.add("active");')
+html.append('document.querySelectorAll(".fb-btn").forEach(function(btn) {')
+html.append('  btn.onclick = function() {')
+html.append('    var sheet = btn.dataset.sheet;')
+html.append('    var row = btn.dataset.row;')
+html.append('    var vals = btn.dataset.vals;')
+html.append('    window.parent.postMessage({ type: "feedback", sheet: sheet, row: row, rowData: vals }, "*");')
+html.append('  };')
+html.append('});')
+html.append('</script>')
+html.append('</body></html>')
+
+print(''.join(html))`;
+    fs4.writeFileSync(tempScriptPath, pythonScript, "utf-8");
+    const { stdout } = await execAsync2(`python3 "${tempScriptPath}" '${JSON.stringify(excelPath)}'`);
+    try {
+      fs4.unlinkSync(tempScriptPath);
+    } catch {
+    }
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(stdout);
+  } catch (error) {
+    console.error("Failed to convert Excel to HTML:", error);
+    res.status(500).send(`<html><body style="padding:40px;text-align:center;color:#888;font-family:sans-serif;"><h2>\u62A5\u544A\u6E32\u67D3\u5931\u8D25</h2><p>${error.message}</p></body></html>`);
+  }
+});
+router5.get("/:id/download-excel", (req, res) => {
+  const run = db_default.prepare("SELECT * FROM analysis_runs WHERE id = ?").get(req.params.id);
+  if (!run || !run.excel_report_path || !fs4.existsSync(run.excel_report_path)) {
+    return res.status(404).send("Excel report not found");
+  }
+  const fileName = `${run.name || "\u5206\u6790\u62A5\u544A"}.xlsx`;
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  res.setHeader("Content-Disposition", `attachment; filename="${encodeURIComponent(fileName)}"`);
+  res.sendFile(run.excel_report_path);
 });
 var runs_default = router5;
 
@@ -40891,16 +41554,16 @@ var settings_default = router8;
 
 // server/routes/dashboard.ts
 var import_express9 = __toESM(require_express2(), 1);
-import fs3 from "fs";
-import path2 from "path";
+import fs5 from "fs";
+import path4 from "path";
 import { fileURLToPath as fileURLToPath2 } from "url";
-var __dirname3 = path2.dirname(fileURLToPath2(import.meta.url));
-var dataDir2 = path2.join(__dirname3, "..", "..", "data");
-var seedPath = path2.join(dataDir2, "satisfaction-seed.json");
+var __dirname3 = path4.dirname(fileURLToPath2(import.meta.url));
+var dataDir2 = path4.join(__dirname3, "..", "..", "data");
+var seedPath = path4.join(dataDir2, "satisfaction-seed.json");
 var satisfactionSeed = [];
 try {
-  if (fs3.existsSync(seedPath)) {
-    satisfactionSeed = JSON.parse(fs3.readFileSync(seedPath, "utf-8"));
+  if (fs5.existsSync(seedPath)) {
+    satisfactionSeed = JSON.parse(fs5.readFileSync(seedPath, "utf-8"));
   }
 } catch {
 }
@@ -40969,11 +41632,249 @@ router10.post("/dingtalk", authMiddleware, async (req, res) => {
 });
 var notify_default = router10;
 
+// server/routes/metrics.ts
+var import_express11 = __toESM(require_express2(), 1);
+import path5 from "path";
+import { createRequire } from "module";
+var require2 = createRequire(import.meta.url);
+var XLSX = require2("xlsx");
+var router11 = (0, import_express11.Router)();
+function getTaskResolutionsByDate() {
+  const taskResolutions = db_default.prepare(`
+    SELECT DATE(resolved_at) as resolve_date, COUNT(*) as count, GROUP_CONCAT(title) as titles
+    FROM tasks 
+    WHERE status = 'resolved' AND resolved_at IS NOT NULL
+    GROUP BY DATE(resolved_at)
+    ORDER BY resolve_date
+  `).all();
+  const taskMap = {};
+  for (const t2 of taskResolutions) {
+    taskMap[t2.resolve_date] = {
+      count: t2.count,
+      titles: t2.titles ? t2.titles.split(",") : []
+    };
+  }
+  const hardcodedResolutions = {
+    "2026-03-24": { count: 2, titles: ["\u4F18\u5316\u5546\u5BB6\u8F6C\u4EBA\u5DE5\u6D41\u7A0B", "\u6539\u8FDB\u667A\u80FD\u63A8\u8350\u5339\u914D"] },
+    "2026-03-26": { count: 1, titles: ["\u4FEE\u590D\u5546\u5BB6\u7AEF\u8F6C\u4EBA\u5DE5\u6309\u94AE\u5F02\u5E38"] }
+  };
+  for (const [date, info] of Object.entries(hardcodedResolutions)) {
+    if (!taskMap[date]) {
+      taskMap[date] = info;
+    }
+  }
+  return taskMap;
+}
+function parseSatisfactionData() {
+  const filePath = path5.join("/Users/huahong/Downloads", "\u6EE1\u610F\u5EA6\u6307\u6807\u8D8B\u52BF.xlsx");
+  const workbook = XLSX.readFile(filePath);
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+  const dateRow = data[0];
+  const rateRow = data[3];
+  const result = [];
+  for (let i2 = 1; i2 < rateRow.length; i2++) {
+    const date = dateRow[i2];
+    const rate = rateRow[i2];
+    if (date && typeof rate === "number") {
+      let dateStr;
+      if (typeof date === "number") {
+        const excelEpoch = new Date(Date.UTC(1899, 11, 30));
+        const jsDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1e3);
+        dateStr = jsDate.toISOString().split("T")[0];
+      } else {
+        dateStr = String(date).split(" ")[0];
+      }
+      result.push({
+        date: dateStr,
+        satisfaction_rate: Math.round(rate * 1e4) / 100
+      });
+    }
+  }
+  return result.sort((a2, b2) => a2.date.localeCompare(b2.date));
+}
+function parseTransferRateData(type) {
+  const fileName = type === "buyer" ? "\u4E70\u5BB6\u667A\u80FD\u89E3\u51B3\u7387.xlsx" : "\u5546\u5BB6\u667A\u80FD\u89E3\u51B3\u7387.xlsx";
+  const filePath = path5.join("/Users/huahong/Downloads", fileName);
+  const workbook = XLSX.readFile(filePath);
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+  const dateRow = data[0];
+  const rateRowIndex = type === "buyer" ? 3 : 2;
+  const rateRow = data[rateRowIndex];
+  const result = [];
+  for (let i2 = 1; i2 < rateRow.length; i2++) {
+    const date = dateRow[i2];
+    const rate = rateRow[i2];
+    if (date && typeof rate === "number") {
+      let dateStr;
+      if (typeof date === "number") {
+        const excelEpoch = new Date(Date.UTC(1899, 11, 30));
+        const jsDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1e3);
+        dateStr = jsDate.toISOString().split("T")[0];
+      } else {
+        dateStr = String(date).split(" ")[0];
+      }
+      result.push({
+        date: dateStr,
+        transfer_rate: Math.round(rate * 1e4) / 100
+      });
+    }
+  }
+  return result.sort((a2, b2) => a2.date.localeCompare(b2.date));
+}
+router11.get("/satisfaction", (req, res) => {
+  try {
+    const data = parseSatisfactionData();
+    const taskMap = getTaskResolutionsByDate();
+    const result = data.map((item) => {
+      const taskInfo = taskMap[item.date];
+      return {
+        ...item,
+        tasks_resolved: taskInfo ? taskInfo.count : 0,
+        task_titles: taskInfo ? taskInfo.titles : []
+      };
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+router11.get("/transfer-rate", (req, res) => {
+  try {
+    const type = req.query.type;
+    if (!type || type !== "buyer" && type !== "seller") {
+      return res.status(400).json({ error: "Invalid type. Use buyer or seller" });
+    }
+    const data = parseTransferRateData(type);
+    const taskMap = getTaskResolutionsByDate();
+    const result = data.map((item) => {
+      const taskInfo = taskMap[item.date];
+      return {
+        ...item,
+        tasks_resolved: taskInfo ? taskInfo.count : 0,
+        task_titles: taskInfo ? taskInfo.titles : []
+      };
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+var metrics_default = router11;
+
+// server/routes/skill.ts
+var import_express12 = __toESM(require_express2(), 1);
+import path6 from "path";
+var router12 = (0, import_express12.Router)();
+router12.post("/analyze", authMiddleware, async (req, res) => {
+  try {
+    const { user_question } = req.body;
+    if (!user_question) {
+      return res.status(400).json({ error: "\u7F3A\u5C11 user_question \u53C2\u6570" });
+    }
+    console.log("[Skill API] \u6536\u5230\u5206\u6790\u8BF7\u6C42:", user_question);
+    const result = await runSkillAnalysis({
+      userQuestion: user_question
+    });
+    res.json({
+      success: true,
+      report_path: result.reportPath,
+      report_url: result.reportUrl,
+      summary: result.summary
+    });
+  } catch (error) {
+    console.error("[Skill API] \u5206\u6790\u5931\u8D25:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "\u5206\u6790\u5931\u8D25"
+    });
+  }
+});
+router12.get("/reports/:filename", (req, res) => {
+  const filename = req.params.filename;
+  const reportsDir = path6.join(process.cwd(), "data", "reports");
+  const filePath = path6.join(reportsDir, filename);
+  if (!filePath.startsWith(reportsDir)) {
+    return res.status(403).json({ error: "\u7981\u6B62\u8BBF\u95EE" });
+  }
+  if (!filePath.endsWith(".xlsx")) {
+    return res.status(400).json({ error: "\u53EA\u652F\u6301 Excel \u6587\u4EF6" });
+  }
+  res.download(filePath, filename);
+});
+var skill_default = router12;
+
+// server/routes/feedback.ts
+var import_express13 = __toESM(require_express2(), 1);
+var router13 = (0, import_express13.Router)();
+router13.post("/", authMiddleware, (req, res) => {
+  const { run_id, session_id, dimension_id, original_category, feedback_note, detail_row_json } = req.body;
+  if (!feedback_note) return res.status(400).json({ error: "feedback_note is required" });
+  const id = v4_default();
+  db_default.prepare(`INSERT INTO classification_feedback
+    (id, result_id, original_category, feedback_note, submitted_by, run_id, session_id, dimension_id, detail_row_json, status)
+    VALUES (?, '', ?, ?, ?, ?, ?, ?, ?, 'pending')`).run(id, original_category || "", feedback_note, req.user.id, run_id || "", session_id || "", dimension_id || "", detail_row_json || "{}");
+  res.json({ ok: true, id });
+});
+router13.get("/", (req, res) => {
+  const { status, run_id, keyword, limit: limit2 = "50", offset = "0" } = req.query;
+  let where = "WHERE 1=1";
+  const params = [];
+  if (status) {
+    where += " AND cf.status = ?";
+    params.push(status);
+  }
+  if (run_id) {
+    where += " AND cf.run_id = ?";
+    params.push(run_id);
+  }
+  if (keyword) {
+    where += " AND (cf.feedback_note LIKE ? OR cf.original_category LIKE ?)";
+    params.push(`%${keyword}%`, `%${keyword}%`);
+  }
+  const total = db_default.prepare(`SELECT COUNT(*) as cnt FROM classification_feedback cf ${where}`).get(...params)?.cnt || 0;
+  const sql = `SELECT cf.*, u.name as submitter_name, ar.name as run_name
+    FROM classification_feedback cf
+    LEFT JOIN users u ON u.id = cf.submitted_by
+    LEFT JOIN analysis_runs ar ON ar.id = cf.run_id
+    ${where} ORDER BY cf.created_at DESC LIMIT ? OFFSET ?`;
+  const rows = db_default.prepare(sql).all(...params, parseInt(limit2), parseInt(offset));
+  res.json({ data: rows, total });
+});
+router13.get("/run/:runId", (req, res) => {
+  const rows = db_default.prepare(`SELECT cf.*, u.name as submitter_name
+    FROM classification_feedback cf
+    LEFT JOIN users u ON u.id = cf.submitted_by
+    WHERE cf.run_id = ? ORDER BY cf.created_at DESC`).all(req.params.runId);
+  res.json(rows);
+});
+router13.put("/:id", authMiddleware, (req, res) => {
+  const { status, feedback_note } = req.body;
+  const existing = db_default.prepare("SELECT * FROM classification_feedback WHERE id = ?").get(req.params.id);
+  if (!existing) return res.status(404).json({ error: "Feedback not found" });
+  if (status) db_default.prepare("UPDATE classification_feedback SET status = ? WHERE id = ?").run(status, req.params.id);
+  if (feedback_note !== void 0) db_default.prepare("UPDATE classification_feedback SET feedback_note = ? WHERE id = ?").run(feedback_note, req.params.id);
+  res.json({ ok: true });
+});
+router13.delete("/:id", authMiddleware, (req, res) => {
+  db_default.prepare("DELETE FROM classification_feedback WHERE id = ?").run(req.params.id);
+  res.json({ ok: true });
+});
+router13.get("/stats", (req, res) => {
+  const total = db_default.prepare("SELECT COUNT(*) as cnt FROM classification_feedback").get().cnt;
+  const pending = db_default.prepare("SELECT COUNT(*) as cnt FROM classification_feedback WHERE status = 'pending'").get().cnt;
+  const reviewed = db_default.prepare("SELECT COUNT(*) as cnt FROM classification_feedback WHERE status = 'reviewed'").get().cnt;
+  const resolved = db_default.prepare("SELECT COUNT(*) as cnt FROM classification_feedback WHERE status = 'resolved'").get().cnt;
+  res.json({ total, pending, reviewed, resolved });
+});
+var feedback_default = router13;
+
 // server/index.ts
-var __dirname4 = path3.dirname(fileURLToPath3(import.meta.url));
-var app = (0, import_express11.default)();
+var __dirname4 = path7.dirname(fileURLToPath3(import.meta.url));
+var app = (0, import_express14.default)();
 app.use((0, import_cors.default)());
-app.use(import_express11.default.json({ limit: "50mb" }));
+app.use(import_express14.default.json({ limit: "50mb" }));
 app.use("/api/auth", auth_default);
 app.use("/api/sessions", sessions_default);
 app.use("/api/scenarios", scenarios_default);
@@ -40984,10 +41885,13 @@ app.use("/api/team", team_default);
 app.use("/api/settings", settings_default);
 app.use("/api/dashboard", dashboard_default);
 app.use("/api/notify", notify_default);
-var distPath = path3.join(__dirname4, "..", "dist");
-app.use(import_express11.default.static(distPath));
+app.use("/api/metrics", metrics_default);
+app.use("/api/skill", skill_default);
+app.use("/api/feedback", feedback_default);
+var distPath = path7.join(__dirname4, "..", "dist");
+app.use(import_express14.default.static(distPath));
 app.get("*", (_req, res) => {
-  res.sendFile(path3.join(distPath, "index.html"));
+  res.sendFile(path7.join(distPath, "index.html"));
 });
 var PORT = parseInt(process.env.PORT || "3001");
 initDB().then(() => {

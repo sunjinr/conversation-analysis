@@ -14,18 +14,37 @@ export async function sendDingTalkNotification(runId: string, baseUrl = 'http://
   const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(runId) as any
   if (!run) return { ok: false, error: 'Run not found' }
 
-  const urgentTasks = db.prepare(`
-    SELECT title, priority FROM tasks WHERE run_id = ? AND priority IN ('urgent', 'high')
-    ORDER BY CASE priority WHEN 'urgent' THEN 0 ELSE 1 END LIMIT 5
-  `).all(runId) as any[]
+  // 解析 summary_json 获取概述信息
+  let summary: any = {}
+  try {
+    summary = JSON.parse(run.summary_json || '{}')
+  } catch {}
 
-  const markdown = `## 会话分析报告完成
-**分析时间**: ${run.completed_at || run.started_at}
-**会话数量**: ${run.total_sessions} 条
+  // 构建分析数据摘要
+  const statsLines: string[] = []
+  if (summary.topicLabel) {
+    statsLines.push(`**分析主题**：${summary.topicLabel}`)
+  }
+  if (summary.totalSessions) {
+    statsLines.push(`**数据总量**：${summary.totalSessions} 条会话`)
+  }
+  if (summary.keywordFiltered) {
+    statsLines.push(`**关键词匹配**：${summary.keywordFiltered} 条`)
+  }
+  if (summary.analyzed) {
+    statsLines.push(`**最终分析**：${summary.analyzed} 条`)
+  }
 
-### 紧急发现
-${urgentTasks.length > 0 ? urgentTasks.map(t => `- **[${t.priority}]** ${t.title}`).join('\n') : '无紧急任务'}
+  // 概述文本
+  let overviewText = ''
+  if (summary.overview) {
+    overviewText = summary.overview.length > 200 ? summary.overview.substring(0, 200) + '...' : summary.overview
+  }
 
+  const markdown = `## ${run.name || '洞察完成'}
+
+${statsLines.length > 0 ? statsLines.join('\n\n') + '\n' : ''}
+${overviewText ? `> ${overviewText}\n` : ''}
 [查看详细报告](${baseUrl}/#/analysis/runs/${run.id})`
 
   let url = config.webhook_url
@@ -41,7 +60,7 @@ ${urgentTasks.length > 0 ? urgentTasks.map(t => `- **[${t.priority}]** ${t.title
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         msgtype: 'markdown',
-        markdown: { title: '会话分析报告', text: markdown },
+        markdown: { title: run.name || '洞察完成', text: markdown },
       }),
     })
     const result = await resp.json()

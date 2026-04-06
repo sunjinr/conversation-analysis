@@ -1,4 +1,4 @@
-import { chatComplete } from './openai.js'
+import { chatComplete, getEmbedding, cosineSimilarity, isEmbeddingAvailable } from './openai.js'
 import db from '../db.js'
 import { v4 as uuid } from 'uuid'
 
@@ -81,7 +81,7 @@ ${catList}
   return result
 }
 
-export function generateTasksForRun(runId: string) {
+export async function generateTasksForRun(runId: string) {
   const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(runId) as any
   if (!run) return
 
@@ -102,19 +102,33 @@ export function generateTasksForRun(runId: string) {
       const sessionIds = cat.session_ids.split(',').slice(0, 20)
       const priority = cat.cnt >= 50 ? 'urgent' : cat.cnt >= 20 ? 'high' : cat.cnt >= 10 ? 'medium' : 'low'
 
-      // Auto-assign based on team member role
+      // Auto-assign based on embedding semantic matching between task title and member role
       let assigneeId: string | null = null
       const members = db.prepare('SELECT * FROM team_members').all() as any[]
-      if (members.length > 0) {
-        const catLower = (cat.category + ' ' + dim.name).toLowerCase()
-        for (const m of members) {
-          const roleWords = m.role_description.toLowerCase().split(/\s+/)
-          if (roleWords.some((w: string) => catLower.includes(w) && w.length > 2)) {
-            assigneeId = m.id
-            break
+      if (members.length > 0 && isEmbeddingAvailable()) {
+        try {
+          const taskTitle = `[${dim.name}] ${cat.category}`
+          const taskVec = await getEmbedding(taskTitle)
+          
+          let bestScore = -1
+          let bestMember: any = null
+          
+          for (const m of members) {
+            const roleVec = await getEmbedding(m.role_description)
+            const score = cosineSimilarity(taskVec, roleVec)
+            if (score > bestScore) {
+              bestScore = score
+              bestMember = m
+            }
           }
+          
+          // Assign the best matching member
+          if (bestMember) {
+            assigneeId = bestMember.id
+          }
+        } catch (e) {
+          console.error('Embedding matching failed:', e)
         }
-        if (!assigneeId) assigneeId = members[0].id
       }
 
       db.prepare(`INSERT INTO tasks (id, run_id, dimension_id, title, description, priority, status, assignee_id, related_session_ids)

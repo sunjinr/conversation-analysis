@@ -103,7 +103,7 @@ export default function DimensionsPage() {
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={form.auto_discover} onChange={e => setForm(f => ({ ...f, auto_discover: e.target.checked }))}
                 className="rounded border-gray-300" />
-              AI自动沉淀新维度（AI发现不属于现有类别的数据时，自动新增类别）
+              AI+挖掘新维度（AI发现不属于现有类别的数据时，自动新增类别）
             </label>
 
             <input value={form.sub_skill_ref} onChange={e => setForm(f => ({ ...f, sub_skill_ref: e.target.value }))}
@@ -128,7 +128,7 @@ export default function DimensionsPage() {
                 <div className="flex items-center gap-2 mb-2">
                   <Layers size={16} className="text-accent" />
                   <h4 className="font-semibold text-gray-900">{d.name}</h4>
-                  {d.auto_discover ? <span className="badge bg-amber-100 text-amber-600">AI自动发现</span> : null}
+                  {d.auto_discover ? <span className="badge bg-amber-100 text-amber-600">AI+挖掘</span> : null}
                   {d.sub_skill_ref && <span className="badge bg-blue-100 text-blue-600">Skill: {d.sub_skill_ref}</span>}
                   {!d.enabled && <span className="badge bg-gray-100 text-gray-400">已禁用</span>}
                 </div>

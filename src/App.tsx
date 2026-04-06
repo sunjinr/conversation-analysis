@@ -5,12 +5,10 @@ import AnalysisLayout from '@/components/analysis/AnalysisLayout'
 import DashboardPage from '@/pages/analysis/DashboardPage'
 import SessionsPage from '@/pages/analysis/SessionsPage'
 import SessionDetailPage from '@/pages/analysis/SessionDetailPage'
-import ScenariosPage from '@/pages/analysis/ScenariosPage'
 import DimensionsPage from '@/pages/analysis/DimensionsPage'
 import NewRunPage from '@/pages/analysis/NewRunPage'
 import RunsPage from '@/pages/analysis/RunsPage'
 import RunDetailPage from '@/pages/analysis/RunDetailPage'
-import TasksPage from '@/pages/analysis/TasksPage'
 import SettingsPage from '@/pages/analysis/SettingsPage'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -30,12 +28,10 @@ function App() {
             <Route index element={<DashboardPage />} />
             <Route path="sessions" element={<SessionsPage />} />
             <Route path="sessions/:id" element={<SessionDetailPage />} />
-            <Route path="scenarios" element={<ScenariosPage />} />
             <Route path="dimensions" element={<DimensionsPage />} />
             <Route path="runs" element={<RunsPage />} />
             <Route path="runs/new" element={<NewRunPage />} />
             <Route path="runs/:id" element={<RunDetailPage />} />
-            <Route path="tasks" element={<TasksPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/analysis" replace />} />
