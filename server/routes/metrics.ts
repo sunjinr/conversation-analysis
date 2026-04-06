@@ -1,7 +1,9 @@
 import { Router } from 'express'
 import path from 'path'
+import fs from 'fs'
 import XLSX from 'xlsx'
 import db from '../db.js'
+import { satisfactionSeedData } from '../seed-production.js'
 
 const router = Router()
 
@@ -41,6 +43,12 @@ function getTaskResolutionsByDate(): Record<string, { count: number; titles: str
 // Helper to parse satisfaction Excel file
 function parseSatisfactionData(): any[] {
   const filePath = path.join('/Users/huahong/Downloads', '满意度指标趋势.xlsx')
+  if (!fs.existsSync(filePath)) {
+    return satisfactionSeedData.map(d => ({
+      date: d.date,
+      satisfaction_rate: d.satisfaction_rate,
+    }))
+  }
   const workbook = XLSX.readFile(filePath)
   const sheet = workbook.Sheets[workbook.SheetNames[0]]
   const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][]
@@ -77,6 +85,9 @@ function parseSatisfactionData(): any[] {
 function parseTransferRateData(type: 'buyer' | 'seller'): any[] {
   const fileName = type === 'buyer' ? '买家智能解决率.xlsx' : '商家智能解决率.xlsx'
   const filePath = path.join('/Users/huahong/Downloads', fileName)
+  if (!fs.existsSync(filePath)) {
+    return []
+  }
   const workbook = XLSX.readFile(filePath)
   const sheet = workbook.Sheets[workbook.SheetNames[0]]
   const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][]

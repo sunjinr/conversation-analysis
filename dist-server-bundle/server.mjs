@@ -109,7 +109,7 @@ var require_package = __commonJS({
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module) {
-    var fs6 = __require("fs");
+    var fs7 = __require("fs");
     var path8 = __require("path");
     var os = __require("os");
     var crypto3 = __require("crypto");
@@ -248,7 +248,7 @@ var require_main = __commonJS({
       if (options && options.path && options.path.length > 0) {
         if (Array.isArray(options.path)) {
           for (const filepath of options.path) {
-            if (fs6.existsSync(filepath)) {
+            if (fs7.existsSync(filepath)) {
               possibleVaultPath = filepath.endsWith(".vault") ? filepath : `${filepath}.vault`;
             }
           }
@@ -258,7 +258,7 @@ var require_main = __commonJS({
       } else {
         possibleVaultPath = path8.resolve(process.cwd(), ".env.vault");
       }
-      if (fs6.existsSync(possibleVaultPath)) {
+      if (fs7.existsSync(possibleVaultPath)) {
         return possibleVaultPath;
       }
       return null;
@@ -311,7 +311,7 @@ var require_main = __commonJS({
       const parsedAll = {};
       for (const path9 of optionPaths) {
         try {
-          const parsed = DotenvModule.parse(fs6.readFileSync(path9, { encoding }));
+          const parsed = DotenvModule.parse(fs7.readFileSync(path9, { encoding }));
           DotenvModule.populate(parsedAll, parsed, options);
         } catch (e2) {
           if (debug2) {
@@ -1738,8 +1738,8 @@ var require_node = __commonJS({
           }
           break;
         case "FILE":
-          var fs6 = __require("fs");
-          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
+          var fs7 = __require("fs");
+          stream2 = new fs7.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -18085,8 +18085,8 @@ var require_node2 = __commonJS({
           }
           break;
         case "FILE":
-          var fs6 = __require("fs");
-          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
+          var fs7 = __require("fs");
+          stream2 = new fs7.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -18804,8 +18804,8 @@ var require_node3 = __commonJS({
           }
           break;
         case "FILE":
-          var fs6 = __require("fs");
-          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
+          var fs7 = __require("fs");
+          stream2 = new fs7.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -19699,7 +19699,7 @@ var require_view = __commonJS({
     "use strict";
     var debug2 = require_src3()("express:view");
     var path8 = __require("path");
-    var fs6 = __require("fs");
+    var fs7 = __require("fs");
     var dirname = path8.dirname;
     var basename2 = path8.basename;
     var extname = path8.extname;
@@ -19765,7 +19765,7 @@ var require_view = __commonJS({
     function tryStat(path9) {
       debug2('stat "%s"', path9);
       try {
-        return fs6.statSync(path9);
+        return fs7.statSync(path9);
       } catch (e2) {
         return void 0;
       }
@@ -20370,8 +20370,8 @@ var require_node4 = __commonJS({
           }
           break;
         case "FILE":
-          var fs6 = __require("fs");
-          stream2 = new fs6.SyncWriteStream(fd2, { autoClose: false });
+          var fs7 = __require("fs");
+          stream2 = new fs7.SyncWriteStream(fd2, { autoClose: false });
           stream2._type = "fs";
           break;
         case "PIPE":
@@ -20544,7 +20544,7 @@ var require_types = __commonJS({
 var require_mime = __commonJS({
   "node_modules/mime/mime.js"(exports, module) {
     var path8 = __require("path");
-    var fs6 = __require("fs");
+    var fs7 = __require("fs");
     function Mime() {
       this.types = /* @__PURE__ */ Object.create(null);
       this.extensions = /* @__PURE__ */ Object.create(null);
@@ -20565,7 +20565,7 @@ var require_mime = __commonJS({
     };
     Mime.prototype.load = function(file) {
       this._loading = file;
-      var map = {}, content = fs6.readFileSync(file, "ascii"), lines = content.split(/[\r\n]+/);
+      var map = {}, content = fs7.readFileSync(file, "ascii"), lines = content.split(/[\r\n]+/);
       lines.forEach(function(line) {
         var fields = line.replace(/\s*#.*|^\s*|\s*$/g, "").split(/\s+/);
         map[fields.shift()] = fields;
@@ -20803,7 +20803,7 @@ var require_send = __commonJS({
     var escapeHtml = require_escape_html();
     var etag = require_etag();
     var fresh = require_fresh();
-    var fs6 = __require("fs");
+    var fs7 = __require("fs");
     var mime = require_mime();
     var ms = require_ms5();
     var onFinished = require_on_finished();
@@ -21136,7 +21136,7 @@ var require_send = __commonJS({
       var i2 = 0;
       var self2 = this;
       debug2('stat "%s"', path9);
-      fs6.stat(path9, function onstat(err, stat) {
+      fs7.stat(path9, function onstat(err, stat) {
         if (err && err.code === "ENOENT" && !extname(path9) && path9[path9.length - 1] !== sep) {
           return next(err);
         }
@@ -21151,7 +21151,7 @@ var require_send = __commonJS({
         }
         var p2 = path9 + "." + self2._extensions[i2++];
         debug2('stat "%s"', p2);
-        fs6.stat(p2, function(err2, stat) {
+        fs7.stat(p2, function(err2, stat) {
           if (err2) return next(err2);
           if (stat.isDirectory()) return next();
           self2.emit("file", p2, stat);
@@ -21169,7 +21169,7 @@ var require_send = __commonJS({
         }
         var p2 = join(path9, self2._index[i2]);
         debug2('stat "%s"', p2);
-        fs6.stat(p2, function(err2, stat) {
+        fs7.stat(p2, function(err2, stat) {
           if (err2) return next(err2);
           if (stat.isDirectory()) return next();
           self2.emit("file", p2, stat);
@@ -21181,7 +21181,7 @@ var require_send = __commonJS({
     SendStream.prototype.stream = function stream(path9, options) {
       var self2 = this;
       var res = this.res;
-      var stream2 = fs6.createReadStream(path9, options);
+      var stream2 = fs7.createReadStream(path9, options);
       this.emit("stream", stream2);
       stream2.pipe(res);
       function cleanup() {
@@ -25113,15 +25113,15 @@ var require_sql_wasm = __commonJS({
         "undefined" != typeof __filename ? ya = __filename : ba && (ya = self.location.href);
         var za = "", Aa, Ba;
         if (ca) {
-          var fs6 = __require("node:fs");
+          var fs7 = __require("node:fs");
           za = __dirname + "/";
           Ba = (a2) => {
             a2 = Ca(a2) ? new URL(a2) : a2;
-            return fs6.readFileSync(a2);
+            return fs7.readFileSync(a2);
           };
           Aa = async (a2) => {
             a2 = Ca(a2) ? new URL(a2) : a2;
-            return fs6.readFileSync(a2, void 0);
+            return fs7.readFileSync(a2, void 0);
           };
           1 < process.argv.length && (wa = process.argv[1].replace(/\\/g, "/"));
           process.argv.slice(2);
@@ -25403,7 +25403,7 @@ var require_sql_wasm = __commonJS({
               if (ca) {
                 var b2 = Buffer.alloc(256), c2 = 0, d2 = process.stdin.fd;
                 try {
-                  c2 = fs6.readSync(d2, b2, 0, 256);
+                  c2 = fs7.readSync(d2, b2, 0, 256);
                 } catch (e2) {
                   if (e2.toString().includes("EOF")) c2 = 0;
                   else throw e2;
@@ -38138,9 +38138,9 @@ var require_xlsx = __commonJS({
           }
           return o2;
         }
-        var fs6;
+        var fs7;
         function get_fs() {
-          return fs6 || (fs6 = __require("fs"));
+          return fs7 || (fs7 = __require("fs"));
         }
         function parse(file, options) {
           if (file[0] == 80 && file[1] == 75) return parse_zip2(file, options);
@@ -38416,7 +38416,7 @@ var require_xlsx = __commonJS({
         }
         function read_file(filename2, options) {
           get_fs();
-          return parse(fs6.readFileSync(filename2), options);
+          return parse(fs7.readFileSync(filename2), options);
         }
         function read(blob, options) {
           var type = options && options.type;
@@ -38742,7 +38742,7 @@ var require_xlsx = __commonJS({
         function write_file(cfb, filename2, options) {
           get_fs();
           var o2 = _write(cfb, options);
-          fs6.writeFileSync(filename2, o2);
+          fs7.writeFileSync(filename2, o2);
         }
         function a2s2(o2) {
           var out = new Array(o2.length);
@@ -38754,7 +38754,7 @@ var require_xlsx = __commonJS({
           switch (options && options.type || "buffer") {
             case "file":
               get_fs();
-              fs6.writeFileSync(options.filename, o2);
+              fs7.writeFileSync(options.filename, o2);
               return o2;
             case "binary":
               return typeof o2 == "string" ? o2 : a2s2(o2);
@@ -65744,7 +65744,7 @@ var require_xlsx = __commonJS({
         return out;
       }
       var qreg = /"/g;
-      function make_csv_row(sheet, r2, R2, cols, fs6, rs, FS, o2) {
+      function make_csv_row(sheet, r2, R2, cols, fs7, rs, FS, o2) {
         var isempty = true;
         var row = [], txt = "", rr2 = encode_row(R2);
         for (var C2 = r2.s.c; C2 <= r2.e.c; ++C2) {
@@ -65754,7 +65754,7 @@ var require_xlsx = __commonJS({
           else if (val.v != null) {
             isempty = false;
             txt = "" + (o2.rawNumbers && val.t == "n" ? val.v : format_cell(val, null, o2));
-            for (var i2 = 0, cc = 0; i2 !== txt.length; ++i2) if ((cc = txt.charCodeAt(i2)) === fs6 || cc === rs || cc === 34 || o2.forceQuotes) {
+            for (var i2 = 0, cc = 0; i2 !== txt.length; ++i2) if ((cc = txt.charCodeAt(i2)) === fs7 || cc === rs || cc === 34 || o2.forceQuotes) {
               txt = '"' + txt.replace(qreg, '""') + '"';
               break;
             }
@@ -65774,7 +65774,7 @@ var require_xlsx = __commonJS({
         var o2 = opts == null ? {} : opts;
         if (sheet == null || sheet["!ref"] == null) return "";
         var r2 = safe_decode_range(sheet["!ref"]);
-        var FS = o2.FS !== void 0 ? o2.FS : ",", fs6 = FS.charCodeAt(0);
+        var FS = o2.FS !== void 0 ? o2.FS : ",", fs7 = FS.charCodeAt(0);
         var RS = o2.RS !== void 0 ? o2.RS : "\n", rs = RS.charCodeAt(0);
         var endregex = new RegExp((FS == "|" ? "\\|" : FS) + "+$");
         var row = "", cols = [];
@@ -65785,7 +65785,7 @@ var require_xlsx = __commonJS({
         var w2 = 0;
         for (var R2 = r2.s.r; R2 <= r2.e.r; ++R2) {
           if ((rowinfo[R2] || {}).hidden) continue;
-          row = make_csv_row(sheet, r2, R2, cols, fs6, rs, FS, o2);
+          row = make_csv_row(sheet, r2, R2, cols, fs7, rs, FS, o2);
           if (row == null) {
             continue;
           }
@@ -66057,7 +66057,7 @@ var require_xlsx = __commonJS({
           return stream;
         }
         var r2 = safe_decode_range(sheet["!ref"]);
-        var FS = o2.FS !== void 0 ? o2.FS : ",", fs6 = FS.charCodeAt(0);
+        var FS = o2.FS !== void 0 ? o2.FS : ",", fs7 = FS.charCodeAt(0);
         var RS = o2.RS !== void 0 ? o2.RS : "\n", rs = RS.charCodeAt(0);
         var endregex = new RegExp((FS == "|" ? "\\|" : FS) + "+$");
         var row = "", cols = [];
@@ -66075,7 +66075,7 @@ var require_xlsx = __commonJS({
           while (R2 <= r2.e.r) {
             ++R2;
             if ((rowinfo[R2 - 1] || {}).hidden) continue;
-            row = make_csv_row(sheet, r2, R2 - 1, cols, fs6, rs, FS, o2);
+            row = make_csv_row(sheet, r2, R2 - 1, cols, fs7, rs, FS, o2);
             if (row != null) {
               if (o2.strip) row = row.replace(endregex, "");
               if (row || o2.blankrows !== false) return stream.push((w2++ ? RS : "") + row);
@@ -74858,6 +74858,7 @@ var notify_default = router10;
 var import_express11 = __toESM(require_express2(), 1);
 var import_xlsx = __toESM(require_xlsx(), 1);
 import path5 from "path";
+import fs6 from "fs";
 var router11 = (0, import_express11.Router)();
 function getTaskResolutionsByDate() {
   const taskResolutions = db_default.prepare(`
@@ -74887,6 +74888,12 @@ function getTaskResolutionsByDate() {
 }
 function parseSatisfactionData() {
   const filePath = path5.join("/Users/huahong/Downloads", "\u6EE1\u610F\u5EA6\u6307\u6807\u8D8B\u52BF.xlsx");
+  if (!fs6.existsSync(filePath)) {
+    return satisfactionSeedData.map((d2) => ({
+      date: d2.date,
+      satisfaction_rate: d2.satisfaction_rate
+    }));
+  }
   const workbook = import_xlsx.default.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const data = import_xlsx.default.utils.sheet_to_json(sheet, { header: 1 });
@@ -74916,6 +74923,9 @@ function parseSatisfactionData() {
 function parseTransferRateData(type) {
   const fileName = type === "buyer" ? "\u4E70\u5BB6\u667A\u80FD\u89E3\u51B3\u7387.xlsx" : "\u5546\u5BB6\u667A\u80FD\u89E3\u51B3\u7387.xlsx";
   const filePath = path5.join("/Users/huahong/Downloads", fileName);
+  if (!fs6.existsSync(filePath)) {
+    return [];
+  }
   const workbook = import_xlsx.default.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const data = import_xlsx.default.utils.sheet_to_json(sheet, { header: 1 });
