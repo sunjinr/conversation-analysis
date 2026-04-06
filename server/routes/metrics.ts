@@ -1,9 +1,7 @@
 import { Router } from 'express'
 import path from 'path'
-import { createRequire } from 'module'
+import XLSX from 'xlsx'
 import db from '../db.js'
-const require = createRequire(import.meta.url)
-const XLSX = require('xlsx')
 
 const router = Router()
 
