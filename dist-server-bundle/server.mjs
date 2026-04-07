@@ -74111,8 +74111,8 @@ import { promisify } from "util";
 import path2 from "path";
 import fs3 from "fs";
 var execAsync = promisify(exec);
-var SKILL_PATH = "/Users/huahong/Downloads/skisight_analysis";
-var OUTPUT_DIR = path2.join(process.cwd(), "data", "reports");
+var SKILL_PATH = process.env.SKILL_PATH || "/app/skisight_analysis";
+var OUTPUT_DIR = process.env.NODE_ENV === "production" ? "/tmp/data/reports" : path2.join(process.cwd(), "data", "reports");
 async function runSkillAnalysis(request) {
   if (!fs3.existsSync(OUTPUT_DIR)) {
     fs3.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -74483,7 +74483,8 @@ router5.get("/:id/excel-report", authMiddleware, async (req, res) => {
   }
   try {
     const excelPath = run.excel_report_path.replace(/'/g, "'\\''");
-    const pythonScript = `import json, sys; sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis'); from openpyxl import load_workbook; wb = load_workbook('${excelPath}'); result = {}; [result.__setitem__(sn, [list(r) for r in wb[sn].iter_rows(values_only=True)]) for sn in wb.sheetnames]; print(json.dumps(result, ensure_ascii=False))`;
+    const skillPath = process.env.SKILL_PATH || "/app/skisight_analysis";
+    const pythonScript = `import json, sys; sys.path.insert(0, '${skillPath}'); from openpyxl import load_workbook; wb = load_workbook('${excelPath}'); result = {}; [result.__setitem__(sn, [list(r) for r in wb[sn].iter_rows(values_only=True)]) for sn in wb.sheetnames]; print(json.dumps(result, ensure_ascii=False))`;
     const { stdout } = await execAsync2(`python3 -c "${pythonScript}"`);
     const excelData = JSON.parse(stdout);
     res.json({ success: true, sheets: excelData });
@@ -74500,8 +74501,9 @@ router5.get("/:id/view-excel", async (req, res) => {
   try {
     const excelPath = run.excel_report_path;
     const tempScriptPath = path3.join("/tmp", `view_excel_${Date.now()}.py`);
+    const skillPath = process.env.SKILL_PATH || "/app/skisight_analysis";
     const pythonScript = `import sys
-sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis')
+sys.path.insert(0, '${skillPath}')
 from openpyxl import load_workbook
 import json
 

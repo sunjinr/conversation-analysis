@@ -22,8 +22,8 @@ import fs from 'fs'
 
 const execAsync = promisify(exec)
 
-const SKILL_PATH = '/Users/huahong/Downloads/skisight_analysis'
-const OUTPUT_DIR = path.join(process.cwd(), 'data', 'reports')
+const SKILL_PATH = process.env.SKILL_PATH || '/app/skisight_analysis'
+const OUTPUT_DIR = process.env.NODE_ENV === 'production' ? '/tmp/data/reports' : path.join(process.cwd(), 'data', 'reports')
 
 export interface SkillAnalysisRequest {
   userQuestion: string

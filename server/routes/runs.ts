@@ -248,7 +248,8 @@ router.get('/:id/excel-report', authMiddleware, async (req: AuthRequest, res) =>
 
   try {
     const excelPath = run.excel_report_path.replace(/'/g, "'\\''")
-    const pythonScript = `import json, sys; sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis'); from openpyxl import load_workbook; wb = load_workbook('${excelPath}'); result = {}; [result.__setitem__(sn, [list(r) for r in wb[sn].iter_rows(values_only=True)]) for sn in wb.sheetnames]; print(json.dumps(result, ensure_ascii=False))`
+    const skillPath = process.env.SKILL_PATH || '/app/skisight_analysis'
+    const pythonScript = `import json, sys; sys.path.insert(0, '${skillPath}'); from openpyxl import load_workbook; wb = load_workbook('${excelPath}'); result = {}; [result.__setitem__(sn, [list(r) for r in wb[sn].iter_rows(values_only=True)]) for sn in wb.sheetnames]; print(json.dumps(result, ensure_ascii=False))`
     
     const { stdout } = await execAsync(`python3 -c "${pythonScript}"`)
     const excelData = JSON.parse(stdout)
@@ -271,8 +272,9 @@ router.get('/:id/view-excel', async (req, res) => {
     const tempScriptPath = path.join('/tmp', `view_excel_${Date.now()}.py`)
     
     // Clean Python script using raw strings to avoid escaping issues
+    const skillPath = process.env.SKILL_PATH || '/app/skisight_analysis'
     const pythonScript = `import sys
-sys.path.insert(0, '/Users/huahong/Downloads/skisight_analysis')
+sys.path.insert(0, '${skillPath}')
 from openpyxl import load_workbook
 import json
 
