@@ -68,12 +68,26 @@ router.post('/', authMiddleware, async (req: AuthRequest, res) => {
         }
       }
 
+      // 从 SQLite 读取会话数据并转换为 Python 格式
+      const rawSessions = db.prepare('SELECT * FROM sessions').all() as any[]
+      const sessionsData = rawSessions.map(s => ({
+        session_id: s.session_id,
+        user_id: s.user_id,
+        ocs_session_id: s.ocs_session_id,
+        bot_messages: (s.bot_conversation || '').split('\n').filter(Boolean),
+        human_messages: (s.human_conversation || '').split('\n').filter(Boolean),
+        unsatisfied: !!s.dissatisfaction_info,
+        dissatisfaction_info: s.dissatisfaction_info || '',
+        session_date: s.session_date,
+      }))
+
       // 调用 Python skill 分析
       const result = await runSkillAnalysis({
         userQuestion,
         customDimensions,
         dateFrom: date_from || undefined,
         dateTo: date_to || undefined,
+        sessionsData,
       })
 
       // 更新运行状态，使用 Python 实际处理的会话数

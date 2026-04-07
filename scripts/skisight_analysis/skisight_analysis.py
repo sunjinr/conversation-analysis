@@ -93,10 +93,19 @@ DEFAULT_DIMENSIONS = {
 # ─── 数据加载 ───────────────────────────────────────────────────
 
 def load_sessions():
-    """加载内嵌的 JSON 会话数据"""
+    """加载会话数据。优先从环境变量指定的路径加载，fallback 到内嵌的 chat_data.json"""
+    # 优先使用环境变量指定的数据文件路径
+    data_path = os.environ.get('SESSIONS_DATA_PATH')
+    if data_path and os.path.exists(data_path):
+        with open(data_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    # fallback 到脚本目录下的 chat_data.json
     data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chat_data.json')
-    with open(data_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    if os.path.exists(data_path):
+        with open(data_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    # 最后 fallback：返回空列表
+    return []
 
 
 # 关键词扩展映射，补充 LLM 可能遗漏的相关词

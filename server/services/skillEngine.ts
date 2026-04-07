@@ -33,6 +33,8 @@ export interface SkillAnalysisRequest {
   customDimensions?: Record<string, { definition: string; suggestion: string }>
   dateFrom?: string
   dateTo?: string
+  /** 会话数据（从 SQLite 读取后传入） */
+  sessionsData?: any[]
 }
 
 export interface SkillAnalysisResponse {
@@ -68,12 +70,16 @@ export async function runSkillAnalysis(request: SkillAnalysisRequest): Promise<S
   const outputPath = path.join(OUTPUT_DIR, `${sanitizedTopic}_${timestamp}.xlsx`)
 
   // 构建 Python 调用脚本和配置文件
-  const { scriptPath, configPath } = buildPythonScript(request, outputPath)
+  const { scriptPath, configPath, sessionsDataPath } = buildPythonScript(request, outputPath)
 
   try {
     const { stdout, stderr } = await execAsync(`python3 "${scriptPath}"`, {
       cwd: SKILL_PATH,
       timeout: 600000, // 10 分钟超时
+      env: {
+        ...process.env,
+        SESSIONS_DATA_PATH: sessionsDataPath,
+      },
     })
 
     if (stderr) {
@@ -92,6 +98,7 @@ export async function runSkillAnalysis(request: SkillAnalysisRequest): Promise<S
     // 清理临时文件
     try { fs.unlinkSync(scriptPath) } catch {}
     try { fs.unlinkSync(configPath) } catch {}
+    try { fs.unlinkSync(sessionsDataPath) } catch {}
 
     return {
       success: true,
@@ -113,8 +120,8 @@ export async function runSkillAnalysis(request: SkillAnalysisRequest): Promise<S
  * 这个脚本只做一件事：导入 skisight_analysis 模块，调用 run_full_analysis()。
  * 所有真正的分析工作（LLM 意图解析、精筛、分类、回答）都在 Python 内部完成。
  */
-function buildPythonScript(request: SkillAnalysisRequest, outputPath: string): { scriptPath: string; configPath: string } {
-  const { userQuestion, topicKeywords, topicLabel, customDimensions, dateFrom, dateTo } = request
+function buildPythonScript(request: SkillAnalysisRequest, outputPath: string): { scriptPath: string; configPath: string; sessionsDataPath: string } {
+  const { userQuestion, topicKeywords, topicLabel, customDimensions, dateFrom, dateTo, sessionsData } = request
 
   const keywordsArg = topicKeywords ? JSON.stringify(topicKeywords) : 'None'
   const labelArg = topicLabel ? `'${topicLabel}'` : 'None'
@@ -128,6 +135,10 @@ function buildPythonScript(request: SkillAnalysisRequest, outputPath: string): {
     date_from: dateFrom || null,
     date_to: dateTo || null,
   }), 'utf-8')
+
+  // 写入会话数据文件
+  const sessionsDataPath = path.join(OUTPUT_DIR, `sessions_${Date.now()}.json`)
+  fs.writeFileSync(sessionsDataPath, JSON.stringify(sessionsData || []), 'utf-8')
 
   const scriptPath = path.join(OUTPUT_DIR, `temp_${Date.now()}.py`)
   const pythonScript = `#!/usr/bin/env python3
@@ -155,7 +166,7 @@ print(f"DONE: {result}")
 `
   fs.writeFileSync(scriptPath, pythonScript, 'utf-8')
 
-  return { scriptPath, configPath }
+  return { scriptPath, configPath, sessionsDataPath }
 }
 
 /**

@@ -74120,12 +74120,16 @@ async function runSkillAnalysis(request) {
   const timestamp = (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-").slice(0, 19);
   const sanitizedTopic = (request.topicLabel || "analysis").replace(/[\/\\]/g, "_");
   const outputPath = path2.join(OUTPUT_DIR, `${sanitizedTopic}_${timestamp}.xlsx`);
-  const { scriptPath, configPath } = buildPythonScript(request, outputPath);
+  const { scriptPath, configPath, sessionsDataPath } = buildPythonScript(request, outputPath);
   try {
     const { stdout, stderr } = await execAsync(`python3 "${scriptPath}"`, {
       cwd: SKILL_PATH,
-      timeout: 6e5
+      timeout: 6e5,
       // 10 分钟超时
+      env: {
+        ...process.env,
+        SESSIONS_DATA_PATH: sessionsDataPath
+      }
     });
     if (stderr) {
       console.error("[Skill] stderr:", stderr);
@@ -74141,6 +74145,10 @@ async function runSkillAnalysis(request) {
     }
     try {
       fs3.unlinkSync(configPath);
+    } catch {
+    }
+    try {
+      fs3.unlinkSync(sessionsDataPath);
     } catch {
     }
     return {
@@ -74162,7 +74170,7 @@ async function runSkillAnalysis(request) {
   }
 }
 function buildPythonScript(request, outputPath) {
-  const { userQuestion, topicKeywords, topicLabel, customDimensions, dateFrom, dateTo } = request;
+  const { userQuestion, topicKeywords, topicLabel, customDimensions, dateFrom, dateTo, sessionsData } = request;
   const keywordsArg = topicKeywords ? JSON.stringify(topicKeywords) : "None";
   const labelArg = topicLabel ? `'${topicLabel}'` : "None";
   const dimensionsArg = customDimensions ? JSON.stringify(customDimensions) : "None";
@@ -74173,6 +74181,8 @@ function buildPythonScript(request, outputPath) {
     date_from: dateFrom || null,
     date_to: dateTo || null
   }), "utf-8");
+  const sessionsDataPath = path2.join(OUTPUT_DIR, `sessions_${Date.now()}.json`);
+  fs3.writeFileSync(sessionsDataPath, JSON.stringify(sessionsData || []), "utf-8");
   const scriptPath = path2.join(OUTPUT_DIR, `temp_${Date.now()}.py`);
   const pythonScript = `#!/usr/bin/env python3
 import sys
@@ -74198,7 +74208,7 @@ result = run_full_analysis(
 print(f"DONE: {result}")
 `;
   fs3.writeFileSync(scriptPath, pythonScript, "utf-8");
-  return { scriptPath, configPath };
+  return { scriptPath, configPath, sessionsDataPath };
 }
 function parsePythonOutput(stdout, fallbackTopic) {
   const lines = stdout.split("\n");
@@ -74347,11 +74357,23 @@ router5.post("/", authMiddleware, async (req, res) => {
           suggestion: categories.map((c2) => `${c2.name}: ${c2.description}`).join("; ")
         };
       }
+      const rawSessions = db_default.prepare("SELECT * FROM sessions").all();
+      const sessionsData = rawSessions.map((s2) => ({
+        session_id: s2.session_id,
+        user_id: s2.user_id,
+        ocs_session_id: s2.ocs_session_id,
+        bot_messages: (s2.bot_conversation || "").split("\n").filter(Boolean),
+        human_messages: (s2.human_conversation || "").split("\n").filter(Boolean),
+        unsatisfied: !!s2.dissatisfaction_info,
+        dissatisfaction_info: s2.dissatisfaction_info || "",
+        session_date: s2.session_date
+      }));
       const result = await runSkillAnalysis({
         userQuestion,
         customDimensions,
         dateFrom: date_from || void 0,
-        dateTo: date_to || void 0
+        dateTo: date_to || void 0,
+        sessionsData
       });
       const totalFromPython = result.summary.totalSessions || sessionIds.length;
       db_default.prepare("UPDATE analysis_runs SET status = 'completed', completed_at = datetime('now'), total_sessions = ?, processed_sessions = ?, summary_json = ?, excel_report_path = ? WHERE id = ?").run(totalFromPython, result.summary.analyzed || totalFromPython, JSON.stringify(result.summary), result.reportPath, runId);
