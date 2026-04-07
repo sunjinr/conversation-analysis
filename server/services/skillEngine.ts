@@ -187,26 +187,29 @@ function parsePythonOutput(stdout: string, fallbackTopic: string): SkillAnalysis
 
   // 提取 Python 打印的关键指标
   for (const line of lines) {
-    if (line.includes('加载') && line.includes('条会话')) {
+    // 匹配: "✓ 加载 98 条会话" 或 "加载 98 条会话"
+    // 使用更宽松的正则：只要行中包含"加载"和数字即可
+    if (line.includes('加载')) {
       const match = line.match(/(\d+)\s*条/)
       if (match) loaded = parseInt(match[1])
     }
-    if (line.includes('关键词匹配') && line.includes('条会话')) {
-      const match = line.match(/(\d+)\s*条/)
+    // 匹配: "✓ 关键词匹配: 1 条会话"
+    if (line.includes('关键词匹配')) {
+      const match = line.match(/匹配[:：]?\s*(\d+)/)
       if (match) keywordFiltered = parseInt(match[1])
     }
+    // 匹配: "✓ 精筛完成: 1 条相关会话" 或 "精筛完成: 12/15 条"
     if (line.includes('精筛完成')) {
-      // 匹配两种格式: "精筛完成: 12/15 条" 或 "✓ 精筛完成: 12 条相关会话"
-      const match = line.match(/(\d+)(?:\/(\d+))?\s*条/)
+      const match = line.match(/精筛完成[:：]?\s*(\d+)/)
       if (match) llmRefined = parseInt(match[1])
     }
+    // 匹配: "✓ 分类完成: 1 条会话" 或 "分类完成: 12/15 条"
     if (line.includes('分类完成')) {
-      // 匹配两种格式: "分类完成: 12/15 条" 或 "✓ 分类完成: 12 条会话"
-      const match = line.match(/(\d+)(?:\/(\d+))?\s*条/)
+      const match = line.match(/分类完成[:：]?\s*(\d+)/)
       if (match) analyzed = parseInt(match[1])
     }
     if (line.includes('主题:')) {
-      const match = line.match(/主题:\s*(.+)/)
+      const match = line.match(/主题[:：]\s*(.+)/)
       if (match) topicLabel = match[1].trim()
     }
     // 捕获概述行
@@ -214,6 +217,8 @@ function parsePythonOutput(stdout: string, fallbackTopic: string): SkillAnalysis
       overviewLines.push(line.replace('OVERVIEW:', '').trim())
     }
   }
+
+  console.log('[Skill] Parsed metrics:', { loaded, keywordFiltered, llmRefined, analyzed, topicLabel })
 
   return {
     topicLabel,
