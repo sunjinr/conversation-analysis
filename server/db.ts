@@ -208,6 +208,11 @@ export async function initDB() {
     db.exec(`ALTER TABLE analysis_runs ADD COLUMN user_question TEXT DEFAULT ''`)
   } catch {}
 
+  // Migration: add excel_report_path to analysis_runs
+  try {
+    db.exec(`ALTER TABLE analysis_runs ADD COLUMN excel_report_path TEXT DEFAULT ''`)
+  } catch {}
+
   // Migration: extend classification_feedback with context fields
   try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN run_id TEXT NOT NULL DEFAULT ''`) } catch {}
   try { db.exec(`ALTER TABLE classification_feedback ADD COLUMN session_id TEXT NOT NULL DEFAULT ''`) } catch {}

@@ -66579,6 +66579,10 @@ async function initDB() {
   } catch {
   }
   try {
+    db.exec(`ALTER TABLE analysis_runs ADD COLUMN excel_report_path TEXT DEFAULT ''`);
+  } catch {
+  }
+  try {
     db.exec(`ALTER TABLE classification_feedback ADD COLUMN run_id TEXT NOT NULL DEFAULT ''`);
   } catch {
   }
