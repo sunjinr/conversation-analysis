@@ -122,13 +122,17 @@ KEYWORD_EXPANSIONS = {
 
 
 def expand_keywords(keywords):
-    """扩展关键词"""
+    """扩展关键词，支持复合词子串匹配（如 '支付失败' 包含 '支付'）"""
     expanded = set(keywords)
     for kw in keywords:
         if kw in KEYWORD_EXPANSIONS:
             expanded.update(KEYWORD_EXPANSIONS[kw])
-        # 也做反向匹配
+        # 子串匹配：如果关键词包含某个扩展映射的 key，也进行扩展
+        # 例如 '支付失败' 包含 '支付'，应扩展为 ['pay', 'payment', ...]
         for parent, children in KEYWORD_EXPANSIONS.items():
+            if parent in kw or kw in parent:
+                expanded.add(parent)
+                expanded.update(children)
             if kw.lower() in [c.lower() for c in children]:
                 expanded.add(parent)
                 expanded.update(children)
