@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import XLSX from 'xlsx'
 import db from '../db.js'
-import { satisfactionSeedData } from '../seed-production.js'
+import { satisfactionSeedData, buyerTransferRateData, sellerTransferRateData } from '../seed-production.js'
 
 const router = Router()
 
@@ -40,91 +40,14 @@ function getTaskResolutionsByDate(): Record<string, { count: number; titles: str
   return taskMap
 }
 
-// Helper to parse satisfaction Excel file
-function parseSatisfactionData(): any[] {
-  const filePath = path.join('/Users/huahong/Downloads', '满意度指标趋势.xlsx')
-  if (!fs.existsSync(filePath)) {
-    return satisfactionSeedData.map(d => ({
-      date: d.date,
-      satisfaction_rate: d.satisfaction_rate,
-    }))
-  }
-  const workbook = XLSX.readFile(filePath)
-  const sheet = workbook.Sheets[workbook.SheetNames[0]]
-  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][]
-
-  // Row 1 (index 0) has dates, Row 4 (index 3) has satisfaction rate
-  const dateRow = data[0]
-  const rateRow = data[3]
-  const result: any[] = []
-
-  for (let i = 1; i < rateRow.length; i++) {
-    const date = dateRow[i]
-    const rate = rateRow[i]
-    if (date && typeof rate === 'number') {
-      let dateStr: string
-      if (typeof date === 'number') {
-        const excelEpoch = new Date(Date.UTC(1899, 11, 30))
-        const jsDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000)
-        dateStr = jsDate.toISOString().split('T')[0]
-      } else {
-        dateStr = String(date).split(' ')[0]
-      }
-      
-      result.push({
-        date: dateStr,
-        satisfaction_rate: Math.round(rate * 10000) / 100,
-      })
-    }
-  }
-
-  return result.sort((a, b) => a.date.localeCompare(b.date))
-}
-
-// Helper to parse transfer rate Excel files
-function parseTransferRateData(type: 'buyer' | 'seller'): any[] {
-  const fileName = type === 'buyer' ? '买家智能解决率.xlsx' : '商家智能解决率.xlsx'
-  const filePath = path.join('/Users/huahong/Downloads', fileName)
-  if (!fs.existsSync(filePath)) {
-    return []
-  }
-  const workbook = XLSX.readFile(filePath)
-  const sheet = workbook.Sheets[workbook.SheetNames[0]]
-  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][]
-
-  // Row 1 (index 0) has dates, Row 4/3 has transfer rate
-  const dateRow = data[0]
-  const rateRowIndex = type === 'buyer' ? 3 : 2
-  const rateRow = data[rateRowIndex]
-  const result: any[] = []
-
-  for (let i = 1; i < rateRow.length; i++) {
-    const date = dateRow[i]
-    const rate = rateRow[i]
-    if (date && typeof rate === 'number') {
-      let dateStr: string
-      if (typeof date === 'number') {
-        const excelEpoch = new Date(Date.UTC(1899, 11, 30))
-        const jsDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000)
-        dateStr = jsDate.toISOString().split('T')[0]
-      } else {
-        dateStr = String(date).split(' ')[0]
-      }
-      
-      result.push({
-        date: dateStr,
-        transfer_rate: Math.round(rate * 10000) / 100,
-      })
-    }
-  }
-
-  return result.sort((a, b) => a.date.localeCompare(b.date))
-}
-
 // GET /api/metrics/satisfaction
 router.get('/satisfaction', (req, res) => {
   try {
-    const data = parseSatisfactionData()
+    // Use seed data as fallback when Excel file is not available
+    const data = satisfactionSeedData.map(d => ({
+      date: d.date,
+      satisfaction_rate: d.satisfaction_rate,
+    }))
     const taskMap = getTaskResolutionsByDate()
     
     const result = data.map(item => {
@@ -149,7 +72,9 @@ router.get('/transfer-rate', (req, res) => {
     if (!type || (type !== 'buyer' && type !== 'seller')) {
       return res.status(400).json({ error: 'Invalid type. Use buyer or seller' })
     }
-    const data = parseTransferRateData(type)
+    
+    // Use seed data
+    const data = type === 'buyer' ? buyerTransferRateData : sellerTransferRateData
     const taskMap = getTaskResolutionsByDate()
     
     const result = data.map(item => {
