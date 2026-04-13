@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 
 // POST /api/runs/import - import analysis run data directly (no re-analysis)
 router.post('/import', authMiddleware, (req: AuthRequest, res) => {
-  const { id, name, user_question, total_sessions, processed_sessions, summary_json, excel_report_path, created_at, completed_at } = req.body
+  const { id, name, user_question, total_sessions, processed_sessions, summary_json, excel_report_base64, created_at, completed_at } = req.body
   if (!id || !name) return res.status(400).json({ error: 'id and name required' })
 
   // Check if already exists
@@ -34,6 +34,19 @@ router.post('/import', authMiddleware, (req: AuthRequest, res) => {
   db.prepare('INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)')
     .run(configId, name, null, '[]', req.user!.id)
 
+  // Save Excel report if provided
+  let excelPath = ''
+  if (excel_report_base64) {
+    const OUTPUT_DIR = process.env.NODE_ENV === 'production' ? '/tmp/data/reports' : path.join(process.cwd(), 'data', 'reports')
+    if (!fs.existsSync(OUTPUT_DIR)) {
+      fs.mkdirSync(OUTPUT_DIR, { recursive: true })
+    }
+    const fileName = `${name.replace(/[\/\\]/g, '_')}_${id.slice(0, 8)}.xlsx`
+    excelPath = path.join(OUTPUT_DIR, fileName)
+    const buffer = Buffer.from(excel_report_base64, 'base64')
+    fs.writeFileSync(excelPath, buffer)
+  }
+
   db.prepare(`INSERT INTO analysis_runs (id, config_id, name, user_question, status, total_sessions, processed_sessions, 
     started_at, completed_at, summary_json, excel_report_path, created_at, triggered_by)
     VALUES (?, ?, ?, ?, 'completed', ?, ?, datetime('now'), ?, ?, ?, ?, ?)`).run(
@@ -41,7 +54,7 @@ router.post('/import', authMiddleware, (req: AuthRequest, res) => {
     total_sessions || 0, processed_sessions || 0,
     completed_at || new Date().toISOString().slice(0, 19),
     summary_json || '{}',
-    excel_report_path || '',
+    excelPath,
     created_at || new Date().toISOString().slice(0, 19),
     req.user!.id
   )
