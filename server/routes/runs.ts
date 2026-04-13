@@ -19,6 +19,36 @@ router.get('/', (req, res) => {
   res.json(rows)
 })
 
+// POST /api/runs/import - import analysis run data directly (no re-analysis)
+router.post('/import', authMiddleware, (req: AuthRequest, res) => {
+  const { id, name, user_question, total_sessions, processed_sessions, summary_json, excel_report_path, created_at, completed_at } = req.body
+  if (!id || !name) return res.status(400).json({ error: 'id and name required' })
+
+  // Check if already exists
+  const existing = db.prepare('SELECT id FROM analysis_runs WHERE id = ?').get(id)
+  if (existing) {
+    return res.json({ ok: true, message: 'already exists', id })
+  }
+
+  const configId = uuid()
+  db.prepare('INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)')
+    .run(configId, name, null, '[]', req.user!.id)
+
+  db.prepare(`INSERT INTO analysis_runs (id, config_id, name, user_question, status, total_sessions, processed_sessions, 
+    started_at, completed_at, summary_json, excel_report_path, created_at, triggered_by)
+    VALUES (?, ?, ?, ?, 'completed', ?, ?, datetime('now'), ?, ?, ?, ?, ?)`).run(
+    id, configId, name, user_question || '', 
+    total_sessions || 0, processed_sessions || 0,
+    completed_at || new Date().toISOString().slice(0, 19),
+    summary_json || '{}',
+    excel_report_path || '',
+    created_at || new Date().toISOString().slice(0, 19),
+    req.user!.id
+  )
+
+  res.json({ ok: true, id })
+})
+
 // POST /api/runs - create and start a run
 router.post('/', authMiddleware, async (req: AuthRequest, res) => {
   const { name, scenario_id, dimension_ids, user_question, date_from, date_to } = req.body

@@ -72189,6 +72189,32 @@ router5.get("/", (req, res) => {
   const rows = db_default.prepare("SELECT * FROM analysis_runs ORDER BY created_at DESC").all();
   res.json(rows);
 });
+router5.post("/import", authMiddleware, (req, res) => {
+  const { id, name, user_question, total_sessions, processed_sessions, summary_json, excel_report_path, created_at, completed_at } = req.body;
+  if (!id || !name) return res.status(400).json({ error: "id and name required" });
+  const existing = db_default.prepare("SELECT id FROM analysis_runs WHERE id = ?").get(id);
+  if (existing) {
+    return res.json({ ok: true, message: "already exists", id });
+  }
+  const configId = v4_default();
+  db_default.prepare("INSERT INTO analysis_configs (id, name, scenario_id, dimension_ids, created_by) VALUES (?, ?, ?, ?, ?)").run(configId, name, null, "[]", req.user.id);
+  db_default.prepare(`INSERT INTO analysis_runs (id, config_id, name, user_question, status, total_sessions, processed_sessions, 
+    started_at, completed_at, summary_json, excel_report_path, created_at, triggered_by)
+    VALUES (?, ?, ?, ?, 'completed', ?, ?, datetime('now'), ?, ?, ?, ?, ?)`).run(
+    id,
+    configId,
+    name,
+    user_question || "",
+    total_sessions || 0,
+    processed_sessions || 0,
+    completed_at || (/* @__PURE__ */ new Date()).toISOString().slice(0, 19),
+    summary_json || "{}",
+    excel_report_path || "",
+    created_at || (/* @__PURE__ */ new Date()).toISOString().slice(0, 19),
+    req.user.id
+  );
+  res.json({ ok: true, id });
+});
 router5.post("/", authMiddleware, async (req, res) => {
   const { name, scenario_id, dimension_ids, user_question, date_from, date_to } = req.body;
   const configId = v4_default();
