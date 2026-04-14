@@ -8,6 +8,10 @@ RUN pip3 install openpyxl requests dashscope --break-system-packages
 # 复制 Python 分析脚本
 COPY scripts/skisight_analysis /app/skisight_analysis
 
+# 复制数据导入脚本和 Excel 数据文件
+COPY scripts/import-sessions.py /app/scripts/
+COPY data/chat_data_org.xlsx /app/chat_data_org.xlsx
+
 # 复制 package.json 并安装 Node 依赖（express、sql.js 等 external 模块）
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
@@ -17,4 +21,6 @@ COPY dist-server-bundle/server.mjs dist-server-bundle/sql-wasm.wasm ./dist-serve
 COPY dist ./dist
 RUN mkdir -p /tmp/data
 ENV NODE_ENV=production
+
+# 启动服务（数据导入在 server 启动时自动执行）
 CMD ["node", "dist-server-bundle/server.mjs"]

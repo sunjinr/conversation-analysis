@@ -4,6 +4,7 @@ import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { initDB } from './db.js'
+import { seedProductionDataIfNeeded } from './seed-data.js'
 import authRouter from './routes/auth.js'
 import sessionsRouter from './routes/sessions.js'
 import scenariosRouter from './routes/scenarios.js'
@@ -49,6 +50,11 @@ app.get('*', (_req, res) => {
 const PORT = parseInt(process.env.PORT || '3001')
 
 initDB().then(() => {
+  // Auto-seed data in production if database is empty
+  if (process.env.NODE_ENV === 'production') {
+    seedProductionDataIfNeeded()
+  }
+  
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[Server] Running on http://0.0.0.0:${PORT}`)
   })
