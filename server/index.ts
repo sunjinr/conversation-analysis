@@ -50,13 +50,16 @@ app.get('*', (_req, res) => {
 const PORT = parseInt(process.env.PORT || '3001')
 
 initDB().then(() => {
-  // Auto-seed data in production if database is empty
-  if (process.env.NODE_ENV === 'production') {
-    seedProductionDataIfNeeded()
-  }
-  
+  // Start server first, then seed data (so API is available)
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[Server] Running on http://0.0.0.0:${PORT}`)
+    
+    // Auto-seed data in production AFTER server is listening
+    if (process.env.NODE_ENV === 'production') {
+      setTimeout(() => {
+        seedProductionDataIfNeeded()
+      }, 3000) // Wait 3 seconds for server to be ready
+    }
   })
 }).catch(e => {
   console.error('[DB] Init failed:', e)

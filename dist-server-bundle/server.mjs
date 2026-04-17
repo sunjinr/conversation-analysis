@@ -26978,11 +26978,13 @@ app.get("*", (_req, res) => {
 });
 var PORT = parseInt(process.env.PORT || "3001");
 initDB().then(() => {
-  if (process.env.NODE_ENV === "production") {
-    seedProductionDataIfNeeded();
-  }
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`[Server] Running on http://0.0.0.0:${PORT}`);
+    if (process.env.NODE_ENV === "production") {
+      setTimeout(() => {
+        seedProductionDataIfNeeded();
+      }, 3e3);
+    }
   });
 }).catch((e) => {
   console.error("[DB] Init failed:", e);
