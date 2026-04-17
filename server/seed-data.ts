@@ -10,26 +10,20 @@ const EXCEL_PATH = '/app/chat_data_org.xlsx'
 
 export function seedProductionDataIfNeeded() {
   try {
-    // Check if database already has data by calling API
-    // Wait a moment for server to start
-    console.log('[Seed] Waiting for server to be ready...')
-    execSync('sleep 2')
+    console.log('[Seed] Checking if database needs seeding...')
     
-    // Check session count via API
-    const checkResult = execSync('curl -s http://localhost:10000/api/sessions', { encoding: 'utf-8' })
-    const checkData = JSON.parse(checkResult)
-    const sessionCount = checkData.total || 0
+    if (!fs.existsSync(EXCEL_PATH)) {
+      console.log('[Seed] WARNING: Excel file not found at', EXCEL_PATH)
+      return
+    }
     
-    console.log(`[Seed] Current sessions: ${sessionCount}`)
+    console.log('[Seed] Importing sessions from Excel via API...')
     
-    if (sessionCount <= 1 && fs.existsSync(EXCEL_PATH)) {
-      console.log('[Seed] Database empty, importing sessions from Excel via API...')
-      
-      // Use Python script to parse Excel and import via API
-      const importScript = `
+    // Use Python script to parse Excel and import via API
+    // Note: Using requests (not curl) since curl may not be installed
+    const importScript = `
 import openpyxl
 import requests
-import json
 
 wb = openpyxl.load_workbook('${EXCEL_PATH}')
 ws = wb.active
@@ -42,8 +36,15 @@ for row in ws.iter_rows(min_row=2, values_only=False):
     if seq and sid:
         if current:
             sessions.append(current)
-        current = {'sequence_num': seq, 'session_id': str(sid), 'user_id': str(uid or ''), 
-                   'ocs_session_id': str(oid or ''), 'bot_conversation': '', 'human_conversation': '', 'dissatisfaction_info': ''}
+        current = {
+            'sequence_num': seq, 
+            'session_id': str(sid), 
+            'user_id': str(uid or ''), 
+            'ocs_session_id': str(oid or ''), 
+            'bot_conversation': '', 
+            'human_conversation': '', 
+            'dissatisfaction_info': ''
+        }
     if current and conv:
         t = str(conv)
         if '客服:' in t:
@@ -56,24 +57,24 @@ for row in ws.iter_rows(min_row=2, values_only=False):
 if current:
     sessions.append(current)
 
+print(f'[Seed] Found {len(sessions)} sessions from Excel')
+
+# Import via API using requests (not curl)
 rows = [{'sequence_num': i+1, **s} for i, s in enumerate(sessions)]
 res = requests.post('http://localhost:10000/api/sessions/import', json={'rows': rows})
-print(f'[Seed API] Imported: {res.json()}')
+print(f'[Seed] API response: {res.status_code} - {res.json()}')
 `
-      
-      const result = execSync(`python3 -c '${importScript}'`, {
-        encoding: 'utf-8',
-        cwd: '/app',
-        timeout: 120000
-      })
-      console.log('[Seed]', result)
-      console.log('[Seed] Production data import complete')
-    } else if (sessionCount > 1) {
-      console.log('[Seed] Database already seeded, skipping')
-    } else {
-      console.log('[Seed] WARNING: Excel file not found')
-    }
+    
+    const result = execSync(`python3 -c "${importScript}"`, {
+      encoding: 'utf-8',
+      cwd: '/app',
+      timeout: 120000
+    })
+    console.log('[Seed]', result)
+    console.log('[Seed] Production data import complete')
   } catch (err: any) {
     console.error('[Seed] Error during seeding:', err.message)
+    if (err.stderr) console.error('[Seed] stderr:', err.stderr.toString())
+    if (err.stdout) console.error('[Seed] stdout:', err.stdout.toString())
   }
 }
