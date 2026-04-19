@@ -7,7 +7,7 @@ import fs from 'fs'
 import { execSync } from 'child_process'
 
 const SEED_SCRIPT = '/app/scripts/auto-seed.py'
-const EXCEL_PATH = '/app/chat_data_org.xlsx'
+const EXCEL_PATH = '/app/scripts/seed-data/chat_data_org.xlsx'
 
 export function seedProductionDataIfNeeded() {
   try {

@@ -25156,7 +25156,7 @@ var db_default = db;
 import fs2 from "fs";
 import { execSync } from "child_process";
 var SEED_SCRIPT = "/app/scripts/auto-seed.py";
-var EXCEL_PATH = "/app/chat_data_org.xlsx";
+var EXCEL_PATH = "/app/scripts/seed-data/chat_data_org.xlsx";
 function seedProductionDataIfNeeded() {
   try {
     console.log("[Seed] Checking if database needs seeding...");
