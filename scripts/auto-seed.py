@@ -2,23 +2,28 @@
 """
 Auto-seed script for production deployment.
 Parses Excel file and imports sessions via API.
+Also imports insight (analysis run) data from seed JSON.
 """
 
 import openpyxl
 import requests
+import json
 import sys
+import os
 
-EXCEL_PATH = '/app/chat_data_org.xlsx'
-API_URL = 'http://localhost:10000/api/sessions/import'
+EXCEL_PATH = '/app/scripts/seed-data/chat_data_org.xlsx'
+INSIGHT_SEED_PATH = '/app/scripts/seed-data/insight-seed.json'
+SESSIONS_API = 'http://localhost:10000/api/sessions/import'
+RUNS_API = 'http://localhost:10000/api/runs/import'
 
-def main():
-    print('[Seed] Starting auto-seed from Excel...')
+def import_sessions():
+    print('[Seed] Importing sessions from Excel...')
     
     try:
         wb = openpyxl.load_workbook(EXCEL_PATH)
     except Exception as e:
         print(f'[Seed] ERROR: Cannot open Excel: {e}')
-        sys.exit(1)
+        return False
     
     ws = wb.active
     sessions = []
@@ -58,14 +63,46 @@ def main():
     
     print(f'[Seed] Parsed {len(sessions)} sessions from Excel')
     
-    # Import via API
     rows = [{'sequence_num': i+1, **s} for i, s in enumerate(sessions)]
     
     try:
-        res = requests.post(API_URL, json={'rows': rows}, timeout=60)
-        print(f'[Seed] API response: {res.status_code} - {res.json()}')
+        res = requests.post(SESSIONS_API, json={'rows': rows}, timeout=60)
+        print(f'[Seed] Sessions API response: {res.status_code} - {res.json()}')
+        return True
     except Exception as e:
-        print(f'[Seed] ERROR: API call failed: {e}')
+        print(f'[Seed] ERROR: Sessions API call failed: {e}')
+        return False
+
+def import_insight():
+    print('[Seed] Importing insight data...')
+    
+    if not os.path.exists(INSIGHT_SEED_PATH):
+        print(f'[Seed] WARNING: Insight seed file not found at {INSIGHT_SEED_PATH}')
+        return False
+    
+    try:
+        with open(INSIGHT_SEED_PATH, 'r') as f:
+            seed_data = json.load(f)
+        
+        res = requests.post(RUNS_API, json=seed_data, timeout=60)
+        print(f'[Seed] Insight API response: {res.status_code} - {res.json()}')
+        return True
+    except Exception as e:
+        print(f'[Seed] ERROR: Insight API call failed: {e}')
+        return False
+
+def main():
+    print('[Seed] Starting auto-seed...')
+    
+    sessions_ok = import_sessions()
+    insight_ok = import_insight()
+    
+    if sessions_ok and insight_ok:
+        print('[Seed] Auto-seed complete')
+    elif sessions_ok:
+        print('[Seed] Auto-seed complete (insight failed)')
+    else:
+        print('[Seed] Auto-seed failed')
         sys.exit(1)
 
 if __name__ == '__main__':

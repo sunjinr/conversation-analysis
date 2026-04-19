@@ -8,10 +8,10 @@ RUN pip3 install openpyxl requests dashscope --break-system-packages
 # 复制 Python 分析脚本
 COPY scripts/skisight_analysis /app/skisight_analysis
 
-# 复制数据导入脚本和 Excel 数据文件
+# 复制数据导入脚本和种子数据文件
 COPY scripts/import-sessions.py /app/scripts/
 COPY scripts/auto-seed.py /app/scripts/
-COPY scripts/seed-data/chat_data_org.xlsx /app/chat_data_org.xlsx
+COPY scripts/seed-data/ /app/scripts/seed-data/
 
 # 复制 package.json 并安装 Node 依赖（express、sql.js 等 external 模块）
 COPY package.json package-lock.json ./
