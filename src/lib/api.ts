@@ -77,6 +77,7 @@ export const api = {
     if (category) url += `&category=${encodeURIComponent(category)}`
     return get<{ data: any[]; total: number }>(url)
   },
+  getRunDashboardData: (id: string) => get<any>(`/runs/${id}/dashboard-data`),
 
   // Tasks
   getTasks: (params?: { status?: string; assignee_id?: string; run_id?: string }) => {

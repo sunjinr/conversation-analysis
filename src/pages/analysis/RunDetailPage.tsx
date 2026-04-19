@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { api } from '@/lib/api'
 import { ArrowLeft, Download, Play, FileSpreadsheet, X } from 'lucide-react'
+import DashboardInsightView from '@/components/analysis/DashboardInsightView'
 
 export default function RunDetailPage() {
   const { id } = useParams()
@@ -13,10 +14,33 @@ export default function RunDetailPage() {
   const [feedbackModal, setFeedbackModal] = useState<{ sheet: string; row: string; rowData: string } | null>(null)
   const [feedbackNote, setFeedbackNote] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [dashboardData, setDashboardData] = useState<any>(null)
+  const [dashboardLoading, setDashboardLoading] = useState(false)
 
   const loadRun = () => {
     if (!id) return
-    api.getRun(id).then(r => setRun(r))
+    api.getRun(id).then(r => {
+      setRun(r)
+      // Check if this is a dashboard-type insight
+      try {
+        const summary = JSON.parse(r.summary_json || '{}')
+        if (summary.viewType === 'dashboard') {
+          loadDashboardData(id)
+        }
+      } catch {}
+    })
+  }
+
+  const loadDashboardData = async (runId: string) => {
+    setDashboardLoading(true)
+    try {
+      const data = await api.getRunDashboardData(runId)
+      setDashboardData(data)
+    } catch (e) {
+      console.error('Failed to load dashboard data:', e)
+    } finally {
+      setDashboardLoading(false)
+    }
   }
 
   useEffect(() => { loadRun() }, [id])
@@ -155,8 +179,13 @@ export default function RunDetailPage() {
         </div>
       )}
 
+      {/* Completed: Dashboard View */}
+      {run.status === 'completed' && dashboardData && (
+        <DashboardInsightView run={run} dashboardData={dashboardData} />
+      )}
+
       {/* Completed: embed Excel file via iframe */}
-      {run.status === 'completed' && run.excel_report_path ? (
+      {run.status === 'completed' && !dashboardData && run.excel_report_path ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" style={{ height: 'calc(100vh - 120px)', minHeight: '800px' }}>
           {!iframeLoaded && !iframeError && (
             <div className="flex items-center justify-center h-full">
@@ -185,12 +214,22 @@ export default function RunDetailPage() {
             style={{ display: iframeLoaded ? 'block' : 'none' }}
           />
         </div>
-      ) : run.status === 'completed' ? (
+      ) : run.status === 'completed' && !dashboardData ? (
         <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
           <FileSpreadsheet size={56} className="mx-auto mb-3 text-gray-300" />
-          <p className="text-gray-400 text-sm">暂无 Excel 报告</p>
+          <p className="text-gray-400 text-sm">暂无报告</p>
         </div>
       ) : null}
+
+      {/* Dashboard loading */}
+      {run.status === 'completed' && !dashboardData && dashboardLoading && (
+        <div className="flex items-center justify-center py-16">
+          <div className="text-center">
+            <div className="animate-spin w-8 h-8 border-2 border-brand border-t-transparent rounded-full mx-auto mb-3" />
+            <p className="text-gray-400 text-sm">加载仪表板数据...</p>
+          </div>
+        </div>
+      )}
 
       {/* Feedback Modal */}
       {feedbackModal && (

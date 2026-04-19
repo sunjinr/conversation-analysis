@@ -13,6 +13,7 @@ import os
 
 EXCEL_PATH = '/app/scripts/seed-data/chat_data_org.xlsx'
 INSIGHT_SEED_PATH = '/app/scripts/seed-data/insight-seed.json'
+DASHBOARD_INSIGHT_SEED_PATH = '/app/scripts/seed-data/dashboard-insight-seed.json'
 SESSIONS_API = 'http://localhost:10000/api/sessions/import'
 RUNS_API = 'http://localhost:10000/api/runs/import'
 
@@ -91,16 +92,35 @@ def import_insight():
         print(f'[Seed] ERROR: Insight API call failed: {e}')
         return False
 
+def import_dashboard_insight():
+    print('[Seed] Importing dashboard insight data...')
+    
+    if not os.path.exists(DASHBOARD_INSIGHT_SEED_PATH):
+        print(f'[Seed] WARNING: Dashboard insight seed file not found at {DASHBOARD_INSIGHT_SEED_PATH}')
+        return False
+    
+    try:
+        with open(DASHBOARD_INSIGHT_SEED_PATH, 'r') as f:
+            seed_data = json.load(f)
+        
+        res = requests.post(RUNS_API, json=seed_data, timeout=60)
+        print(f'[Seed] Dashboard Insight API response: {res.status_code} - {res.json()}')
+        return True
+    except Exception as e:
+        print(f'[Seed] ERROR: Dashboard Insight API call failed: {e}')
+        return False
+
 def main():
     print('[Seed] Starting auto-seed...')
     
     sessions_ok = import_sessions()
     insight_ok = import_insight()
+    dashboard_ok = import_dashboard_insight()
     
-    if sessions_ok and insight_ok:
+    if sessions_ok and insight_ok and dashboard_ok:
         print('[Seed] Auto-seed complete')
     elif sessions_ok:
-        print('[Seed] Auto-seed complete (insight failed)')
+        print('[Seed] Auto-seed complete (some insights failed)')
     else:
         print('[Seed] Auto-seed failed')
         sys.exit(1)

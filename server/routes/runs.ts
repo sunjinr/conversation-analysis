@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 
 // POST /api/runs/import - import analysis run data directly (no re-analysis)
 router.post('/import', authMiddleware, (req: AuthRequest, res) => {
-  const { id, name, user_question, total_sessions, processed_sessions, summary_json, excel_report_base64, created_at, completed_at } = req.body
+  const { id, name, user_question, total_sessions, processed_sessions, summary_json, excel_report_base64, view_type, detail_data, created_at, completed_at } = req.body
   if (!id || !name) return res.status(400).json({ error: 'id and name required' })
 
   // Check if already exists
@@ -47,13 +47,23 @@ router.post('/import', authMiddleware, (req: AuthRequest, res) => {
     fs.writeFileSync(excelPath, buffer)
   }
 
+  // For dashboard view type, store detail_data in summary_json along with original summary
+  let finalSummaryJson = summary_json || '{}'
+  if (view_type === 'dashboard' && detail_data) {
+    // Embed detail_data into summary_json for dashboard views
+    const summary = typeof summary_json === 'string' ? JSON.parse(summary_json) : summary_json
+    summary.detailData = detail_data
+    summary.viewType = 'dashboard'
+    finalSummaryJson = JSON.stringify(summary)
+  }
+
   db.prepare(`INSERT INTO analysis_runs (id, config_id, name, user_question, status, total_sessions, processed_sessions, 
     started_at, completed_at, summary_json, excel_report_path, created_at, triggered_by)
     VALUES (?, ?, ?, ?, 'completed', ?, ?, datetime('now'), ?, ?, ?, ?, ?)`).run(
     id, configId, name, user_question || '', 
     total_sessions || 0, processed_sessions || 0,
     completed_at || new Date().toISOString().slice(0, 19),
-    summary_json || '{}',
+    finalSummaryJson,
     excelPath,
     created_at || new Date().toISOString().slice(0, 19),
     req.user!.id
@@ -506,6 +516,28 @@ router.get('/:id/download-excel', (req, res) => {
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`)
   res.sendFile(run.excel_report_path)
+})
+
+// GET /api/runs/:id/dashboard-data - get dashboard chart data for dashboard-type insights
+router.get('/:id/dashboard-data', (req, res) => {
+  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
+  if (!run) return res.status(404).json({ error: 'Not found' })
+
+  try {
+    const summary = JSON.parse(run.summary_json || '{}')
+    if (summary.viewType !== 'dashboard') {
+      return res.status(400).json({ error: 'This insight does not have dashboard view' })
+    }
+
+    res.json({
+      resolutionStatus: summary.resolutionStatus || {},
+      unresolvedReasons: summary.unresolvedReasons || [],
+      highFrequencyIssues: summary.highFrequencyIssues || [],
+      detailData: summary.detailData || [],
+    })
+  } catch (e: any) {
+    res.status(500).json({ error: 'Failed to parse dashboard data', message: e.message })
+  }
 })
 
 export default router
