@@ -1,1 +1,0 @@
-let n=null;async function o(){if(n)return n;const a=await fetch("./mock-data.json").then(t=>t.json());return n=a,a}let s=[],c=null;function e(){o().then(a=>{s=a.runs.map(t=>({...t,summary_json:JSON.stringify(t.summary_json)})),c=a.dashboardData})}export{o as getMockData,e as initMockData,c as mockDashboardData,s as mockRuns};
