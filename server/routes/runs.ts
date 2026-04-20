@@ -178,6 +178,29 @@ router.post('/', authMiddleware, async (req: AuthRequest, res) => {
   res.json({ id: runId, total_sessions: TOTAL_DATA_POOL })
 })
 
+// GET /api/runs/:id/dashboard-data - get dashboard chart data for dashboard-type insights
+// MUST be before /:id route to avoid Express route matching issues
+router.get('/:id/dashboard-data', (req, res) => {
+  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
+  if (!run) return res.status(404).json({ error: 'Not found' })
+
+  try {
+    const summary = JSON.parse(run.summary_json || '{}')
+    if (summary.viewType !== 'dashboard') {
+      return res.status(400).json({ error: 'This insight does not have dashboard view' })
+    }
+
+    res.json({
+      resolutionStatus: summary.resolutionStatus || {},
+      unresolvedReasons: summary.unresolvedReasons || [],
+      highFrequencyIssues: summary.highFrequencyIssues || [],
+      detailData: summary.detailData || [],
+    })
+  } catch (e: any) {
+    res.status(500).json({ error: 'Failed to parse dashboard data', message: e.message })
+  }
+})
+
 // GET /api/runs/:id
 router.get('/:id', (req, res) => {
   const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id)
@@ -531,28 +554,6 @@ router.get('/:id/download-excel', (req, res) => {
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`)
   res.sendFile(run.excel_report_path)
-})
-
-// GET /api/runs/:id/dashboard-data - get dashboard chart data for dashboard-type insights
-router.get('/:id/dashboard-data', (req, res) => {
-  const run = db.prepare('SELECT * FROM analysis_runs WHERE id = ?').get(req.params.id) as any
-  if (!run) return res.status(404).json({ error: 'Not found' })
-
-  try {
-    const summary = JSON.parse(run.summary_json || '{}')
-    if (summary.viewType !== 'dashboard') {
-      return res.status(400).json({ error: 'This insight does not have dashboard view' })
-    }
-
-    res.json({
-      resolutionStatus: summary.resolutionStatus || {},
-      unresolvedReasons: summary.unresolvedReasons || [],
-      highFrequencyIssues: summary.highFrequencyIssues || [],
-      detailData: summary.detailData || [],
-    })
-  } catch (e: any) {
-    res.status(500).json({ error: 'Failed to parse dashboard data', message: e.message })
-  }
 })
 
 export default router
