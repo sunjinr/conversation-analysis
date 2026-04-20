@@ -45,15 +45,6 @@ export default function RunDetailPage() {
 
   useEffect(() => { loadRun() }, [id])
 
-  // Poll for running status
-  useEffect(() => {
-    if (!run || run.status !== 'running') return
-    const interval = setInterval(() => {
-      api.getRun(id!).then(r => setRun(r))
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [run?.status, id])
-
   // Listen for feedback postMessage from iframe
   useEffect(() => {
     const handler = (e: MessageEvent) => {
@@ -179,13 +170,23 @@ export default function RunDetailPage() {
         </div>
       )}
 
+      {/* Dashboard loading state */}
+      {run.status === 'completed' && dashboardLoading && (
+        <div className="flex items-center justify-center py-16">
+          <div className="text-center">
+            <div className="animate-spin w-8 h-8 border-2 border-brand border-t-transparent rounded-full mx-auto mb-3" />
+            <p className="text-gray-400 text-sm">加载仪表板数据...</p>
+          </div>
+        </div>
+      )}
+
       {/* Completed: Dashboard View */}
-      {run.status === 'completed' && dashboardData && (
+      {run.status === 'completed' && !dashboardLoading && dashboardData && (
         <DashboardInsightView run={run} dashboardData={dashboardData} />
       )}
 
       {/* Completed: embed Excel file via iframe */}
-      {run.status === 'completed' && !dashboardData && run.excel_report_path ? (
+      {run.status === 'completed' && !dashboardLoading && !dashboardData && run.excel_report_path && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" style={{ height: 'calc(100vh - 120px)', minHeight: '800px' }}>
           {!iframeLoaded && !iframeError && (
             <div className="flex items-center justify-center h-full">
@@ -214,20 +215,13 @@ export default function RunDetailPage() {
             style={{ display: iframeLoaded ? 'block' : 'none' }}
           />
         </div>
-      ) : run.status === 'completed' && !dashboardData ? (
+      )}
+
+      {/* No report available */}
+      {run.status === 'completed' && !dashboardLoading && !dashboardData && !run.excel_report_path && (
         <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
           <FileSpreadsheet size={56} className="mx-auto mb-3 text-gray-300" />
           <p className="text-gray-400 text-sm">暂无报告</p>
-        </div>
-      ) : null}
-
-      {/* Dashboard loading */}
-      {run.status === 'completed' && !dashboardData && dashboardLoading && (
-        <div className="flex items-center justify-center py-16">
-          <div className="text-center">
-            <div className="animate-spin w-8 h-8 border-2 border-brand border-t-transparent rounded-full mx-auto mb-3" />
-            <p className="text-gray-400 text-sm">加载仪表板数据...</p>
-          </div>
         </div>
       )}
 
