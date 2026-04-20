@@ -13,12 +13,19 @@ COPY scripts/import-sessions.py /app/scripts/
 COPY scripts/auto-seed.py /app/scripts/
 COPY scripts/seed-data/ /app/scripts/seed-data/
 
-# 复制 package.json 并安装 Node 依赖（express、sql.js 等 external 模块）
+# 复制 package.json 并安装 Node 依赖（包括 esbuild 用于构建服务端）
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
-# 复制前端和后端 bundle
-COPY dist-server-bundle/server.mjs dist-server-bundle/sql-wasm.wasm ./dist-server-bundle/
+# 复制服务端源代码并构建
+COPY server/ ./server/
+COPY tsconfig.json ./
+RUN npx esbuild server/index.ts --bundle --platform=node --target=node20 --outfile=dist-server-bundle/server.mjs --format=esm --external:sql.js --banner:js="import { createRequire } from 'module'; const require = createRequire(import.meta.url);"
+
+# 复制 sql-wasm.wasm
+COPY dist-server-bundle/sql-wasm.wasm ./dist-server-bundle/
+
+# 复制前端构建产物
 COPY dist ./dist
 RUN mkdir -p /tmp/data
 ENV NODE_ENV=production
