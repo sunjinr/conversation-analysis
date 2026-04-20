@@ -47,13 +47,28 @@ router.post('/import', authMiddleware, (req: AuthRequest, res) => {
     fs.writeFileSync(excelPath, buffer)
   }
 
-  // For dashboard view type, store detail_data in summary_json along with original summary
+  // For dashboard view type, ensure summary_json contains all necessary data
   let finalSummaryJson = summary_json || '{}'
-  if (view_type === 'dashboard' && detail_data) {
-    // Embed detail_data into summary_json for dashboard views
-    const summary = typeof summary_json === 'string' ? JSON.parse(summary_json) : summary_json
-    summary.detailData = detail_data
+  
+  // If summary_json is already a string (from seed file), parse it first
+  let summary: any = {}
+  if (typeof summary_json === 'string') {
+    try {
+      summary = JSON.parse(summary_json)
+    } catch {
+      summary = {}
+    }
+  } else if (typeof summary_json === 'object') {
+    summary = summary_json
+  }
+  
+  // For dashboard views, ensure viewType is set and detailData is present
+  if (view_type === 'dashboard') {
     summary.viewType = 'dashboard'
+    // If detail_data is provided separately, merge it
+    if (detail_data && !summary.detailData) {
+      summary.detailData = detail_data
+    }
     finalSummaryJson = JSON.stringify(summary)
   }
 
