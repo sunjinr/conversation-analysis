@@ -20,7 +20,7 @@ RUN npm ci
 # 复制服务端源代码并构建
 COPY server/ ./server/
 COPY tsconfig.json ./
-RUN npx esbuild server/index.ts --bundle --platform=node --target=node20 --outfile=dist-server-bundle/server.mjs --format=esm --external:sql.js --banner:js="import { createRequire } from 'module'; const require = createRequire(import.meta.url);"
+RUN npx esbuild server/index.ts --bundle --platform=node --target=node20 --outfile=dist-server-bundle/server.mjs --format=esm --external:sql.js --resolve-extensions=.ts,.js --banner:js="import { createRequire } from 'module'; const require = createRequire(import.meta.url);"
 
 # 复制 sql-wasm.wasm
 COPY dist-server-bundle/sql-wasm.wasm ./dist-server-bundle/
