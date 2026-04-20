@@ -15,7 +15,7 @@ COPY scripts/seed-data/ /app/scripts/seed-data/
 
 # 复制 package.json 并安装 Node 依赖
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN NODE_ENV=development npm ci
 
 # 复制服务端源代码
 COPY server/ ./server/
