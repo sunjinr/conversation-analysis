@@ -23,9 +23,6 @@ COPY tsconfig.json ./
 # 复制前端构建产物
 COPY dist ./dist
 
-# 复制 sql-wasm.wasm
-COPY dist-server-bundle/sql-wasm.wasm ./dist-server-bundle/
-
 RUN mkdir -p /tmp/data
 ENV NODE_ENV=production
 
